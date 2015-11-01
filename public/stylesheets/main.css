@@ -1,34 +1,26 @@
-
 .demo-card-wide.mdl-card {
   width: 512px;
 }
-
 .demo-card-wide > .mdl-card__title {
   color: #fff;
   height: 176px;
   background: url('getmdl.io/assets/demos/welcome_card.jpg') center / cover;
 }
-
 .demo-card-wide > .mdl-card__menu {
   color: #fff;
 }
-
 .center-responsive {
   text-align: center;
 }
-
 .responsive {
   display: inline-block;
 }
-
 .hct {
   text-align: center;
 }
-
 .el {
   padding: 1em;
 }
-
 p.hct {
   width: 50%;
   margin: 0 auto;
@@ -42,16 +34,17 @@ p.hct {
   width: 40%;
   margin-top: 2em;
   padding: 2em;
-
 }
 .nolink {
   text-decoration: none;
   color: inherit;
 }
 .lable {
-width:150px
-font-weight: 700;
-padding-right: 3em;
+  width: 150px;
+  color: darkgrey;
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 3em;
 }
 .questionContent {
   font-size: 15px;
@@ -59,8 +52,12 @@ padding-right: 3em;
   padding-left: 5em;
 }
 .questions {
-  border: 7.5px solid rgb(68,138,255);
+  padding-left: 1em;
+  border: 7px solid rgb(68, 138, 255);
   border-top: 0px;
   border-bottom: 0px;
   border-right: 0px;
+}
+.nounder {
+  text-decoration: none;
 }

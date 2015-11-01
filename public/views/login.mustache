@@ -6,18 +6,13 @@
   <title>TestTaker</title>
   {{^scripts}}
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-  {{/scripts}}
-  {{^stylesheets}}
+  {{/scripts}} {{^stylesheets}}
   <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="../stylesheets/main.css" rel="stylesheet">
-  {{/stylesheets}}
-  {{#scripts}}
+  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
   <script src="{{.}}"></script>
-  {{/scripts}}
-  {{#stylesheets}}
-  <link href="{{.}}" rel="stylesheet">
-  {{/stylesheets}}
+  {{/scripts}} {{#stylesheets}}
+  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
@@ -99,10 +94,10 @@
               </button>
             </div>
           </div>
-        <!-- <div> -->
-      </div>
+          <!-- <div> -->
+        </div>
     </main>
-  </div>
+    </div>
 </body>
 
 </html>
