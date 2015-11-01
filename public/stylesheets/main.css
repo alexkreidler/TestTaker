@@ -54,8 +54,13 @@ font-weight: 700;
 padding-right: 3em;
 }
 .questionContent {
-  margin: 2px solid 
-  font-size:
+  font-size: 15px;
   padding-top: 2em;
   padding-left: 5em;
+}
+.questions {
+  border: 7.5px solid rgb(68,138,255);
+  border-top: 0px;
+  border-bottom: 0px;
+  border-right: 0px;
 }
