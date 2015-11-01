@@ -11,6 +11,13 @@ var students = root.child('students');
 var teachers = root.child('teachers');
 var classes = root.child('classes');
 var testData = root.child('testData');
+var tests = root.child('tests');
+var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
+var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
+function scriptGen(script, arg){
+    script.push(arg);
+    return script;
+}
 
 app.listen(443);
 
@@ -29,23 +36,21 @@ app.use(express.static('public'));
 app.get('/', function(req, res) {
     res.render('index', {
         title: 'TestTaker',
-        scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', '../js/index.js'],
-        stylesheets: ['https://storage.googleapis.com/code.getmdl.io/1.0.5/material.blue-deep_purple.min.css', '../stylesheets/main.css']
+        scripts: scripts,
+        stylesheets: stylesheets
     });
     console.log(req.method + ' request at ' + req.originalUrl)
 });
 app.get('/test', function(req, res) {
     //res.sendFile(__dirname + '/static/test/test.html');
+    res.redirect('/')
 });
 app.get('/login', function(req, res) {
-        res.render('login.mustache', {
-            scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', '../js/index.js'],
-            stylesheets: ['https://storage.googleapis.com/code.getmdl.io/1.0.5/material.blue-deep_purple.min.css', '../stylesheets/main.css']
-        });
+    res.render('login', {
+        scripts: scriptGen(scripts, '../js/login.js'),
+        stylesheets: stylesheets
     });
-    /*app.get('/*', function(req, res) {
-        res.sendFile(__dirname + '/public/' + req.originalUrl)
-    });*/
+});
 app.post('/signUp', urlencodedParser, function(req, res) {
     if (req.body.type == 'student') {
         students.createUser({
@@ -98,8 +103,8 @@ app.post('/login', urlencodedParser, function(req, res) {
                 res.render('dashboard', {
                     userData: user[Object.keys(user)[0]],
                     title: 'Dashboard',
-                    scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', '../js/index.js', '../js/dashboard.js'],
-                    stylesheets: ['https://storage.googleapis.com/code.getmdl.io/1.0.5/material.blue-deep_purple.min.css', '../stylesheets/main.css']
+                    scripts: scripts,
+                    stylesheets: stylesheets
                 });
             });
     } else if (req.body.type == 'teacher') {
@@ -148,18 +153,43 @@ app.post('/test', urlencodedParser, function(req, res) {
         .startAt(req.body.testID)
         .endAt(req.body.testID)
         .child('testData');
-    var thisTestData = testData.child(testDataKey).once('value', function(data){
+    var thisTestData = testData.child(testDataKey).once('value', function(data) {
         questions = Object.keys(data);
     });
 
-    var i;
-    while(i < 10){
+    for (var i = 1; i < questions.length; i++) {
         var value = Math.floor((Math.random() * questions.length) - 1);
-        questions[i]
+        var data = questions[value];
+        questions.slice(pos, i);
+        randomArray.push(data);
     }
 
+    // TODO: substitute references with Firebase values
+
     //send test to students
-    res.render('test', {'class': data, 'teacher': data, 'name': data, 'questions': [{'prompt': data, 'img': data}]});
+    res.render('test', {
+        'class': data,
+        'teacher': data,
+        'name': data,
+        'questions': [{
+            'prompt': data,
+            'img': data
+        }]
+    });
+});
+
+app.post('/createTest', urlencodedParser, function(req, res){
+    // TODO: check auth
+    if (req.body.type == 'teacher') {
+    var thisTestData = testData.push(req.body.testData);
+    var thisTestDataKey = thisTestData.key();
+    var data = JSON.parse(req.body);
+    data.testData = thisTestDataKey;
+} else {
+    res.json({
+        error: "You can not create tests."
+    });
+}
 });
 
 console.log('Finished starting TestTaker Server v' + version);
