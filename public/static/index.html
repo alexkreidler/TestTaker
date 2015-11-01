@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>TestTaker | Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+</head>
+
+<body>
+    <div id="page">
+        <h2>Login</h2>
+        <!-- TODO: Make login interface an HTML form -->
+        <input id="user" type="text" placeholder="email/username">
+        <input id="pass" type="password" placeholder="password">
+        <button id="studentLogin">I'm A Student</button>
+        <button id="teacherLogin">I'm A Teacher</button>
+        <h2>Sign up</h2>
+        <form action="/signUp" method="post">
+            <input name="name" type="text" placeholder="Name">
+            <input name="email" type="text" placeholder="Email or username">
+            <input name="password" type="password" placeholder="Password"> I'm a Student:
+            <input type="radio" name="type" value="student"> I'm a Teacher:
+            <input type="radio" name="type" value="teacher">
+            <input type="submit">
+        </form>
+    </div>
+
+    <script src="../client.js">
+    </script>
+</body>
+
+</html>

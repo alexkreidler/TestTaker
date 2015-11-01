@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<!--TODO: make a partial for head-->
+
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    {{#scripts}}
+        <script src="{{.}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+        <link rel="stylesheet" href="{{.}}">
+    {{/stylesheets}}
+</head>
+
+<body>
+    <h1>Welcome: {{userData.name}}</h1>
+    <div>
+        {{#userData.classes}}
+            <h1>{{name}}</h1>
+            <div>
+                {{#tests}}
+                    <p>{{name}}</p>
+                    <p>{{date}}</p>
+                {{/tests}}
+            </div>
+        {{/userData.classes}}
+        {{^userData.classes}} No Classes.
+        {{/userData.classes}}
+        <button id="addClass">Add A Class</button>
+    </div>
+</body>
+
+</html>

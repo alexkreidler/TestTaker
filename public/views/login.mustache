@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!--    <title>{{title}}</title>
+    {{#scripts}}
+        <script src="{{.}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+        <link rel="stylesheet" href="{{.}}">
+    {{/stylesheets}}-->
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="../stylesheets/main.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="about.mustache">About</a>
+          <!-- TODO: For development purpaces-->
+          <a class="mdl-navigation__link" href="login.mustache">Login &nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.gravatar.com/avatar/07450399d037aeb3a6242d97d0b4980b?s=47&d=http%3A%2F%2Fwww.techrepublic.com%2Fbundles%2Ftechrepubliccore%2Fimages%2Ficons%2Fstandard%2Ficon-user-default.png" alt="Login" width="20px" height="20px"/></a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div id="page">
+          <div class="login-page">
+            <div class="login-inline">
+              <h2>Login</h2>
+              <!-- TODO: Make login interface an HTML form -->
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="email" class="mdl-textfield__input" type="text" id="loginEmail" />
+                <label class="mdl-textfield__label" for="loginEmail">Email...</label>
+              </div>
+              <br>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="password" class="mdl-textfield__input" type="text" id="loginPass" />
+                <label class="mdl-textfield__label" for="loginPass">Password...</label>
+              </div>
+              <br>
+              <button id="studentLogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                I'm A Student
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button id="teacherLogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                I'm A Teacher
+              </button>
+            </div>
+            <div class="login-inline">
+              <h2>Sign up</h2>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="name" class="mdl-textfield__input" type="text" id="signUpName" />
+                <label class="mdl-textfield__label" for="signUpName">Name...</label>
+              </div>
+              <br>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="email" class="mdl-textfield__input" type="text" id="signUpEmail" />
+                <label class="mdl-textfield__label" for="signUpEmail">Email...</label>
+              </div>
+              <br>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="password" class="mdl-textfield__input" type="password" id="signUpPass" />
+                <label class="mdl-textfield__label" for="signUpPass">Password...</label>
+              </div>
+              <br>
+              <button id="signUpStudent" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                I'm A Student
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button id="signUpTeacher" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                I'm A Teacher
+              </button>
+            </div>
+          </div>
+        <!-- <div> -->
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

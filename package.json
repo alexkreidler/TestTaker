@@ -1,0 +1,28 @@
+{
+  "name": "testtaker",
+  "version": "0.0.0",
+  "description": "a testing app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://tim1589@bitbucket.org/tim1589/testtaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/tim1589/testtaker#readme",
+  "dependencies": {
+    "body-parser": "latest",
+    "express": "latest",
+    "firebase": "latest",
+    "consolidate": "latest",
+    "mustache": "latest"
+  },
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-shell": "latest"
+  }
+}

@@ -1,0 +1,50 @@
+
+.demo-card-wide.mdl-card {
+  width: 512px;
+}
+
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+  height: 176px;
+  background: url('getmdl.io/assets/demos/welcome_card.jpg') center / cover;
+}
+
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+
+.center-responsive {
+  text-align: center;
+}
+
+.responsive {
+  display: inline-block;
+}
+
+.hct {
+  text-align: center;
+}
+
+.el {
+  padding: 1em;
+}
+
+p.hct {
+  width: 50%;
+  margin: 0 auto;
+  padding: 1em;
+}
+.login-page {
+  padding-bottom: 3em;
+}
+.login-inline {
+  display: inline-table;
+  width: 40%;
+  margin-top: 2em;
+  padding: 2em;
+
+}
+.nolink {
+  text-decoration: none;
+  color: inherit;
+}

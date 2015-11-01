@@ -1,0 +1,19 @@
+/*  Copyright (c) Pending   */
+
+body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  color: #20af00;
+}
+.error {
+  color: #f00;
+}
+img.centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}

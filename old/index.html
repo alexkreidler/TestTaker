@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>TestTaker2000</title>
+  <link rel="stylesheet" href="outdatedbrowser/outdatedBrowser.min.css">
+  <link rel="stylesheet" href="main.css">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src='https://cdn.firebase.com/js/client/2.0.4/firebase.js'></script>
+</head>
+
+<body>
+  <a href="index.html">
+    <img src="logo.png" alt="Our Logo" class="centered">
+  </a>
+  <h3>TestTaker</h3>
+  <p id="version"></p>
+  <img class="centered" src="line.bmp" alt="line" width="100%" height="5px">
+
+<!-- Begin new section2-->
+  <p id="error" class="error"></p>
+  <p>Please your name.</p>
+  <input type="text" placeholder="Name" id="name">
+  <button onclick='notEmpty()'>Start Test</button>
+<!-- end new section2-->
+
+
+  <br>
+  <br>
+  <button onclick="goToLogin();">Log In</button>
+
+  <br>
+  <br>
+  <a href="about.html">About</a>
+
+
+  <script src="outdatedbrowser/outdatedBrowser.min.js"></script>
+  <script>
+    //event listener: DOM ready
+    function addLoadEvent(func) {
+        var oldonload = window.onload;
+        if (typeof window.onload != 'function') {
+          window.onload = func;
+        } else {
+          window.onload = function() {
+            if (oldonload) {
+              oldonload();
+            }
+            func();
+          };
+        }
+      }
+      //call plugin function after DOM ready
+    addLoadEvent(function() {
+      outdatedBrowser({
+        bgColor: '#f25648',
+        color: '#ffffff',
+        lowerThan: 'transform',
+        languagePath: 'outdatedbrowser/lang/en.html'
+      });
+    });
+  </script>
+  <div id="outdated"></div>
+
+
+  <script src="version.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
