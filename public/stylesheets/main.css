@@ -58,6 +58,12 @@ p.hct {
   border-bottom: 0px;
   border-right: 0px;
 }
+.answerheadings {
+  padding-left: 3em;
+}
+.answer{
+  padding-left: 2em;
+}
 .nounder {
   text-decoration: none;
 }
