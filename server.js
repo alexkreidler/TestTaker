@@ -4,7 +4,6 @@ var express = require('express');
 var Firebase = require('firebase');
 var bodyParser = require('body-parser');
 var consolidate = require('consolidate');
-var testCore = require('./test_core.js');
 var app = express();
 var root = new Firebase('http://testtaker.firebaseio.com')
 var students = root.child('students');
