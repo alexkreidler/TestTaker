@@ -48,3 +48,14 @@ p.hct {
   text-decoration: none;
   color: inherit;
 }
+.lable {
+width:150px
+font-weight: 700;
+padding-right: 3em;
+}
+.questionContent {
+  margin: 2px solid 
+  font-size:
+  padding-top: 2em;
+  padding-left: 5em;
+}

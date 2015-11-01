@@ -4,10 +4,20 @@
 <head>
   <meta charset="utf-8">
   <title>TestTaker</title>
-  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
+  {{^scripts}}
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  {{/scripts}}
+  {{^stylesheets}}
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="../stylesheets/main.css" rel="stylesheet">
+  <link href="../stylesheets/main.css" rel="stylesheet">
+  {{/stylesheets}}
+  {{#scripts}}
+  <script src="{{.}}"></script>
+  {{/scripts}}
+  {{#stylesheets}}
+  <link href="{{.}}" rel="stylesheet">
+  {{/stylesheets}}
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
@@ -21,6 +31,7 @@
         <div class="mdl-layout-spacer"></div>
 
         <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="questions.mustache">Support</a>
           <a class="mdl-navigation__link" href="">About</a>
           <!-- TODO: For development purpaces-->
           <a class="mdl-navigation__link" href="login.mustache">Login &nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.gravatar.com/avatar/07450399d037aeb3a6242d97d0b4980b?s=47&d=http%3A%2F%2Fwww.techrepublic.com%2Fbundles%2Ftechrepubliccore%2Fimages%2Ficons%2Fstandard%2Ficon-user-default.png" alt="Login" width="20px" height="20px"/></a>
