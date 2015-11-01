@@ -49,17 +49,17 @@
 
         <p class="hct">Welcome {{userData.name}}</p>
 
-
+{{#userData.classes}}
         <div class="demo-card-wide mdl-card mdl-shadow--2dp">
           <div class="mdl-card__title">
-            <img src="http://t2.gstatic.com/images?q=tbn:ANd9GcRzVkCpcMHPT21p9_el1p7Xz-XZEXXKxsOImnG4dnl1E8_jENWrWQ">
+            <img src="{{image}}">
           </div>
           <div class="mdl-card__supporting-text">
-            Teacher: Mr. Higginbottom, Subject: Computer progamming, Blah (not bla): Blah Blah (with h's)
+            Teacher: {{teacher}}, Subject: {{subject}}, Class: {{classname}}
           </div>
           <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-           Class
+            <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+          Go to class
             </a>
           </div>
           <div class="mdl-card__menu">
@@ -68,10 +68,10 @@
             </button>
           </div>
         </div>
+        {{/userData.classes}}
         <div class="center-responsive">
           <!-- TODO: For development purpaces-->
         </div>
-fff
         <br>
 
         <footer class="mdl-mini-footer">
