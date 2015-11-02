@@ -36,10 +36,8 @@
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Menu</span>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">(class 1)</a>
-        <a class="mdl-navigation__link" href="">(class 2)</a>
-        <a class="mdl-navigation__link" href="">(class 3)</a>
-        <a class="mdl-navigation__link" href="">(class 4)</a>
+        {{#userData.classes}}
+        <a class="mdl-navigation__link" href="/classes/{{id}}">{{className}}</a> {{/userData.classes}}
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -48,14 +46,17 @@
         <h1 class="hct">TestTaker</h1>
 
         <p class="hct">Welcome {{userData.name}}</p>
+        <button id="addClass" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+          <i class="material-icons">add</i>
+        </button>
 
-{{#userData.classes}}
+        {{#userData.classes}}
         <div class="demo-card-wide mdl-card mdl-shadow--2dp">
           <div class="mdl-card__title">
             <img src="{{image}}">
           </div>
           <div class="mdl-card__supporting-text">
-            Teacher: {{teacher}}, Subject: {{subject}}, Class: {{classname}}
+            Teacher: {{teacher}}, Subject: {{subject}}, Class: {{className}}
           </div>
           <div class="mdl-card__actions mdl-card--border">
             <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
@@ -63,8 +64,9 @@
             </a>
           </div>
           <div class="mdl-card__menu">
-            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-              <i class="material-icons">share</i>
+            <!-- Colored mini FAB button -->
+            <button id="delete-{{id}}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+              <i class="material-icons">delete</i>
             </button>
           </div>
         </div>
@@ -83,7 +85,6 @@
             </ul>
           </div>
         </footer>
-
       </div>
     </main>
   </div>
