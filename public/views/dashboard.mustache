@@ -9,10 +9,12 @@
   {{/scripts}} {{^stylesheets}}
   <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
-  <script src="{{.}}"></script>
-  {{/scripts}} {{#stylesheets}}
-  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
+  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}}
+  {{#scripts}}
+    <script src="{{.}}"></script>
+  {{/scripts}}
+  {{#stylesheets}}
+    <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
@@ -28,7 +30,7 @@
         <nav class="mdl-navigation mdl-layout--large-screen-only">
           <a class="mdl-navigation__link" href="questions.mustache">Support</a>
           <a class="mdl-navigation__link" href="">About</a>
-          <!-- TODO: For development purpaces-->
+          <!-- TODO: For development purposes-->
           <a class="mdl-navigation__link" href="login.mustache">Login</a>
         </nav>
       </div>
@@ -37,7 +39,7 @@
       <span class="mdl-layout-title">Menu</span>
       <nav class="mdl-navigation">
         {{#userData.classes}}
-        <a class="mdl-navigation__link" href="/classes/{{id}}">{{className}}</a> {{/userData.classes}}
+          <a class="mdl-navigation__link" href="/classes/{{id}}">{{className}}</a> {{/userData.classes}}
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -51,27 +53,27 @@
         </button>
 
         {{#userData.classes}}
-        <div class="classCard">
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-          <div class="mdl-card__title">
-            <img src="{{image}}">
-          </div>
-          <div class="mdl-card__supporting-text">
-            Teacher: {{teacher}}, Subject: {{subject}}, Class: {{className}}
-          </div>
-          <div class="mdl-card__actions mdl-card--border">
-            <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+          <div class="classCard">
+            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title" style="background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg');">
+                <h1>{{className}}</h1>
+              </div>
+              <div class="mdl-card__supporting-text">
+                Teachers: {{#teachers}}{{name}}{{/teachers}}<br> Subject: {{subject}}
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
           Go to class
             </a>
+              </div>
+              <div class="mdl-card__menu">
+                <!-- Colored mini FAB button -->
+                <button id="delete-{{id}}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
+                  <i class="material-icons">delete</i>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="mdl-card__menu">
-            <!-- Colored mini FAB button -->
-            <button id="delete-{{id}}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
-              <i class="material-icons">delete</i>
-            </button>
-          </div>
-        </div>
-      </div>
 
         {{/userData.classes}}
         <div class="center-responsive">
