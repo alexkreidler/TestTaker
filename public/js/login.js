@@ -50,15 +50,15 @@ $(document).ready(function() {
   });
   $('#signUpStudent').on('click', function() {
     $.post('/signUp', {
-      'type': 'student'
-      'email': $('#signUpEmail').val()
+      'type': 'student',
+      'email': $('#signUpEmail').val(),
       'password': $('#signUpPass').val()
     })
   })
   $('#signUpTeacher').on('click', function() {
     $.post('/signUp', {
-      'type': 'teacher'
-      'email': $('#signUpEmail').val()
+      'type': 'teacher',
+      'email': $('#signUpEmail').val(),
       'password': $('#signUpPass').val()
     })
   })

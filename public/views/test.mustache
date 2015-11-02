@@ -69,13 +69,34 @@
               <img src="{{image}}">
               <div class="quizAnswers">
                 <form action="#">
+
+                </form>
+              </div>
+              <!-- Wide card with share menu button -->
+              <style>
+
+              </style>
+
+              <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-image: url({{image}})">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Welcome</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  {{prompt}}
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
                   <div class="mdl-textfield mdl-js-textfield">
                     <input class="mdl-textfield__input" type="text" id="question{{______}}">
                     <label class="mdl-textfield__label" for="question{{______}}">Answer...</label>
                   </div>
-                </form>
+                </div>
+                <div class="mdl-card__menu">
+                  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <i class="material-icons">share</i>
+                  </button>
+                </div>
               </div>
-                {{/questions}}
+              {{/questions}}
               <div>
                 <br>
                 <button id="submitTest" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Submit Test</button>
