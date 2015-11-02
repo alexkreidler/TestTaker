@@ -14,15 +14,28 @@ var tests = root.child('tests');
 var port = process.env.PORT || 3000;
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
-function scriptGen(script, args){
+
+app.listen(port);
+console.log('Listening on port: ' + port);
+
+function scriptGen(script, args) {
     for (var i = 0; i < args.length; i++) {
-      script.push(args[i]);
+        script.push(args[i]);
     }
     return script
 }
 
-app.listen(port);
-console.log('Listening on port: ' + port);
+function lookUpUser(uid, type) {
+    var user;
+    root.child(type)
+        .orderByChild("uid")
+        .startAt(uid)
+        .endAt(uid)
+        .once('value', function(snap) {
+            user = snap.val();
+        });
+    return user;
+}
 
 app.engine('mustache', consolidate.mustache);
 app.set('views', __dirname + '/public/views');
@@ -60,7 +73,6 @@ app.get('/', function(req, res) {
         scripts: scripts,
         stylesheets: stylesheets
     });
-    console.log(req.method + ' request at ' + req.originalUrl)
 });
 app.get('/test', function(req, res) {
     //res.sendFile(__dirname + '/static/test/test.html');
@@ -72,11 +84,11 @@ app.get('/login', function(req, res) {
         stylesheets: stylesheets
     });
 });
-app.get('/faq', function(req, res){
-  res.render('questions', {
-    scripts: scriptGen(scripts, ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
-    stylesheets: stylesheets
-  })
+app.get('/faq', function(req, res) {
+    res.render('questions', {
+        scripts: scriptGen(scripts, ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
+        stylesheets: stylesheets
+    })
 })
 
 //*********************************************************************************************************
@@ -123,28 +135,14 @@ app.post('/signUp', urlencodedParser, function(req, res) {
     }
 });
 app.post('/login', urlencodedParser, function(req, res) {
-    var user;
-    console.log('req at login');
-    if (req.body.type == 'student') {
-        students
-            .orderByChild("uid")
-            .startAt(req.body.uid)
-            .endAt(req.body.uid)
-            .once('value', function(snap) {
-                user = snap.val();
-                console.log('USER VALUE ' + user);
-                res.render('dashboard', {
-                    userData: user[Object.keys(user)[0]],
-                    title: 'Dashboard',
-                    scripts: scripts,
-                    stylesheets: stylesheets
-                });
-            });
-    } else if (req.body.type == 'teacher') {
-        res.send('We\'r working on this feature');
-    } else {
-        res.send('Whoops! It looks like an error');
-    }
+    var user = lookUpUser(req.body.uid)
+    res.render('dashboard', {
+        type: req.body.type,
+        userData: user[Object.keys(user)[0]],
+        title: 'Dashboard',
+        scripts: scripts,
+        stylesheets: stylesheets
+    });
 });
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
@@ -166,9 +164,9 @@ app.post('/addClass', urlencodedParser, function(req, res) {
                 'success': 'class added successfully'
             });
         } catch (err) {
-          res.status(500).json({
-              'error': 'class not added successfully'
-          });
+            res.status(500).json({
+                'error': 'class not added successfully'
+            });
             res.send('whoops! there was an error');
         }
     } else if (req.body.type == 'teacher') {
@@ -227,5 +225,25 @@ app.post('/createTest', urlencodedParser, function(req, res) {
         });
     }
 });
+//*********************************************************************************************************
+//*********************************************************************************************************
+//************************************SPECIALIZED REQUESTS*************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
+app.get('/classes/:classID', function(req, res){
+    var classData;
+    classes
+        .orderByKey()
+        .startAt(req.params.classID)
+        .endAt(req.params.classID)
+        .once('value', function(snap){
+            classData = Object.keys(snap.val())[0];
+        })
+    res.render('class', {
+        classData: classData
+    })
+});
+
+
 
 console.log('Finished starting TestTaker Server v' + version);
