@@ -11,6 +11,7 @@ var teachers = root.child('teachers');
 var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
+var responses = root.child('responses');
 var port = process.env.PORT || 3000;
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
@@ -214,7 +215,6 @@ app.post('/test', urlencodedParser, function(req, res) {
 app.post('/createTest', urlencodedParser, function(req, res) {
     // TODO: check auth
     if (req.body.type == 'teacher') {
-
         var thisTestData = testData.push(req.body.testData);
         var thisTestDataKey = thisTestData.key();
         var data = JSON.parse(req.body);
@@ -223,6 +223,27 @@ app.post('/createTest', urlencodedParser, function(req, res) {
         res.status(400).json({
             error: "You can not create tests."
         });
+    }
+});
+app.post('/gradeTest', urlencodedParser, function(req, res){
+    //Record Answers
+    var response = responses.push(req.body)
+
+    var thisTestData;
+    testData
+        .orderByKey()
+        .startAt(req.body.testData)
+        .endAt(req.body.testData)
+        .once('value', function(snap){
+            thisTestData = Object.keys(snap.val())[0];
+        });
+    //
+    var keys = Object.keys(thisTestData.questions)
+    var key;
+    var arrayOfAnswers = [];
+    for (var i = 0; i < keys.length; i++) {
+        key = keys[i];
+        arrayOfAnswers.push(thisTestData[key].answer);
     }
 });
 //*********************************************************************************************************
