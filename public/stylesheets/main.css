@@ -89,3 +89,8 @@ p.hct {
 .classCard{
   padding-left: 3em;
 }
+#addClass{
+  position: absolute;
+  left: 1250px;
+    top: 500px;
+}
