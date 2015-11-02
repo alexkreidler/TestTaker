@@ -4,18 +4,7 @@
 .demo-card-wide > .mdl-card__title {
   color: #fff;
   height: 176px;
-  background: url('getmdl.io/assets/demos/welcome_card.jpg') center / cover;
-}
-.demo-card-wide > .mdl-card__menu {
-  color: #fff;
-}
-.demo-card-wide.mdl-card {
-  width: 512px;
-}
-.demo-card-wide > .mdl-card__title {
-  color: #fff;
-  height: 176px;
-  background: url('../assets/demos/welcome_card.jpg') center / cover;
+  background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg') center / cover;
 }
 .demo-card-wide > .mdl-card__menu {
   color: #fff;
@@ -96,4 +85,7 @@ p.hct {
 .quizAnswers{
   padding-top: 1em;
   padding-left: 4em;
+}
+.classCard{
+  padding-left: 3em;
 }
