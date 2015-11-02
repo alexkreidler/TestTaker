@@ -35,7 +35,7 @@ var urlencodedParser = bodyParser.urlencoded({
 app.use(express.static('public'));
 
 // TODO: helper 'error' function to send back errors
-function error(code){
+/*function error(code){
   switch(code)
   case '500':
 
@@ -47,7 +47,7 @@ function error(code){
 
   break;
 }
-
+*/
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SERVER RENDERING REQUESTS********************************************

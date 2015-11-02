@@ -1,7 +1,6 @@
 $(document).ready(function() {
-
+    var root = new Firebase('https://testtaker.firebaseio.com');
     $('#studentLogin').on('click', function() {
-        console.log('hi');
         var students = root.child('students');
         students.authWithPassword({
             "email": $('#loginEmail').val(),
@@ -25,7 +24,6 @@ $(document).ready(function() {
     });
 
     $('#teacherLogin').on('click', function() {
-        console.log('hi');
         var professors = root.child('professors');
         professors.authWithPassword({
             "email": $('#user').val(),
