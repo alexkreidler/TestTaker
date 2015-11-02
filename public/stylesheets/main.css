@@ -78,3 +78,10 @@ p.hct {
 .nounder {
   text-decoration: none;
 }
+.listQuestions {
+  padding-left: 2em;
+  border: 3px solid rgb(108, 178, 255);
+  border-top: 0px;
+  border-bottom: 0px;
+  border-right: 0px;
+}

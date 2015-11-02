@@ -14,9 +14,11 @@ var testData = root.child('testData');
 var tests = root.child('tests');
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
-function scriptGen(script, arg){
-    script.push(arg);
-    return script;
+function scriptGen(script, args){
+    for (var i = 0; i < args.length; i++) {
+      script.push(args);
+    }
+    return script
 }
 
 app.listen(443);
@@ -59,10 +61,16 @@ app.get('/test', function(req, res) {
 });
 app.get('/login', function(req, res) {
     res.render('login', {
-        scripts: scriptGen(scripts, '../js/login.js'),
+        scripts: scriptGen(scripts, ['../js/login.js']),
         stylesheets: stylesheets
     });
 });
+app.get('/faq', function(req, res){
+  res.render('questions', {
+    scripts: scriptGen(scripts, ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
+    stylesheets: stylesheets
+  })
+})
 app.post('/signUp', urlencodedParser, function(req, res) {
     if (req.body.type == 'student') {
         students.createUser({
