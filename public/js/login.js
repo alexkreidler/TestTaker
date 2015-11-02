@@ -1,5 +1,6 @@
+var uid;
+var type;
 $(document).ready(function() {
-  var uid = authData.uid
   var root = new Firebase('https://testtaker.firebaseio.com');
   $('#studentLogin').on('click', function() {
     var students = root.child('students');
@@ -12,6 +13,7 @@ $(document).ready(function() {
         console.log('error signing in');
       } else {
         // TODO: success
+        type = 'student';
         console.log(authData);
         uid = authData.uid
         $.post('/login', {
@@ -36,6 +38,8 @@ $(document).ready(function() {
         console.log('error signing in');
       } else {
         // TODO: success
+        type = 'teacher';
+        uid = authData.uid;
         console.log(authData);
         $.post('/login', {
           'uid': authData.uid,

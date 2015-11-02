@@ -85,3 +85,15 @@ p.hct {
   border-bottom: 0px;
   border-right: 0px;
 }
+.quizQuestions{
+  padding-top: 1em;
+  padding-left: 4em;
+}
+.quizTextPrompt{
+  padding-top: 1em;
+  padding-left: 5em;
+}
+.quizAnswers{
+  padding-top: 1em;
+  padding-left: 4em;
+}
