@@ -108,17 +108,17 @@ app.post('/signUp', urlencodedParser, function(req, res) {
       if (error) {
         switch (error.code) {
           case "EMAIL_TAKEN":
-            res.json({
+            res.status(400).json({
               error: "The new user account cannot be created because the email is already in use."
             });
             break;
           case "INVALID_EMAIL":
-            res.json({
+            res.status(400).json({
               error: "The specified email is not a valid email."
             });
             break;
           default:
-            res.json({
+            res.status(500).json({
               error: error
             });
         }
@@ -134,7 +134,7 @@ app.post('/signUp', urlencodedParser, function(req, res) {
   } else if (req.body.type == 'teacher') {
 
   } else {
-    res.redirect('/?error=invalid_form_submission')
+    res.status(400).json(error: 'Invalid user type');
   }
 });
 app.post('/login', urlencodedParser, function(req, res) {
