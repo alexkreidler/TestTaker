@@ -136,7 +136,7 @@ app.post('/signUp', urlencodedParser, function(req, res) {
     }
 });
 app.post('/login', urlencodedParser, function(req, res) {
-    var user = lookUpUser(req.body.uid)
+    var user = lookUpUser(req.body.uid, req.body.type);
     res.render('dashboard', {
         type: req.body.type,
         userData: user[Object.keys(user)[0]],
