@@ -32,6 +32,18 @@ var urlencodedParser = bodyParser.urlencoded({
 app.use(express.static('public'));
 
 // TODO: helper 'error' function to send back errors
+function error(code){
+  switch(code)
+  case '500':
+
+  break;
+  case '400':
+  // Bad Request
+  break;
+  case '400':
+
+  break;
+}
 
 app.get('/', function(req, res) {
     res.render('index', {
@@ -133,7 +145,9 @@ app.post('/addClass', urlencodedParser, function(req, res) {
                 'success': 'class added successfully'
             });
         } catch (err) {
-            // TODO: error
+          res.status(500).json({
+              'error': 'class not added successfully'
+          });
             res.send('whoops! there was an error');
         }
     } else if (req.body.type == 'teacher') {
