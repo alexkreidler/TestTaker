@@ -34,6 +34,7 @@
         </nav>
       </div>
     </header>
+      {{#teacher}}
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Menu</span>
       <nav class="mdl-navigation">
@@ -47,6 +48,31 @@
       <div class="page-content">
         <div id="page">
         {{classData.name}} {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}}
+        <button id="tests" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          Tests
+        </button>
+        <button id="students" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          students
+        </button>
+        {{/teacher}}
+        {{#student}}
+        <div class="mdl-layout__drawer">
+          <span class="mdl-layout-title">Menu</span>
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+          </nav>
+        </div>
+        <main class="mdl-layout__content">
+          <div class="page-content">
+            <div id="page">
+            {{classData.name}} {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}}
+            <button id="tests" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Tests
+            </button>
+        {{/student}}
         </div>
     </main>
     </div>
