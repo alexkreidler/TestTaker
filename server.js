@@ -14,7 +14,8 @@ var testData = root.child('testData');
 var tests = root.child('tests');
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
-function scriptGen(script, arg){
+
+function scriptGen(script, arg) {
     script.push(arg);
     return script;
 }
@@ -32,6 +33,12 @@ var urlencodedParser = bodyParser.urlencoded({
 app.use(express.static('public'));
 
 // TODO: helper 'error' function to send back errors
+
+//*********************************************************************************************************
+//*********************************************************************************************************
+//************************************SERVER RENDERING REQUESTS********************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
 
 app.get('/', function(req, res) {
     res.render('index', {
@@ -51,6 +58,11 @@ app.get('/login', function(req, res) {
         stylesheets: stylesheets
     });
 });
+//*********************************************************************************************************
+//*********************************************************************************************************
+//************************************API POST REQUESTS****************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
 app.post('/signUp', urlencodedParser, function(req, res) {
     if (req.body.type == 'student') {
         students.createUser({
@@ -178,18 +190,19 @@ app.post('/test', urlencodedParser, function(req, res) {
     });
 });
 
-app.post('/createTest', urlencodedParser, function(req, res){
+app.post('/createTest', urlencodedParser, function(req, res) {
     // TODO: check auth
     if (req.body.type == 'teacher') {
-    var thisTestData = testData.push(req.body.testData);
-    var thisTestDataKey = thisTestData.key();
-    var data = JSON.parse(req.body);
-    data.testData = thisTestDataKey;
-} else {
-    res.json({
-        error: "You can not create tests."
-    });
-}
+        
+        var thisTestData = testData.push(req.body.testData);
+        var thisTestDataKey = thisTestData.key();
+        var data = JSON.parse(req.body);
+        data.testData = thisTestDataKey;
+    } else {
+        res.status(400).json({
+            error: "You can not create tests."
+        });
+    }
 });
 
 console.log('Finished starting TestTaker Server v' + version);
