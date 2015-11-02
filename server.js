@@ -16,7 +16,7 @@ var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
 function scriptGen(script, args){
     for (var i = 0; i < args.length; i++) {
-      script.push(args);
+      script.push(args[i]);
     }
     return script
 }
@@ -35,7 +35,7 @@ var urlencodedParser = bodyParser.urlencoded({
 app.use(express.static('public'));
 
 // TODO: helper 'error' function to send back errors
-function error(code){
+/*function error(code){
   switch(code)
   case '500':
 
@@ -47,7 +47,7 @@ function error(code){
 
   break;
 }
-
+*/
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SERVER RENDERING REQUESTS********************************************
