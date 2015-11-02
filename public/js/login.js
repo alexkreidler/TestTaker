@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+var uid = authData.uid
     $('#studentLogin').on('click', function() {
         console.log('hi');
         var students = root.child('students');
@@ -13,6 +13,7 @@ $(document).ready(function() {
             } else {
                 // TODO: success
                 console.log(authData);
+                uid = authData.uid
                 $.post('/login', {
                     'uid': authData.uid,
                     'type': 'student',
@@ -37,11 +38,25 @@ $(document).ready(function() {
             } else {
                 // TODO: success
                 console.log(authData);
-                $.post('localhost:443/login', {
+                $.post('/login', {
                     'uid': authData.uid,
                     'type': 'teacher'
                 });
             }
         });
     });
+    $('#signUpStudent').on('click', function () {
+      $.post('/signUp', {
+        'type': 'student'
+        'email': $('#signUpEmail').val()
+        'password': $('#signUpPass').val()
+      })
+    })
+    $('#signUpTeacher').on('click', function () {
+      $.post('/signUp', {
+        'type': 'teacher'
+        'email': $('#signUpEmail').val()
+        'password': $('#signUpPass').val()
+      })
+    })
 });
