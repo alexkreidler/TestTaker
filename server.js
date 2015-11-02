@@ -13,13 +13,15 @@ var testData = root.child('testData');
 var tests = root.child('tests');
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
+var port = process.env.PORT || 3000;
 
 function scriptGen(script, arg) {
     script.push(arg);
     return script;
 }
 
-app.listen(443);
+app.listen(port);
+console.log('Listening on port: ' + port);
 
 app.engine('mustache', consolidate.mustache);
 app.set('views', __dirname + '/public/views');
@@ -192,7 +194,7 @@ app.post('/test', urlencodedParser, function(req, res) {
 app.post('/createTest', urlencodedParser, function(req, res) {
     // TODO: check auth
     if (req.body.type == 'teacher') {
-        
+
         var thisTestData = testData.push(req.body.testData);
         var thisTestDataKey = thisTestData.key();
         var data = JSON.parse(req.body);
