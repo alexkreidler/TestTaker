@@ -29,53 +29,48 @@
         <nav class="mdl-navigation mdl-layout--large-screen-only">
           <a class="mdl-navigation__link" href="questions.mustache">Support</a>
           <a class="mdl-navigation__link" href="about.mustache">About</a>
-          <!-- TODO: For development purpaces-->
-          <a class="mdl-navigation__link" href="login.mustache">Login</a>
+          <!-- For development purposes-->
+          <!-- TODO: Add a settings FAB -->
+          <a class="mdl-navigation__link" href="login.mustache">Logout</a>
         </nav>
       </div>
     </header>
-      {{#teacher}}
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Menu</span>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
+        {{#classes}}
+        <a class="mdl-navigation__link" href="/classes/{{classID}}">{{className}}</a> {{/classes}}
       </nav>
     </div>
     <main class="mdl-layout__content">
       <div class="page-content">
         <div id="page">
-        {{classData.name}} {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}}
-        <button id="tests" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-          Tests
-        </button>
-        <button id="students" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-          students
-        </button>
-        {{/teacher}}
-        {{#student}}
-        <div class="mdl-layout__drawer">
-          <span class="mdl-layout-title">Menu</span>
-          <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-          </nav>
+          {{classData.name}} {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}} {{/teacher}}
+          <!-- TODO: tabs -->
+          {{/teacher}} {{#student}}
+          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Tests</th>
+                <th>Date</th>
+                <th>?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#tests}}
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                <td>{{date}}</td>
+                <td>?</td>
+              </tr>
+              {{/tests}}
+            </tbody>
+          </table>
+          {{/student}}
         </div>
-        <main class="mdl-layout__content">
-          <div class="page-content">
-            <div id="page">
-            {{classData.name}} {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}}
-            <button id="tests" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-              Tests
-            </button>
-        {{/student}}
-        </div>
+      </div>
     </main>
-    </div>
+  </div>
 </body>
 
 </html>

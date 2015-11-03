@@ -19,16 +19,16 @@ var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'h
 app.listen(port);
 console.log('Listening on port: ' + port);
 
-function scriptGen(script, args) {
+function scriptGen(scriptArray, args) {
     for (var i = 0; i < args.length; i++) {
-        script.push(args[i]);
+        scriptArray.push(args[i]);
     }
-    return script
+    return scriptArray;
 }
 
 function lookUpUser(uid, type) {
     var user;
-    root.child(type)
+    root.child(type + 's')
         .orderByChild("uid")
         .startAt(uid)
         .endAt(uid)
@@ -81,13 +81,13 @@ app.get('/test', function(req, res) {
 });
 app.get('/login', function(req, res) {
     res.render('login', {
-        scripts: scriptGen(scripts, ['../js/login.js']),
+        scripts: scriptGen(scripts.slice(), ['../js/login.js']),
         stylesheets: stylesheets
     });
 });
 app.get('/faq', function(req, res) {
     res.render('questions', {
-        scripts: scriptGen(scripts, ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
+        scripts: scriptGen(scripts.slice(), ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
         stylesheets: stylesheets
     })
 })
@@ -136,7 +136,7 @@ app.post('/signUp', urlencodedParser, function(req, res) {
     }
 });
 app.post('/login', urlencodedParser, function(req, res) {
-    var user = lookUpUser(req.body.uid)
+    var user = lookUpUser(req.body.uid, req.body.type);
     res.render('dashboard', {
         type: req.body.type,
         userData: user[Object.keys(user)[0]],

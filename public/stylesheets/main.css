@@ -4,7 +4,7 @@
 .demo-card-wide > .mdl-card__title {
   color: #fff;
   height: 176px;
-  background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg') center / cover;
+  /*background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg') center / cover;*/
 }
 .demo-card-wide > .mdl-card__menu {
   color: #fff;
@@ -89,8 +89,9 @@ p.hct {
 .classCard{
   padding-left: 3em;
 }
-#addClass{
+
+#addClass {
   position: absolute;
-  left: 1250px;
-    top: 500px;
+  bottom: 2em;
+  right: 2em;
 }
