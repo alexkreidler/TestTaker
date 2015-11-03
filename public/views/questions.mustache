@@ -2,154 +2,155 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>TestTaker</title>
-  {{^scripts}}
-  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-  {{/scripts}} {{^stylesheets}}
-  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
-  <script src="{{.}}"></script>
-  {{/scripts}} {{#stylesheets}}
-  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <title>TestTaker</title>
+    {{^scripts}}
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+    {{/scripts}} {{^stylesheets}}
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
+    <script src="{{.}}"></script>
+    {{/scripts}} {{#stylesheets}}
+    <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
 
-        <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
+                <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
 
-        <div class="mdl-layout-spacer"></div>
+                <div class="mdl-layout-spacer"></div>
 
-        <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link" href="questions.mustache">Support</a>
-          <a class="mdl-navigation__link" href="about.mustache">About</a>
-          <!-- TODO: For development purpaces-->
-          <a class="mdl-navigation__link" href="login.mustache">Login</a>
-        </nav>
-      </div>
-    </header>
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Menu</span>
-      <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-      </nav>
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="questions.mustache">Support</a>
+                    <a class="mdl-navigation__link" href="about.mustache">About</a>
+                    <!-- TODO: For development purpaces-->
+                    <a class="mdl-navigation__link" href="login.mustache">Login</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Menu</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <h1 class="hct">FAQ</h1>
+                <div class="questionContent">
+                    <p>
+                        <!--when this is clicked add a question-->
+                        <a class="nounder" href="mail.mustache">Ask a Question</a>
+                    </p>
+                    <div class="lable">Questions</div>
+                    <br>
+                    <div class="questions">
+                        <p>
+                            <a class="nounder" href="#howtomakeaccount">How do you make an account?</a>
+                            <br>
+                            <a class="nounder" href="#howtologin">How do you log in?</a>
+                            <br>
+                            <a class="nounder" href="#howtomakeclass">How do you make a class?</a>
+                            <br>
+                            <a class="nounder" href="#howtoaddstudents">How do you add students?</a>
+                            <br>
+                            <a class="nounder" href="#howtomaketest">How do you make a test?</a>
+                            <br>
+                            <a class="nounder" href="#howtoaccesstestscores">How do you access a students scores</a>
+                            <br>
+                            <a class="nounder" href="#howtoaccessclasses">How do you access your own scores</a>
+                            <br>
+                            <a class="nounder" href=""></a>
+                            <br>
+                            <a class="nounder" href=""></a>
+                            <br>
+                            <a class="nounder" href=""></a>
+                            <br>
+                            <a class="nounder" href=""></a>
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="answers">
+                    <h3 id="howtomakeaccount" class="answerheadings">Making an account</h3>
+                    <p class="answer">
+                        <ol>
+                            <li class="listQuestions">Go to any page in testtaker</li>
+                            <li class="listQuestions">At the top there is a bar, in it press login</li>
+                            <li class="listQuestions">Create your account or sign in</li>
+                        </ol>
+                    </p>
+                    <br>
+                    <h3 id="howtologin" class="answerheadings">Logging in</h3>
+                    <p class="answer">
+                        <ol>
+                            <li class="listQuestions">Go to any page in testtaker</li>
+                            <li class="listQuestions">At the top there is a bar, in it press login</li>
+                            <li class="listQuestions">Create your account or sign in</li>
+                        </ol>
+                    </p>
+                    <br>
+                    <h3 id="howtomakeclass" class="answerheadings">How to make a class</h3>
+                    <p class="answer">
+                        <ol>
+                            <li class="listQuestions">Go to your dashboard</li>
+                            <li class="listQuestions">There is a button to add a class that looks like this
+                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                                    <i class="material-icons">add</i>
+                                </button>
+                            </li>
+                            <li class="listQuestions">Click on it and go through the prosses of creating a class</li>
+                        </ol>
+                    </p>
+                    <br>
+                    <h3 id="howtoaddstudents" class="answerheadings">How to add students</h3>
+                    <p class="answer">
+                        ___________
+                    </p>
+                    <br>
+                    <h3 id="howtomaketest" class="answerheadings">How to make a test</h3>
+                    <p class="answer">
+                        ___________
+                    </p>
+                    <br>
+                    <h3 id="howtoaccesstestscores" class="answerheadings">How to access test scores</h3>
+                    <p class="answer">
+                        ___________
+                    </p>
+                    <br>
+                    <h3 id="howtoaccessclasses" class="answerheadings">How to access classes</h3>
+                    <p class="answer">
+                        ___________
+                    </p>
+                    <br>
+                </div>
+            </div>
+            <br>
+
+
+        </main>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">Title</div>
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="questions.mustache">Help</a></li>
+                    <li><a href="#">Privacy &amp; Terms</a></li>
+                </ul>
+            </div>
+        </footer>
     </div>
-    <main class="mdl-layout__content">
-      <div class="page-content">
-
-        <h1 class="hct">FAQ</h1>
-        <div class="questionContent">
-          <p>
-            <!--when this is clicked add a question-->
-            <a class="nounder" href="mail.mustache">Ask a Question</a>
-          </p>
-          <div class="lable">Questions</div>
-          <br>
-          <div class="questions">
-            <p>
-              <a class="nounder" href="#howtomakeaccount">How do you make an account?</a>
-              <br>
-              <a class="nounder" href="#howtologin">How do you log in?</a>
-              <br>
-              <a class="nounder" href="#howtomakeclass">How do you make a class?</a>
-              <br>
-              <a class="nounder" href="#howtoaddstudents">How do you add students?</a>
-              <br>
-              <a class="nounder" href="#howtomaketest">How do you make a test?</a>
-              <br>
-              <a class="nounder" href="#howtoaccesstestscores">How do you access a students scores</a>
-              <br>
-              <a class="nounder" href="#howtoaccessclasses">How do you access your own scores</a>
-              <br>
-              <a class="nounder" href=""></a>
-              <br>
-              <a class="nounder" href=""></a>
-              <br>
-              <a class="nounder" href=""></a>
-              <br>
-              <a class="nounder" href=""></a>
-            </p>
-          </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="answers">
-          <h3 id="howtomakeaccount" class="answerheadings">Making an account</h3>
-          <p class="answer">
-            <ol>
-              <li class="listQuestions">Go to any page in testtaker</li>
-              <li class="listQuestions">At the top there is a bar, in it press login</li>
-              <li class="listQuestions">Create your account or sign in</li>
-            </ol>
-          </p>
-          <br>
-          <h3 id="howtologin" class="answerheadings">Logging in</h3>
-          <p class="answer">
-            <ol>
-              <li class="listQuestions">Go to any page in testtaker</li>
-              <li class="listQuestions">At the top there is a bar, in it press login</li>
-              <li class="listQuestions">Create your account or sign in</li>
-            </ol>
-          </p>
-          <br>
-          <h3 id="howtomakeclass" class="answerheadings">How to make a class</h3>
-          <p class="answer">
-            <ol>
-              <li class="listQuestions">Go to your dashboard</li>
-              <li class="listQuestions">There is a button to add a class that looks like this
-                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-                  <i class="material-icons">add</i>
-                </button>
-              </li>
-              <li class="listQuestions">Click on it and go through the prosses of creating a class</li>
-            </ol>
-          </p>
-          <br>
-          <h3 id="howtoaddstudents" class="answerheadings">How to add students</h3>
-          <p class="answer">
-            ___________
-          </p>
-          <br>
-          <h3 id="howtomaketest" class="answerheadings">How to make a test</h3>
-          <p class="answer">
-            ___________
-          </p>
-          <br>
-          <h3 id="howtoaccesstestscores" class="answerheadings">How to access test scores</h3>
-          <p class="answer">
-            ___________
-          </p>
-          <br>
-          <h3 id="howtoaccessclasses" class="answerheadings">How to access classes</h3>
-          <p class="answer">
-            ___________
-          </p>
-          <br>
-        </div>
-      </div>
-      <br>
-      <footer class="mdl-mini-footer">
-        <div class="mdl-mini-footer__left-section">
-          <div class="mdl-logo">Title</div>
-          <ul class="mdl-mini-footer__link-list">
-            <li><a href="questions.mustache">Help</a></li>
-            <li><a href="#">Privacy &amp; Terms</a></li>
-          </ul>
-        </div>
-      </footer>
-
-  </div>
-  </main>
 
 </body>
 
