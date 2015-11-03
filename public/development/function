@@ -1,3 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>TestTaker</title>
+  {{^scripts}}
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  {{/scripts}} {{^stylesheets}}
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
+  <script src="{{.}}"></script>
+  {{/scripts}} {{#stylesheets}}
+  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+
+        <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
+
+        <div class="mdl-layout-spacer"></div>
+
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="questions.mustache">Support</a>
+          <a class="mdl-navigation__link" href="about.mustache">About</a>
+          <!-- TODO: For development purpaces-->
+          <a class="mdl-navigation__link" href="login.mustache">Login</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <button type="button" name="button" onclick="makequestion('hi', 0, 'text', [])">text</button>
+      <div id="questions">
+
+      </div>
+      </div>
+      <br>
+      <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+          <div class="mdl-logo">Title</div>
+          <ul class="mdl-mini-footer__link-list">
+            <li><a href="questions.mustache">Help</a></li>
+            <li><a href="#">Privacy &amp; Terms</a></li>
+          </ul>
+        </div>
+      </footer>
+
+  </div>
+  </main>
+
+<script>
 function makequestion(prompt, image, type, answers){
   var questions = document.getElementById('questions').innerHTML
   var question;
@@ -5,16 +71,20 @@ function makequestion(prompt, image, type, answers){
   switch(type){
     case 'text':
     question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url('+image+')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n'+prompt+'\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div>\n<input class=mdl-textfield__input id=question{{______}}></div>\n<label class=mdl-textfield__label for=question{{______}}>Answer...</label>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
+    questions = questions + question;
     break;
     case 'radio':
     //TODO: change to radio
     question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url('+image+')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n'+prompt+'\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
     for (var i = 0; i < answers.length; i++) {
       options = document.getElementById('radioHolder');
-      options = options + answers[i];
+      options = options +  + answers[i];
       document.getElementById('radioHolder') = options;
     }
     break;
   }
   questions = questions + question;
 }
+</script>
+</body>
+</html>
