@@ -1,0 +1,20 @@
+function makequestion(prompt, image, type, answers){
+  var questions = document.getElementById('questions').innerHTML
+  var question;
+  var options
+  switch(type){
+    case 'text':
+    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url('+image+')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n'+prompt+'\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div>\n<input class=mdl-textfield__input id=question{{______}}></div>\n<label class=mdl-textfield__label for=question{{______}}>Answer...</label>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
+    break;
+    case 'radio':
+    //TODO: change to radio
+    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url('+image+')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n'+prompt+'\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
+    for (var i = 0; i < answers.length; i++) {
+      options = document.getElementById('radioHolder');
+      options = options + answers[i];
+      document.getElementById('radioHolder') = options;
+    }
+    break;
+  }
+  questions = questions + question;
+}
