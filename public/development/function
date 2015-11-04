@@ -71,6 +71,7 @@ function makequestion(prompt, image, type, answers){
   var question;
   var question2 = '';
   var options;
+  var checkbox;
   document.getElementById('questions').innerHTML = questions;
   switch(type){
     case 'text':
@@ -95,7 +96,8 @@ function makequestion(prompt, image, type, answers){
           questions = questions + question
           document.getElementById('questions').innerHTML = questions;
         for (var i = 0; i < answers.length; i++) {
-          question2 = question2 + '<input type="checkbox" name="question" id="question'+number+'">'+answers[i]+'<br>'
+          checkbox = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="question'+number+'">\n<input type="checkbox" id="question'+number+'" class="mdl-checkbox__input">\n<span class="mdl-checkbox__label">'+answers[i]+'</span>\n</label>';
+          question2 = question2 + checkbox;
         }
         document.getElementById('checkboxHolder').innerHTML = question2
         document.getElementById('checkboxHolder').id = 'added'

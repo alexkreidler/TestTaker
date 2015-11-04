@@ -95,3 +95,7 @@ p.hct {
   bottom: 2em;
   right: 2em;
 }
+
+body {
+  min-height: 100vh;
+}
