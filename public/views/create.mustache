@@ -51,19 +51,22 @@
         <div>
           <div class="mdl-textfield mdl-js-textfield testimage">
             <input name="testImage" class="mdl-textfield__input" type="text" id="testImage" onkeyup="test()">
-            <label class="mdl-textfield__label" for="loginPass">Image...</label>
+            <label class="mdl-textfield__label" for="loginPass">Image url...</label>
           </div>
+          <br>
           <div class="mdl-textfield mdl-js-textfield testprompt">
             <input name="testImage" class="mdl-textfield__input" type="text" id="testPrompt" onkeyup="test()">
             <label class="mdl-textfield__label" for="loginPass">Prompt...</label>
           </div>
+          <br>
           <div class="mdl-textfield mdl-js-textfield" id="test-type">
             <input name="testImage" class="mdl-textfield__input" type="text" id="testType" onkeyup="test()">
             <label class="mdl-textfield__label" for="loginPass">Type...</label>
           </div>
+          <br>
           <div class="mdl-textfield mdl-js-textfield" id="test-questions">
             <input name="testImage" class="mdl-textfield__input" type="text" id="testQuestions" onkeyup="test()">
-            <label class="mdl-textfield__label" for="loginPass">Questions...</label>
+            <label class="mdl-textfield__label" for="testQuestions">Questions...</label>
           </div>
         </div>
       </div>
@@ -79,17 +82,18 @@
     </footer>
   <div class="mdl-layout__obfuscator"></div></div></div>
   <script>
-    function test() {
       var type = document.getElementById('testType').value
-      var questions = document.getElementById("testQuestions").innerHTML
+      var questions = document.getElementById("testQuestions").value
+      var questions2;
+    function test() {
+      type = document.getElementById('testType').value
+      questions = document.getElementById("testQuestions").value
       type = type.toLowerCase();
       if (type == 'checkbox' || type == 'check box' || type == 'multiple choice' || type == 'h') {
         document.getElementById('test-questions').style.display = '';
         if (questions != "") {
-        questions = document.getElementById("testQuestions").innerHTML
-          alert("his")
-//          questions = questions.split(', ')
-          alert(questions)
+        questions = document.getElementById("testQuestions").value
+          questions2 = questions.split(',f')
         }
       } else {
         document.getElementById('test-questions').style.display = 'none';
