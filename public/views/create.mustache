@@ -64,7 +64,7 @@
             <label class="mdl-textfield__label" for="loginPass">Type...</label>
           </div>
           <br>
-          <div class="mdl-textfield mdl-js-textfield" id="test-questions2">
+          <div class="mdl-textfield mdl-js-textfield" id="test-questions">
             <input name="testImage" class="mdl-textfield__input" type="text" id="testQuestions" onkeyup="test()">
             <label class="mdl-textfield__label" for="testQuestions">Questions...</label>
           </div>
@@ -111,13 +111,13 @@
         } else if (type == 'multiple choice') {
           type = 'radio';
         }
-        document.getElementById('test-questions2').style.display = '';
+        document.getElementById('test-questions').style.display = '';
         if (questions2 != "") {
         questions2 = document.getElementById("testQuestions").value
           questions3 = questions2.split(', ');
         }
       } else {
-        document.getElementById('test-questions2').style.display = 'none';
+        document.getElementById('test-questions').style.display = 'none';
       }
     }
     var number = 0;
