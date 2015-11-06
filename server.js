@@ -1,10 +1,19 @@
 var version = '0.0.0'
+var clientVersion = '0.0.0'
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
-var Firebase = require('firebase');
 var bodyParser = require('body-parser');
-var consolidate = require('consolidate');
+//Work on redirection
+//var express-session = require('express-session');
+var port = process.env.PORT || 3000;
 var app = express();
+app.listen(port);
+console.log('Listening on port: ' + port);
+app.use(express.static('public'));
+
+var Firebase = require('firebase');
+var consolidate = require('consolidate');
+//var RedisStore = require('connect-redis')(session);
 var root = new Firebase('http://testtaker.firebaseio.com')
 var students = root.child('students');
 var teachers = root.child('teachers');
@@ -12,19 +21,28 @@ var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
-var port = process.env.PORT || 3000;
-var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
-var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
+var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js', '../js/main.js'];
+var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', '../stylesheets/main.css', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css'];
+var dataPass = {};
 
-app.listen(port);
-console.log('Listening on port: ' + port);
+/*
+app.use(session({
+    genid: function(req) {
+        return Math.floor((Math.random() * 9999999999) + 1);
+    },
+    secret: Math.floor((Math.random() * 9999999999) + 1)
+}));
+*/
+app.use(express.static('public'));
 
+//dont need now that it is all in one js file
+/*
 function scriptGen(scriptArray, args) {
     for (var i = 0; i < args.length; i++) {
         scriptArray.push(args[i]);
     }
     return scriptArray;
-}
+}*/
 
 function lookUpUser(uid, type, callback) {
     console.log(uid + ' TYPE: ' + type);
@@ -48,7 +66,8 @@ var urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
 
-app.use(express.static('public'));
+//work on redirection
+//app.use(express-session());
 
 // TODO: helper 'error' function to send back errors
 /*function error(code){
@@ -83,8 +102,9 @@ app.get('/test', function(req, res) {
 });
 app.get('/login', function(req, res) {
     res.render('login', {
-        scripts: scriptGen(scripts.slice(), ['../js/login.js']),
-        stylesheets: stylesheets
+        scripts: scripts,
+        stylesheets: stylesheets,
+        version: clientVersion
     });
 });
 app.get('/faq', function(req, res) {
@@ -141,15 +161,56 @@ app.post('/signUp', urlencodedParser, function(req, res) {
 });
 app.post('/login', urlencodedParser, function(req, res) {
     lookUpUser(req.body.uid, req.body.type, function(data) {
+        /*var dataPassId = Math.floor((Math.random * 9999999) + 1);
+        dataPass[dataPassId] = {
+            type: req.body.type,
+            userData: data[Object.keys(data)[0]]
+        }*/
+        /*
+        req.session.type = req.body.type;
+        req.session.userData = data[Object.keys(data)[0]];
+        res.redirect('/dashboard');
+        */
         res.render('dashboard', {
             type: req.body.type,
             userData: data[Object.keys(data)[0]],
             title: 'Dashboard',
             scripts: scripts,
+            stylesheets: stylesheets,
+            version: clientVersion
+        });
+        //res.redirect('/dashboard?dataPass=' + dataPassId
+    });
+    /*app.all('/dashboard', function(req, res) {
+      if (req.session.type && req.session.userData) {
+        res.render('dashboard', {
+          type: req.session.type,
+          userData: req.session.userData,
+          title: 'Dashboard',
+          scripts: scripts,
+          stylesheets: stylesheets
+        });
+      } else {
+        // TODO: error 'you need to sign in'
+      }
+    });
+    */
+});
+/*app.get('/dashboard', function(req, res){
+    console.log('Dashboard');
+    if(dataPass[req.params.dataPass]){
+        var data = dataPass[req.params.dataPass];
+        res.render('dashboard', {
+            type: data.type,
+            userData: data.userData,
+            title: 'Dashboard',
+            scripts: scripts,
             stylesheets: stylesheets
         });
-    });
-});
+    } else {
+        res.status(400).send('not logged in');
+    }
+})*/
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
