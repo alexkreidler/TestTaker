@@ -4,6 +4,7 @@ var express = require('express');
 var Firebase = require('firebase');
 var bodyParser = require('body-parser');
 var consolidate = require('consolidate');
+//var express-session = require('express-session');
 var app = express();
 var root = new Firebase('http://testtaker.firebaseio.com')
 var students = root.child('students');
@@ -15,9 +16,12 @@ var responses = root.child('responses');
 var port = process.env.PORT || 3000;
 var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
+var dataPass = {};
 
 app.listen(port);
 console.log('Listening on port: ' + port);
+
+app.use(express.static('public'));
 
 function scriptGen(scriptArray, args) {
     for (var i = 0; i < args.length; i++) {
@@ -48,7 +52,7 @@ var urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
 
-app.use(express.static('public'));
+//app.use(express-session());
 
 // TODO: helper 'error' function to send back errors
 /*function error(code){
@@ -141,6 +145,11 @@ app.post('/signUp', urlencodedParser, function(req, res) {
 });
 app.post('/login', urlencodedParser, function(req, res) {
     lookUpUser(req.body.uid, req.body.type, function(data) {
+        /*var dataPassId = Math.floor((Math.random * 9999999) + 1);
+        dataPass[dataPassId] = {
+            type: req.body.type,
+            userData: data[Object.keys(data)[0]]
+        }*/
         res.render('dashboard', {
             type: req.body.type,
             userData: data[Object.keys(data)[0]],
@@ -148,8 +157,25 @@ app.post('/login', urlencodedParser, function(req, res) {
             scripts: scripts,
             stylesheets: stylesheets
         });
+        //res.redirect('/dashboard?dataPass=' + dataPassId);
     });
 });
+
+/*app.get('/dashboard', function(req, res){
+    console.log('Dashboard');
+    if(dataPass[req.params.dataPass]){
+        var data = dataPass[req.params.dataPass];
+        res.render('dashboard', {
+            type: data.type,
+            userData: data.userData,
+            title: 'Dashboard',
+            scripts: scripts,
+            stylesheets: stylesheets
+        });
+    } else {
+        res.status(400).send('not logged in');
+    }
+})*/
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
