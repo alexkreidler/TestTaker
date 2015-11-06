@@ -6,34 +6,32 @@
     <title>TestTaker</title>
     {{^scripts}}
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-    {{/scripts}}
-    {{^stylesheets}}
+    {{/scripts}} {{^stylesheets}}
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="../stylesheets/main.css" rel="stylesheet">
-    {{/stylesheets}}
+    <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}}
     {{#scripts}}
         <script src="{{.}}"></script>
     {{/scripts}}
     {{#stylesheets}}
-        <link href="{{.}}" rel="stylesheet">
-    {{/stylesheets}}
+        <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
+    <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
-
+                <!-- Title -->
                 <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
-
+                <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
-
+                <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
                     <a class="mdl-navigation__link" href="questions.mustache">Support</a>
-                    <a class="mdl-navigation__link" href="">About</a>
-                    <!-- TODO: For development purposes-->
+                    <a class="mdl-navigation__link" href="about.mustache">About</a>
+                    <!-- TODO: For development purpaces-->
                     <a class="mdl-navigation__link" href="login.mustache">Login</a>
                 </nav>
             </div>
@@ -41,21 +39,21 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Menu</span>
             <nav class="mdl-navigation">
-                {{#userData.classes}}
-                    <a class="mdl-navigation__link" href="/classes/{{id}}">{{className}}</a>
-                {{/userData.classes}}
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
             </nav>
         </div>
         <main class="mdl-layout__content">
+
             <div class="page-content">
 
                 <h1 class="hct">TestTaker</h1>
-
                 <p class="hct">Welcome {{userData.name}}</p>
                 <button id="addClass" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
                     <i class="material-icons">add</i>
                 </button>
-
                 {{#userData.classes}}
                     <div class="classCard">
                         <div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -79,31 +77,8 @@
                         </div>
                     </div>
                 {{/userData.classes}}
-                <div class="center-responsive">
-                    <!-- TODO: For development purpaces-->
-                </div>
-                <br>
-
-                <footer class="mdl-mini-footer">
-                    <div class="mdl-mini-footer__left-section">
-                        <div class="mdl-logo">Title</div>
-                        <ul class="mdl-mini-footer__link-list">
-                            <li><a href="questions.mustache">Help</a></li>
-                            <li><a href="privacy.mustache">Privacy &amp; Terms</a></li>
-                        </ul>
-                    </div>
-                </footer>
             </div>
         </main>
-        <footer class="mdl-mini-footer">
-          <div class="mdl-mini-footer__left-section">
-            <div class="mdl-logo">Title</div>
-            <ul class="mdl-mini-footer__link-list">
-              <li><a href="questions.mustache">Help</a></li>
-              <li><a href="#">Privacy &amp; Terms</a></li>
-            </ul>
-          </div>
-        </footer>
     </div>
 </body>
 
