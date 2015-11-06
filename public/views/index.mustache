@@ -14,11 +14,16 @@
     {{/scripts}} {{#stylesheets}}
     <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style>
+    body {
+      color: white;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
+    <div class="mdl-layout mdl-js-layout code-image">
+        <header class="mdl-layout__header mdl-layout__header--transparent">
             <div class="mdl-layout__header-row">
 
                 <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>

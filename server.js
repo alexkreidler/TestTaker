@@ -11,8 +11,7 @@ app.use(express.static('public'));
 
 var Firebase = require('firebase');
 var consolidate = require('consolidate');
-var session = require('express-session');
-//var RedisStore = require('connect-redis')(session);
+var session = require('client-sessions');
 var root = new Firebase('http://testtaker.firebaseio.com')
 var students = root.child('students');
 var teachers = root.child('teachers');
@@ -24,10 +23,10 @@ var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css', '../stylesheets/main.css'];
 
 app.use(session({
-  genid: function(req) {
-    return Math.floor((Math.random() * 9999999999) + 1);
-  },
-  secret: Math.floor((Math.random() * 9999999999) + 1)
+  cookieName: 'session',
+  secret: 'random_string_goes_here',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
 }));
 
 function scriptGen(scriptArray, args) {
@@ -92,10 +91,19 @@ app.get('/test', function(req, res) {
   res.redirect('/')
 });
 app.get('/login', function(req, res) {
-  res.render('login', {
-    scripts: scriptGen(scripts.slice(), ['../js/login.js']),
-    stylesheets: stylesheets
-  });
+  if (req.params.not_signed_in == true) {
+    res.render('login', {
+      scripts: scriptGen(scripts.slice(), ['../js/login.js']),
+      stylesheets: stylesheets,
+      error: 'You are not signed in yet'
+    });
+  } else {
+    res.render('login', {
+      scripts: scriptGen(scripts.slice(), ['../js/login.js']),
+      stylesheets: stylesheets
+    });
+  }
+
 });
 app.get('/faq', function(req, res) {
   res.render('questions', {
@@ -151,34 +159,27 @@ app.post('/signUp', urlencodedParser, function(req, res) {
 });
 app.post('/login', urlencodedParser, function(req, res) {
   lookUpUser(req.body.uid, req.body.type, function(data) {
-    /*
-    req.session.type = req.body.type;
-    req.session.userData = data[Object.keys(data)[0]];
-    res.redirect('/dashboard');
-    */
-    res.render('dashboard', {
+    req.session.user = {
       type: req.body.type,
-      userData: data[Object.keys(data)[0]],
-      title: 'Dashboard',
-      scripts: scripts,
-      stylesheets: stylesheets
-    });
+      userData: data[Object.keys(data)[0]]
+    }
+    res.redirect('/dashboard');
   });
 });
-/*app.all('/dashboard', function(req, res) {
-  if (req.session.type && req.session.userData) {
+app.all('/dashboard', function(req, res) {
+  if (req.session.user.type && req.session.user.userData) {
     res.render('dashboard', {
-      type: req.session.type,
-      userData: req.session.userData,
+      type: req.session.user.type,
+      userData: req.session.user.userData,
       title: 'Dashboard',
       scripts: scripts,
       stylesheets: stylesheets
     });
   } else {
-    // TODO: error 'you need to sign in'
+    res.redirect('/login?not_signed_in=true')
   }
 });
-*/
+
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {

@@ -99,3 +99,6 @@ p.hct {
 body {
   min-height: 100vh;
 }
+.code-image {
+  background: url('https://source.unsplash.com/6g0KJWnBhxg/1600x900')
+}
