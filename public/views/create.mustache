@@ -1,0 +1,102 @@
+<html class="mdl-js">
+<head>
+  <meta charset="utf-8">
+  <title>TestTaker</title>
+  </head><body>{{^scripts}}
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  {{/scripts}} {{^stylesheets}}
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
+  <script src="{{.}}"></script>
+  {{/scripts}} {{#stylesheets}}
+  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+
+
+  <div class="mdl-layout__container"><div class="mdl-layout mdl-js-layout mdl-layout--fixed-header has-drawer " data-upgraded=",MaterialLayout">
+    <header class="mdl-layout__header is-casting-shadow"><div class="mdl-layout__drawer-button"><i class="material-icons">menu</i></div>
+      <div class="mdl-layout__header-row">
+
+        <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
+
+        <div class="mdl-layout-spacer"></div>
+
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="questions.mustache">Support</a>
+          <a class="mdl-navigation__link" href="">About</a>
+          <!-- TODO: For development purpaces-->
+          <a class="mdl-navigation__link" href="login.mustache">Login</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+
+        <h1 class="hct">Create</h1>
+        <button id="addTest" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+          <i class="material-icons">add</i>
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+        <div>
+          <div class="mdl-textfield mdl-js-textfield testimage">
+            <input name="testImage" class="mdl-textfield__input" type="text" id="testImage" onkeyup="test()">
+            <label class="mdl-textfield__label" for="loginPass">Image...</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield testprompt">
+            <input name="testImage" class="mdl-textfield__input" type="text" id="testPrompt" onkeyup="test()">
+            <label class="mdl-textfield__label" for="loginPass">Prompt...</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield" id="test-type">
+            <input name="testImage" class="mdl-textfield__input" type="text" id="testType" onkeyup="test()">
+            <label class="mdl-textfield__label" for="loginPass">Type...</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield" id="test-questions">
+            <input name="testImage" class="mdl-textfield__input" type="text" id="testQuestions" onkeyup="test()">
+            <label class="mdl-textfield__label" for="loginPass">Questions...</label>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="mdl-mini-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Title</div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="questions.mustache">Help</a></li>
+          <li><a href="#">Privacy &amp; Terms</a></li>
+        </ul>
+      </div>
+    </footer>
+  <div class="mdl-layout__obfuscator"></div></div></div>
+  <script>
+    function test() {
+      var type = document.getElementById('testType').value
+      var questions = document.getElementById("testQuestions").innerHTML
+      type = type.toLowerCase();
+      if (type == 'checkbox' || type == 'check box' || type == 'multiple choice' || type == 'h') {
+        document.getElementById('test-questions').style.display = '';
+        if (questions != "") {
+        questions = document.getElementById("testQuestions").innerHTML
+          alert("his")
+//          questions = questions.split(', ')
+          alert(questions)
+        }
+      } else {
+        document.getElementById('test-questions').style.display = 'none';
+      }
+    }
+  </script>
+
+
+
+</body></html>

@@ -19,7 +19,8 @@
     "express": "latest",
     "firebase": "latest",
     "consolidate": "latest",
-    "mustache": "latest"
+    "mustache": "latest",
+    "express-session": "latest"
   },
   "devDependencies": {
     "gulp": "latest",
