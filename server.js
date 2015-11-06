@@ -1,4 +1,5 @@
 var version = '0.0.0'
+var clientVersion = '0.0.0'
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -20,7 +21,7 @@ var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
-var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js'];
+var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js', '../js/main.js'];
 var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', '../stylesheets/main.css', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css'];
 var dataPass = {};
 
@@ -34,12 +35,14 @@ app.use(session({
 */
 app.use(express.static('public'));
 
+//dont need now that it is all in one js file
+/*
 function scriptGen(scriptArray, args) {
     for (var i = 0; i < args.length; i++) {
         scriptArray.push(args[i]);
     }
     return scriptArray;
-}
+}*/
 
 function lookUpUser(uid, type, callback) {
     console.log(uid + ' TYPE: ' + type);
@@ -99,8 +102,9 @@ app.get('/test', function(req, res) {
 });
 app.get('/login', function(req, res) {
     res.render('login', {
-        scripts: scriptGen(scripts.slice(), ['../js/login.js']),
-        stylesheets: stylesheets
+        scripts: scripts,
+        stylesheets: stylesheets,
+        version: clientVersion
     });
 });
 app.get('/faq', function(req, res) {
@@ -167,12 +171,13 @@ app.post('/login', urlencodedParser, function(req, res) {
         req.session.userData = data[Object.keys(data)[0]];
         res.redirect('/dashboard');
         */
-        res.render('dashboard2', {
+        res.render('dashboard', {
             type: req.body.type,
             userData: data[Object.keys(data)[0]],
             title: 'Dashboard',
             scripts: scripts,
-            stylesheets: stylesheets
+            stylesheets: stylesheets,
+            version: clientVersion
         });
         //res.redirect('/dashboard?dataPass=' + dataPassId
     });
