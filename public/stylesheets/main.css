@@ -94,6 +94,7 @@ p.hct {
   position: fixed;
   bottom: 2em;
   right: 2em;
+  z-index: 2;
 }
 
 body {

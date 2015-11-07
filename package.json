@@ -20,7 +20,8 @@
     "consolidate": "latest",
     "express": "latest",
     "firebase": "latest",
-    "mustache": "latest"
+    "mustache": "latest",
+    "async": "latest"
   },
   "devDependencies": {
     "gulp": "latest",

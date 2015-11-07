@@ -12,6 +12,7 @@ app.use(express.static('public'));
 var Firebase = require('firebase');
 var consolidate = require('consolidate');
 var session = require('client-sessions');
+var async = require('async')
 var root = new Firebase('http://testtaker.firebaseio.com')
 var students = root.child('students');
 var teachers = root.child('teachers');
@@ -90,7 +91,7 @@ function toArray(data) {
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.all('/dashboard', function(req, res) {
-    if (req.session.user.userData) {
+    if (req.session.user) {
         var userData = req.session.user.userData;
         root.child([req.session.user.type] + 's')
             .orderByChild('uid')
@@ -102,42 +103,43 @@ app.all('/dashboard', function(req, res) {
                 data = data[Object.keys(data)[0]];
                 var name = data.name;
                 data.classes = toArray(data.classes);
-                var counter = 0;
-                for (var x = 0; x < data.classes.length; x++) {
-                    classes.child(data.classes[x]).once('value', function(snap) {
-                        // weird distortion - in for loop x = 0, in async, x = 1
-                        console.log(snap.val());
-                        var thisClass = snap.val()
-                        thisClass.code = '';
-                        data.classes[x - 1] = snap.val()
-                        counter++;
-                        if (counter == (data.classes.length)) {
-                            nextOperation()
-                        }
+                var otherArr = [];
+                async.each(data.classes, function(item, callback) {
+                    classes.child(item).once('value', function(snap) {
+                        var thisClass = snap.val();
+                        thisClass.id = item;
+                        console.log(thisClass.code);
+                        otherArr.push(thisClass);
+                        callback()
+                    }, function(err) {
+                        callback(err)
                     });
-                }
+                }, function(err) {
+                    if (err) {
 
-                function nextOperation() {
-                    var student;
-                    var teacher;
-                    if (req.session.user.type == 'student') {
-                        student = true;
-                        teacher = false;
-                    } else if (req.session.user.type == 'teacher') {
-                        student = false;
-                        teacher = true;
+                    } else {
+                        data.classes = otherArr;
+                        var student;
+                        var teacher;
+                        if (req.session.user.type == 'student') {
+                            student = true;
+                            teacher = false;
+                        } else if (req.session.user.type == 'teacher') {
+                            student = false;
+                            teacher = true;
+                        }
+                        console.log(data);
+                        res.render('dashboard', {
+                            type: req.session.user.type,
+                            student: student,
+                            teacher: teacher,
+                            userData: data,
+                            title: 'Dashboard',
+                            scripts: scripts,
+                            stylesheets: stylesheets
+                        });
                     }
-                    console.log(data);
-                    res.render('dashboard', {
-                        type: req.session.user.type,
-                        student: student,
-                        teacher: teacher,
-                        userData: data,
-                        title: 'Dashboard',
-                        scripts: scripts,
-                        stylesheets: stylesheets
-                    });
-                }
+                });
             });
     } else {
         res.redirect('/login?error=not_signed_in')
