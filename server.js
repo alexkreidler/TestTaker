@@ -3,8 +3,6 @@ var clientVersion = '0.0.0'
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
-//Work on redirection
-//var express-session = require('express-session');
 var port = process.env.PORT || 3000;
 var app = express();
 app.listen(port);
@@ -27,34 +25,34 @@ var dataPass = {};
 
 
 app.use(session({
-  cookieName: 'session',
-  secret: 'random_string_goes_here',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+    cookieName: 'session',
+    secret: 'random_string_goes_here',
+    duration: 30 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000,
 }));
 app.use(express.static('public'));
 
 
 function lookUpUser(uid, type, callback) {
-  console.log(uid + ' TYPE: ' + type);
-  try {
-    root.child(type + 's')
-      .orderByChild("uid")
-      .startAt(uid)
-      .endAt(uid)
-      .once('value', function(snap) {
-        user = snap.val();
-        if (user == null) {
-          callback('No user found', null);
-        } else {
-          callback(null, user);
-        }
-      }, function(err) {
-        callback(err, null)
-      });
-  } catch (err) {
-    callback(err, null);
-  }
+    console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
+    try {
+        root.child(type + 's')
+            .orderByKey()
+            .startAt(uid)
+            .endAt(uid)
+            .once('value', function(snap) {
+                user = snap.val();
+                if (user == null) {
+                    callback('No user found', null);
+                } else {
+                    callback(null, user);
+                }
+            }, function(err) {
+                callback(err, null)
+            });
+    } catch (err) {
+        callback(err, null);
+    }
 }
 
 app.engine('mustache', consolidate.mustache);
@@ -62,11 +60,10 @@ app.set('views', __dirname + '/public/views');
 app.set('view engine', 'mustache');
 
 var urlencodedParser = bodyParser.urlencoded({
-  extended: true
+    extended: true
 });
 
-//work on redirection
-//app.use(express-session());
+
 
 // TODO: helper 'error' function to send back errors
 /*function error(code){
@@ -82,38 +79,73 @@ var urlencodedParser = bodyParser.urlencoded({
   break;
 }
 */
+function toArray(data) {
+    return Object.keys(data).map(function(key) {
+        return data[key]
+    });
+}
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************APP.ALL REQUESTS****************************************************
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.all('/dashboard', function(req, res) {
-  if (req.session.user.type && req.session.user.userData) {
-    console.log(req.session.user.userData);
-    var userData = req.session.user.userData;
-    root.child([req.session.user.type] + 's')
-      .orderByChild('uid')
-      .startAt(userData.uid)
-      .endAt(userData.uid)
-      .once('value', function(snap) {
-        data = snap.val()
-        var inner = data[Object.keys(data)[0]]
-        console.log(inner);
-      });
-    res.render('dashboard', {
-      type: req.session.user.type,
-      userData: req.session.user.userData,
-      title: 'Dashboard',
-      scripts: scripts,
-      stylesheets: stylesheets
-    });
-  } else {
-    res.redirect('/login?not_signed_in=true')
-  }
+    if (req.session.user.userData) {
+        var userData = req.session.user.userData;
+        root.child([req.session.user.type] + 's')
+            .orderByChild('uid')
+            .startAt(req.session.uid)
+            .endAt(req.session.uid)
+            .once('value', function(snap) {
+                data = snap.val()
+                console.log(data);
+                data = data[Object.keys(data)[0]];
+                var name = data.name;
+                data.classes = toArray(data.classes);
+                var counter = 0;
+                for (var x = 0; x < data.classes.length; x++) {
+                    classes.child(data.classes[x]).once('value', function(snap) {
+                        // weird distortion - in for loop x = 0, in async, x = 1
+                        console.log(snap.val());
+                        var thisClass = snap.val()
+                        thisClass.code = '';
+                        data.classes[x - 1] = snap.val()
+                        counter++;
+                        if (counter == (data.classes.length)) {
+                            nextOperation()
+                        }
+                    });
+                }
+
+                function nextOperation() {
+                    var student;
+                    var teacher;
+                    if (req.session.user.type == 'student') {
+                        student = true;
+                        teacher = false;
+                    } else if (req.session.user.type == 'teacher') {
+                        student = false;
+                        teacher = true;
+                    }
+                    console.log(data);
+                    res.render('dashboard', {
+                        type: req.session.user.type,
+                        student: student,
+                        teacher: teacher,
+                        userData: data,
+                        title: 'Dashboard',
+                        scripts: scripts,
+                        stylesheets: stylesheets
+                    });
+                }
+            });
+    } else {
+        res.redirect('/login?error=not_signed_in')
+    }
 });
 app.all('/logout', function(req, res) {
-  req.session.user = undefined;
-  res.redirect('/');
+    req.session.user = undefined;
+    res.redirect('/');
 });
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -122,39 +154,42 @@ app.all('/logout', function(req, res) {
 //*********************************************************************************************************
 
 app.get('/', function(req, res) {
-  res.render('index', {
-    title: 'TestTaker',
-    scripts: scripts,
-    stylesheets: stylesheets
-  });
+    res.render('index', {
+        title: 'TestTaker',
+        scripts: scripts,
+        stylesheets: stylesheets
+    });
 });
 app.get('/test', function(req, res) {
-  //res.sendFile(__dirname + '/static/test/test.html');
-  res.redirect('/')
+    //res.sendFile(__dirname + '/static/test/test.html');
+    res.redirect('/')
 });
 app.get('/login', function(req, res) {
-  if (req.params.not_signed_in == true) {
-    res.render('login', {
-      scripts: scripts,
-      stylesheets: stylesheets,
-      error: 'You are not signed in yet',
-      version: clientVersion
-    });
-  } else if (req.session.user != undefined && req.session.user != null && req.session.user != '' && req.session.user != {}) {
-    res.redirect('/dashboard');
-  } else {
-    res.render('login', {
-      scripts: scripts,
-      stylesheets: stylesheets,
-      version: clientVersion
-    });
-  }
+    console.log(req.query);
+    if (req.session.user != undefined) {
+        res.redirect('/dashboard');
+    } else {
+        var messages, errors = [];
+        if (req.query.message != undefined) {
+            messages = [req.query.message];
+        } else if (req.query.error != undefined) {
+            errors = [req.query.error];
+        }
+        res.render('login', {
+            scripts: scripts,
+            stylesheets: stylesheets,
+            version: clientVersion,
+            messages: messages,
+            errors: errors
+        });
+
+    }
 });
 app.get('/faq', function(req, res) {
-  res.render('questions', {
-    scripts: scripts,
-    stylesheets: stylesheets
-  })
+    res.render('questions', {
+        scripts: scripts,
+        stylesheets: stylesheets
+    })
 })
 
 //*********************************************************************************************************
@@ -163,160 +198,207 @@ app.get('/faq', function(req, res) {
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.post('/signUp', urlencodedParser, function(req, res) {
-  if (req.body.type == 'student') {
-    students.createUser({
-      email: req.body.email,
-      password: req.body.password
-    }, function(error, userData) {
-      if (error) {
-        switch (error.code) {
-          case "EMAIL_TAKEN":
-            res.status(400).json({
-              error: "The new user account cannot be created because the email is already in use."
-            });
-            break;
-          case "INVALID_EMAIL":
-            res.status(400).json({
-              error: "The specified email is not a valid email."
-            });
-            break;
-          default:
-            res.status(500).json({
-              error: error
-            });
-        }
-      } else {
-        students.push({
-          'name': req.body.name,
-          'uid': userData.uid,
-          classes: 0
+    if (req.body.type == 'student') {
+        students.createUser({
+            email: req.body.email,
+            password: req.body.password
+        }, function(error, userData) {
+            if (error) {
+                switch (error.code) {
+                    case "EMAIL_TAKEN":
+                        res.status(400).json({
+                            error: "The new user account cannot be created because the email is already in use."
+                        });
+                        break;
+                    case "INVALID_EMAIL":
+                        res.status(400).json({
+                            error: "The specified email is not a valid email."
+                        });
+                        break;
+                    default:
+                        res.status(500).json({
+                            error: error
+                        });
+                }
+            } else {
+                var spot = students.child(userData.uid)
+                spot.set({
+                    'name': req.body.name,
+                    classes: 0
+                })
+                res.redirect('/login?message=account_created');
+            }
         })
-        res.redirect('/');
-      }
-    })
-  } else if (req.body.type == 'teacher') {
-
-  } else {
-    res.status(400).json({
-      error: 'Invalid user type'
-    });
-  }
-});
-app.post('/login', urlencodedParser, function(req, res) {
-  lookUpUser(req.body.uid, req.body.type, function(err, data) {
-    if (err) {
-      // TODO: error
-      res.status(400).send('whoops! it looks like an error')
+    } else if (req.body.type == 'teacher') {
+        teachers.createUser({
+            email: req.body.email,
+            password: req.body.password
+        }, function(error, userData) {
+            if (error) {
+                switch (error.code) {
+                    case "EMAIL_TAKEN":
+                        res.status(400).json({
+                            error: "The new user account cannot be created because the email is already in use."
+                        });
+                        break;
+                    case "INVALID_EMAIL":
+                        res.status(400).json({
+                            error: "The specified email is not a valid email."
+                        });
+                        break;
+                    default:
+                        res.status(500).json({
+                            error: error
+                        });
+                }
+            } else {
+                var spot = teachers.child(userData.uid)
+                spot.set({
+                    'name': req.body.name,
+                    classes: 0
+                });
+                res.redirect('/login?message=account_created');
+            }
+        })
     } else {
-      req.session.user = {
-        type: req.body.type,
-        userData: data[Object.keys(data)[0]]
-      }
-      res.redirect('/dashboard');
+        res.status(400).json({
+            error: 'Invalid user type'
+        });
     }
-  });
+});
+
+app.post('/login', urlencodedParser, function(req, res) {
+    lookUpUser(req.body.uid, req.body.type, function(err, data) {
+        if (err) {
+            // TODO: error
+            res.status(400).send('whoops! it looks like an error')
+        } else {
+            req.session.user = {
+                type: req.body.type,
+                userData: data[Object.keys(data)[0]],
+                uid: req.body.uid
+            }
+            res.redirect('/dashboard');
+        }
+    });
 });
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
-  console.log('post at addclass')
-  if (req.body.type == 'student') {
-    var key;
-    try {
-      key = classes
-        .orderByKey()
-        .startAt(req.body.classID)
-        .endAt(req.body.classID)
-        .orderByChild('students')
-        .startAt(req.body.studentID)
-        .endAt(req.body.studentID)
-        .key()
-      var studentClasses = students.child(req.body.studentID + '/classes');
-      studentClasses.push(key);
-      res.json({
-        'success': 'class added successfully'
-      });
-    } catch (err) {
-      res.status(500).json({
-        'error': 'class not added successfully'
-      });
-      res.send('whoops! there was an error');
+    console.log('post at addclass')
+    if (req.body.type == 'student') {
+        var key;
+        try {
+            key = classes
+                .orderByKey()
+                .startAt(req.body.classID)
+                .endAt(req.body.classID)
+                .orderByChild('students')
+                .startAt(req.session.user.uid)
+                .endAt(req.session.user.uid)
+                .key()
+            var studentClasses = students.child(req.body.studentID + '/classes');
+            studentClasses.push(key);
+            res.json({
+                'success': 'class added successfully'
+            });
+        } catch (err) {
+            res.status(500).json({
+                'error': 'class not added successfully'
+            });
+            res.send('whoops! there was an error');
+        }
+    } else if (req.body.type == 'teacher') {
+        res.send('we\'re working on it')
+    } else {
+        res.send('we\'re working on it')
     }
-  } else if (req.body.type == 'teacher') {
-      res.send('we\'re working on it')
-  } else {
-      res.send('we\'re working on it')
-  }
 });
 
 app.post('/test', urlencodedParser, function(req, res) {
-  //verify that they can take the test
-  //generate test, pulling from Firebase
-  var questions = [];
-  var randomArray = [];
-  var testDataKey = tests
-    .orderByKey()
-    .startAt(req.body.testID)
-    .endAt(req.body.testID)
-    .child('testData');
-  var thisTestData = testData.child(testDataKey).once('value', function(data) {
-    questions = Object.keys(data);
-  });
+    //verify that they can take the test
+    //generate test, pulling from Firebase
+    var questions = [];
+    var randomArray = [];
+    var testDataKey = tests
+        .orderByKey()
+        .startAt(req.body.testID)
+        .endAt(req.body.testID)
+        .child('testData');
+    var thisTestData = testData.child(testDataKey).once('value', function(data) {
+        questions = Object.keys(data);
+    });
 
-  for (var i = 1; i < questions.length; i++) {
-    var value = Math.floor((Math.random() * questions.length) - 1);
-    var data = questions[value];
-    questions.slice(pos, i);
-    randomArray.push(data);
-  }
+    for (var i = 1; i < questions.length; i++) {
+        var value = Math.floor((Math.random() * questions.length) - 1);
+        var data = questions[value];
+        questions.slice(pos, i);
+        randomArray.push(data);
+    }
 
-  // TODO: substitute references with Firebase values
+    // TODO: substitute references with Firebase values
 
-  //send test to students
-  res.render('test', {
-    'class': data,
-    'teacher': data,
-    'name': data,
-    'questions': [{
-      'prompt': data,
-      'img': data
-    }]
-  });
+    //send test to students
+    res.render('test', {
+        'class': data,
+        'teacher': data,
+        'name': data,
+        'questions': [{
+            'prompt': data,
+            'img': data
+        }]
+    });
 });
 
 app.post('/createTest', urlencodedParser, function(req, res) {
-  // TODO: check auth
-  if (req.body.type == 'teacher') {
-    var thisTestData = testData.push(req.body.testData);
-    var thisTestDataKey = thisTestData.key();
-    var data = JSON.parse(req.body);
-    data.testData = thisTestDataKey;
-  } else {
-    res.status(400).json({
-      error: "You can not create tests."
-    });
-  }
+    // TODO: check auth
+    if (req.body.type == 'teacher') {
+        var thisTestData = testData.push(req.body.testData);
+        var thisTestDataKey = thisTestData.key();
+        var data = JSON.parse(req.body);
+        data.testData = thisTestDataKey;
+    } else {
+        res.status(400).json({
+            error: "You can not create tests."
+        });
+    }
 });
 app.post('/gradeTest', urlencodedParser, function(req, res) {
-  //Record Answers
-  var response = responses.push(req.body)
+    //Record Answers
+    var response = responses.push(req.body)
 
-  var thisTestData;
-  testData
-    .orderByKey()
-    .startAt(req.body.testData)
-    .endAt(req.body.testData)
-    .once('value', function(snap) {
-      thisTestData = Object.keys(snap.val())[0];
+    var thisTestData;
+    testData
+        .orderByKey()
+        .startAt(req.body.testData)
+        .endAt(req.body.testData)
+        .once('value', function(snap) {
+            thisTestData = Object.keys(snap.val())[0];
+        });
+    //
+    var keys = Object.keys(thisTestData.questions)
+    var key;
+    var arrayOfAnswers = [];
+    for (var i = 0; i < keys.length; i++) {
+        key = keys[i];
+        arrayOfAnswers.push(thisTestData[key].answer);
+    }
+});
+//to think about: do it on client for auth
+app.post('/createClass', urlencodedParser, function(req, res) {
+    // TODO: auth
+    var createdClass = classes.push({
+        name: req.body.className,
+        students: 0,
+        teachers: 0,
+        tests: 0
     });
-  //
-  var keys = Object.keys(thisTestData.questions)
-  var key;
-  var arrayOfAnswers = [];
-  for (var i = 0; i < keys.length; i++) {
-    key = keys[i];
-    arrayOfAnswers.push(thisTestData[key].answer);
-  }
+    var key = createdClass.key()
+    var teacher = teachers.child(req.session.user.uid)
+    var teacherClasses = teacher.child('classes');
+    teacherClasses.push(key);
+    // TODO: success
+    res.end('success');
 });
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -324,17 +406,17 @@ app.post('/gradeTest', urlencodedParser, function(req, res) {
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.get('/classes/:classID', function(req, res) {
-  var classData;
-  classes
-    .orderByKey()
-    .startAt(req.params.classID)
-    .endAt(req.params.classID)
-    .once('value', function(snap) {
-      classData = Object.keys(snap.val())[0];
+    var classData;
+    classes
+        .orderByKey()
+        .startAt(req.params.classID)
+        .endAt(req.params.classID)
+        .once('value', function(snap) {
+            classData = Object.keys(snap.val())[0];
+        })
+    res.render('class', {
+        classData: classData
     })
-  res.render('class', {
-    classData: classData
-  })
 });
 
 

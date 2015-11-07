@@ -44,6 +44,22 @@
     <main class="mdl-layout__content">
       <div class="page-content">
         <div id="page">
+            {{#errors}}
+            <!-- TODO: make look nice -->
+            <div>
+                <p>
+                    Error: {{.}}
+                </p>
+            </div>
+            {{/errors}}
+            {{#messages}}
+            <!-- TODO: make look nice -->
+            <div>
+                <p>
+                    {{.}}
+                </p>
+            </div>
+            {{/messages}}
           <div class="login-page">
             <div class="login-inline">
               <h2>Login</h2>
@@ -88,16 +104,14 @@
                   <label class="mdl-textfield__label" for="signUpPass">Password...</label>
                 </div>
                 <br>
-                <!-- button connected  -->
-                <div onclick="$('#signUpForm').submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <div onclick="submit('signUp', 'student')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                   I'm a student
                 </div>
-                <input type="radio" name="type" value="student" class="buttonAppearance"> &nbsp;&nbsp;&nbsp;
-                <!-- button connected  -->
-                <div onclick="$('#signUpForm').submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <input id="studentSignUp" type="radio" name="type" value="student" class="buttonAppearance"> &nbsp;&nbsp;&nbsp;
+                <div onclick="submit('signUp', 'teacher')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                   I'm a teacher
                 </div>
-                <input type="radio" name="type" value="teacher" class="buttonAppearance">
+                <input id="teacherSignUp" type="radio" name="type" value="teacher" class="buttonAppearance">
               </form>
             </div>
           </div>

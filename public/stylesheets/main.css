@@ -118,3 +118,6 @@ body {
 .mdl-mini-footer {
     bottom: 0;
 }
+#dialog {
+    display: none;
+}
