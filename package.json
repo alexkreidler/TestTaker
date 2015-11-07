@@ -16,10 +16,9 @@
   "homepage": "https://bitbucket.org/tim1589/testtaker#readme",
   "dependencies": {
     "body-parser": "latest",
-    "client-sessions": "^0.7.0",
+    "client-sessions": "latest",
     "consolidate": "latest",
     "express": "latest",
-    "express-session": "latest",
     "firebase": "latest",
     "mustache": "latest"
   },

@@ -34,27 +34,27 @@ app.use(session({
 }));
 app.use(express.static('public'));
 
-//dont need now that it is all in one js file
-/*
-function scriptGen(scriptArray, args) {
-    for (var i = 0; i < args.length; i++) {
-        scriptArray.push(args[i]);
-    }
-    return scriptArray;
-}*/
 
 function lookUpUser(uid, type, callback) {
   console.log(uid + ' TYPE: ' + type);
-  root.child(type + 's')
-    .orderByChild("uid")
-    .startAt(uid)
-    .endAt(uid)
-    .once('value', function(snap) {
-      console.log(snap.val());
-      user = snap.val();
-      console.log(user);
-      callback(user);
-    });
+  try {
+    root.child(type + 's')
+      .orderByChild("uid")
+      .startAt(uid)
+      .endAt(uid)
+      .once('value', function(snap) {
+        user = snap.val();
+        if (user == null) {
+          callback('No user found', null);
+        } else {
+          callback(null, user);
+        }
+      }, function(err) {
+        callback(err, null)
+      });
+  } catch (err) {
+    callback(err, null);
+  }
 }
 
 app.engine('mustache', consolidate.mustache);
@@ -84,6 +84,39 @@ var urlencodedParser = bodyParser.urlencoded({
 */
 //*********************************************************************************************************
 //*********************************************************************************************************
+//************************************APP.ALL REQUESTS****************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
+app.all('/dashboard', function(req, res) {
+  if (req.session.user.type && req.session.user.userData) {
+    console.log(req.session.user.userData);
+    var userData = req.session.user.userData;
+    root.child([req.session.user.type] + 's')
+      .orderByChild('uid')
+      .startAt(userData.uid)
+      .endAt(userData.uid)
+      .once('value', function(snap) {
+        data = snap.val()
+        var inner = data[Object.keys(data)[0]]
+        console.log(inner);
+      });
+    res.render('dashboard', {
+      type: req.session.user.type,
+      userData: req.session.user.userData,
+      title: 'Dashboard',
+      scripts: scripts,
+      stylesheets: stylesheets
+    });
+  } else {
+    res.redirect('/login?not_signed_in=true')
+  }
+});
+app.all('/logout', function(req, res) {
+  req.session.user = undefined;
+  res.redirect('/');
+});
+//*********************************************************************************************************
+//*********************************************************************************************************
 //************************************SERVER RENDERING REQUESTS********************************************
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -102,14 +135,16 @@ app.get('/test', function(req, res) {
 app.get('/login', function(req, res) {
   if (req.params.not_signed_in == true) {
     res.render('login', {
-      scripts: scriptGen(scripts.slice(), ['../js/login.js']),
+      scripts: scripts,
       stylesheets: stylesheets,
       error: 'You are not signed in yet',
       version: clientVersion
     });
+  } else if (req.session.user != undefined && req.session.user != null && req.session.user != '' && req.session.user != {}) {
+    res.redirect('/dashboard');
   } else {
     res.render('login', {
-      scripts: scriptGen(scripts.slice(), ['../js/login.js']),
+      scripts: scripts,
       stylesheets: stylesheets,
       version: clientVersion
     });
@@ -117,7 +152,7 @@ app.get('/login', function(req, res) {
 });
 app.get('/faq', function(req, res) {
   res.render('questions', {
-    scripts: scriptGen(scripts.slice(), ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
+    scripts: scripts,
     stylesheets: stylesheets
   })
 })
@@ -168,30 +203,23 @@ app.post('/signUp', urlencodedParser, function(req, res) {
   }
 });
 app.post('/login', urlencodedParser, function(req, res) {
-  lookUpUser(req.body.uid, req.body.type, function(data) {
-    req.session.user = {
-      type: req.body.type,
-      userData: data[Object.keys(data)[0]]
+  lookUpUser(req.body.uid, req.body.type, function(err, data) {
+    if (err) {
+      // TODO: error
+      res.status(400).send('whoops! it looks like an error')
+    } else {
+      req.session.user = {
+        type: req.body.type,
+        userData: data[Object.keys(data)[0]]
+      }
+      res.redirect('/dashboard');
     }
-    res.redirect('/dashboard');
   });
-});
-app.all('/dashboard', function(req, res) {
-  if (req.session.user.type && req.session.user.userData) {
-    res.render('dashboard', {
-      type: req.session.user.type,
-      userData: req.session.user.userData,
-      title: 'Dashboard',
-      scripts: scripts,
-      stylesheets: stylesheets
-    });
-  } else {
-    res.redirect('/login?not_signed_in=true')
-  }
 });
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
+  console.log('post at addclass')
   if (req.body.type == 'student') {
     var key;
     try {
@@ -215,9 +243,9 @@ app.post('/addClass', urlencodedParser, function(req, res) {
       res.send('whoops! there was an error');
     }
   } else if (req.body.type == 'teacher') {
-
+      res.send('we\'re working on it')
   } else {
-
+      res.send('we\'re working on it')
   }
 });
 

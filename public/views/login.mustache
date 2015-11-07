@@ -2,116 +2,121 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>TestTaker</title>
-    {{^scripts}}
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-    {{/scripts}} {{^stylesheets}}
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}}  {{#stylesheets}}
-    <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="utf-8">
+  <title>TestTaker</title>
+  {{^scripts}}
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  {{/scripts}} {{^stylesheets}}
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#stylesheets}}
+  <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 </head>
 
 <body>
-    <!-- Always shows a header, even in smaller screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
-                <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
-                <!-- Navigation. We hide it in small screens. -->
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="questions.mustache">Support</a>
-                    <a class="mdl-navigation__link" href="about.mustache">About</a>
-                    <!-- TODO: For development purpaces-->
-                    <a class="mdl-navigation__link" href="login.mustache">Login</a>
-                </nav>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Menu</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
-            <div class="page-content">
-                <div id="page">
-                    <div class="login-page">
-                        <div class="login-inline">
-                            <h2>Login</h2>
-                            <!-- TODO: Make login interface an HTML form -->
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="email" class="mdl-textfield__input" type="text" id="loginEmail" />
-                                <label class="mdl-textfield__label" for="loginEmail">Email...</label>
-                            </div>
-                            <br>
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="password" class="mdl-textfield__input" type="password" id="loginPass" />
-                                <label class="mdl-textfield__label" for="loginPass">Password...</label>
-                            </div>
-                            <br>
-                            <!-- button connected  -->
-                            <button id="studentLogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                I'm A Student
-                            </button>
-                            &nbsp;&nbsp;&nbsp;
-                            <!-- button connected  -->
-                            <button id="teacherLogin" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                I'm A Teacher
-                            </button>
-                        </div>
-                        <div class="login-inline">
-                            <h2>Sign up</h2>
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="name" class="mdl-textfield__input" type="text" id="signUpName" />
-                                <label class="mdl-textfield__label" for="signUpName">Name...</label>
-                            </div>
-                            <br>
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="email" class="mdl-textfield__input" type="text" id="signUpEmail" />
-                                <label class="mdl-textfield__label" for="signUpEmail">Email...</label>
-                            </div>
-                            <br>
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="password" class="mdl-textfield__input" type="password" id="signUpPass" />
-                                <label class="mdl-textfield__label" for="signUpPass">Password...</label>
-                            </div>
-                            <br>
-                            <!-- button connected  -->
-                            <button id="signUpStudent" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                I'm A Student
-                            </button>
-                            &nbsp;&nbsp;&nbsp;
-                            <!-- button connected  -->
-                            <button id="signUpTeacher" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                I'm A Teacher
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        <footer class="mdl-mini-footer">
-            <div class="mdl-mini-footer__left-section">
-                <div class="mdl-logo">TestTaker Client v{{version}}</div>
-                <ul class="mdl-mini-footer__link-list">
-                    <li><a href="questions.mustache">Help</a></li>
-                    <li><a href="#">Privacy &amp; Terms</a></li>
-                </ul>
-            </div>
-        </footer>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="questions.mustache">Support</a>
+          <a class="mdl-navigation__link" href="about.mustache">About</a>
+          <!-- TODO: For development purpaces-->
+          <a class="mdl-navigation__link" href="login.mustache">Login</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
     </div>
-    {{#scripts}}
-    <script src="{{.}}"></script>
-    {{/scripts}}
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div id="page">
+          <div class="login-page">
+            <div class="login-inline">
+              <h2>Login</h2>
+              <form action="/login" id="loginForm" method="post">
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input name="email" class="mdl-textfield__input" type="text" id="loginEmail" />
+                  <label class="mdl-textfield__label" for="loginEmail">Email...</label>
+                </div>
+                <br>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input name="password" class="mdl-textfield__input" type="password" id="loginPass" />
+                  <label class="mdl-textfield__label" for="loginPass">Password...</label>
+                </div>
+                <br>
+                <!-- button connected  -->
+                <div onclick="submit('login', 'student')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  I'm a student
+                </div>
+                <input id="studentLogin" type="radio" name="type" value="student" class="buttonAppearance"> &nbsp;&nbsp;&nbsp;
+                <!-- button connected  -->
+                <div onclick="submit('login', 'teacher')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  I'm a teacher
+                </div>
+                <input id="teacherLogin" type="radio" name="type" value="teacher" class="buttonAppearance">
+              </form>
+            </div>
+            <div class="login-inline">
+              <h2>Sign up</h2>
+              <form action="/signUp" id="signUpForm" method="post">
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input name="name" class="mdl-textfield__input" type="text" id="signUpName" />
+                  <label class="mdl-textfield__label" for="signUpName">Name...</label>
+                </div>
+                <br>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input name="email" class="mdl-textfield__input" type="text" id="signUpEmail" />
+                  <label class="mdl-textfield__label" for="signUpEmail">Email...</label>
+                </div>
+                <br>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input name="password" class="mdl-textfield__input" type="password" id="signUpPass" />
+                  <label class="mdl-textfield__label" for="signUpPass">Password...</label>
+                </div>
+                <br>
+                <!-- button connected  -->
+                <div onclick="$('#signUpForm').submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  I'm a student
+                </div>
+                <input type="radio" name="type" value="student" class="buttonAppearance"> &nbsp;&nbsp;&nbsp;
+                <!-- button connected  -->
+                <div onclick="$('#signUpForm').submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                  I'm a teacher
+                </div>
+                <input type="radio" name="type" value="teacher" class="buttonAppearance">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+          <div class="mdl-logo">TestTaker Client v{{version}}</div>
+          <ul class="mdl-mini-footer__link-list">
+            <li><a href="questions.mustache">Help</a></li>
+            <li><a href="#">Privacy &amp; Terms</a></li>
+          </ul>
+        </div>
+      </footer>
+    </main>
+  </div>
+  {{#scripts}}
+  <script src="{{.}}"></script>
+  {{/scripts}}
 </body>
 
 </html>

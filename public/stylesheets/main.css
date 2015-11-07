@@ -102,3 +102,19 @@ body {
 .code-image {
   background: url('https://source.unsplash.com/6g0KJWnBhxg/1600x900')
 }
+
+.buttonAppearance {
+  /*-webkit-appearance: button;
+  width: 100%;
+  height: 100%;
+  */
+  display: none;
+}
+/*
+.page-content {
+    height: 100%;
+    width: 100%;
+}*/
+.mdl-mini-footer {
+    bottom: 0;
+}
