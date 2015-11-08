@@ -3,10 +3,12 @@ var clientVersion = '0.0.0'
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
+var compression = require('compression')
 var port = process.env.PORT || 3000;
 var app = express();
 app.listen(port);
 console.log('Listening on port: ' + port);
+app.use(compression());
 app.use(express.static('public'));
 
 var Firebase = require('firebase');
@@ -64,8 +66,6 @@ var urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
 
-
-
 // TODO: helper 'error' function to send back errors
 /*function error(code){
   switch(code)
@@ -85,6 +85,9 @@ function toArray(data) {
         return data[key]
     });
 }
+function expand(object, callback){
+
+}
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************APP.ALL REQUESTS****************************************************
@@ -102,12 +105,11 @@ app.all('/dashboard', function(req, res) {
                 console.log(data);
                 data = data[Object.keys(data)[0]];
                 var name = data.name;
-                data.classes = toArray(data.classes);
                 var otherArr = [];
-                async.each(data.classes, function(item, callback) {
-                    classes.child(item).once('value', function(snap) {
+                async.forEachOf(data.classes, function(item, key, callback) {
+                    classes.child(key).once('value', function(snap) {
                         var thisClass = snap.val();
-                        thisClass.id = item;
+                        thisClass.id = key;
                         console.log(thisClass.code);
                         otherArr.push(thisClass);
                         callback()
@@ -145,10 +147,12 @@ app.all('/dashboard', function(req, res) {
         res.redirect('/login?error=not_signed_in')
     }
 });
+
 app.all('/logout', function(req, res) {
     req.session.user = undefined;
     res.redirect('/');
 });
+
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SERVER RENDERING REQUESTS********************************************
@@ -162,10 +166,12 @@ app.get('/', function(req, res) {
         stylesheets: stylesheets
     });
 });
+
 app.get('/test', function(req, res) {
     //res.sendFile(__dirname + '/static/test/test.html');
     res.redirect('/')
 });
+
 app.get('/login', function(req, res) {
     console.log(req.query);
     if (req.session.user != undefined) {
@@ -187,6 +193,7 @@ app.get('/login', function(req, res) {
 
     }
 });
+
 app.get('/faq', function(req, res) {
     res.render('questions', {
         scripts: scripts,
@@ -288,19 +295,20 @@ app.post('/login', urlencodedParser, function(req, res) {
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
     console.log('post at addclass')
-    if (req.body.type == 'student') {
+    if (req.session.type == 'student') {
         var key;
         try {
             key = classes
                 .orderByKey()
-                .startAt(req.body.classID)
-                .endAt(req.body.classID)
+                .startAt(req.body.classId)
+                .endAt(req.body.classId)
                 .orderByChild('students')
                 .startAt(req.session.user.uid)
                 .endAt(req.session.user.uid)
                 .key()
-            var studentClasses = students.child(req.body.studentID + '/classes');
-            studentClasses.push(key);
+            var studentClasses = students.child(req.session.uid + '/classes');
+            var theClass = studentClasses.child(req.body.classId);
+            theClass.set(true);
             res.json({
                 'success': 'class added successfully'
             });
@@ -308,10 +316,7 @@ app.post('/addClass', urlencodedParser, function(req, res) {
             res.status(500).json({
                 'error': 'class not added successfully'
             });
-            res.send('whoops! there was an error');
         }
-    } else if (req.body.type == 'teacher') {
-        res.send('we\'re working on it')
     } else {
         res.send('we\'re working on it')
     }
@@ -365,6 +370,7 @@ app.post('/createTest', urlencodedParser, function(req, res) {
         });
     }
 });
+
 app.post('/gradeTest', urlencodedParser, function(req, res) {
     //Record Answers
     var response = responses.push(req.body)
@@ -386,6 +392,7 @@ app.post('/gradeTest', urlencodedParser, function(req, res) {
         arrayOfAnswers.push(thisTestData[key].answer);
     }
 });
+
 //to think about: do it on client for auth
 app.post('/createClass', urlencodedParser, function(req, res) {
     // TODO: auth
@@ -396,17 +403,31 @@ app.post('/createClass', urlencodedParser, function(req, res) {
         tests: 0
     });
     var key = createdClass.key()
-    var teacher = teachers.child(req.session.user.uid)
-    var teacherClasses = teacher.child('classes');
-    teacherClasses.push(key);
+    var teacherClass = teachers.child(req.session.user.uid + '/classes/' + key);
+    teacherClass.set(true);
+
     // TODO: success
     res.end('success');
 });
+
+app.post('/deleteClass', urlencodedParser, function(req, res) {
+    // TODO: auth
+    var theClass = classes.child(req.body.classId);
+    theClass.remove()
+    var str = req.session.user.uid + '/classes/' + req.body.classId;
+    console.log(str);
+    var teacherClassLoc = teachers.child(str);
+    teacherClassLoc.remove();
+    res.end('success')
+        // TODO: error
+});
+
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SPECIALIZED REQUESTS*************************************************
 //*********************************************************************************************************
 //*********************************************************************************************************
+
 app.get('/classes/:classID', function(req, res) {
     var classData;
     classes
@@ -414,13 +435,11 @@ app.get('/classes/:classID', function(req, res) {
         .startAt(req.params.classID)
         .endAt(req.params.classID)
         .once('value', function(snap) {
-            classData = Object.keys(snap.val())[0];
-        })
-    res.render('class', {
-        classData: classData
-    })
+            classData = snap.val()[Object.keys(snap.val())[0]];
+            res.render('class', {
+                classData: classData
+            });
+        });
 });
-
-
 
 console.log('Finished starting TestTaker Server v' + version);

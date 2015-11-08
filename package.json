@@ -21,7 +21,8 @@
     "express": "latest",
     "firebase": "latest",
     "mustache": "latest",
-    "async": "latest"
+    "async": "latest",
+    "compress": "latest"
   },
   "devDependencies": {
     "gulp": "latest",

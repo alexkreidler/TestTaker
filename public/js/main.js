@@ -11,6 +11,15 @@
     $(document).ready(function() {
         root = new Firebase('testtaker.firebaseio.com');
 
+        $('[id^=delete-]').on('click', function() {
+            $.post('/deleteClass', {
+                classId: (this).id.replace('delete-', '')
+            }, function(data) {
+                console.log(data);
+                window.location = '/dashboard'
+            })
+        });
+
         $('#addClass').on('click', function() {
             $('#dialog').show()
             $('#doIt').on('click', function() {
@@ -18,10 +27,12 @@
                     $.post('/createClass', {
                         className: $('#className').val()
                     });
+                    window.location = '/dashboard'
                 } else if (mainType == 'student') {
                     $.post('/addClass', {
-                        classID: $('#classID').val()
-                    })
+                        classID: $('#classId').val()
+                    });
+                    window.location = '/dashboard'
                 } else {
                     // TODO: err
                 }
