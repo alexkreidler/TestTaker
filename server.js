@@ -22,10 +22,6 @@ var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
-var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js', '../js/main.js'];
-var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', '../stylesheets/main.css', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css'];
-var dataPass = {};
-
 
 app.use(session({
     cookieName: 'session',
@@ -36,27 +32,6 @@ app.use(session({
 app.use(express.static('public'));
 
 
-function lookUpUser(uid, type, callback) {
-    console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
-    try {
-        root.child(type + 's')
-            .orderByKey()
-            .startAt(uid)
-            .endAt(uid)
-            .once('value', function(snap) {
-                user = snap.val();
-                if (user == null) {
-                    callback('No user found', null);
-                } else {
-                    callback(null, user);
-                }
-            }, function(err) {
-                callback(err, null)
-            });
-    } catch (err) {
-        callback(err, null);
-    }
-}
 
 app.engine('mustache', consolidate.mustache);
 app.set('views', __dirname + '/public/views');
@@ -80,12 +55,53 @@ var urlencodedParser = bodyParser.urlencoded({
   break;
 }
 */
+//*********************************************************************************************************
+//*********************************************************************************************************
+//************************************HELPER FUNCTIONS*****************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
+
+function render(res, file, locals, script, stylesheet){
+    var toBeRendered = locals;
+    toBeRendered.partials = {
+        header: 'header',
+        footer: 'footer',
+        head: 'head'
+    }
+    toBeRendered.clientVersion = clientVersion;
+    toBeRendered.script = script;
+    toBeRendered.stylesheet = stylesheet;
+    res.render(file, locals);
+}
+function lookUpUser(uid, type, callback) {
+    console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
+    try {
+        root.child(type + 's')
+            .orderByKey()
+            .startAt(uid)
+            .endAt(uid)
+            .once('value', function(snap) {
+                user = snap.val();
+                if (user == null) {
+                    callback('No user found', null);
+                } else {
+                    callback(null, user);
+                }
+            }, function(err) {
+                callback(err, null)
+            });
+    } catch (err) {
+        callback(err, null);
+    }
+}
+
 function toArray(data) {
     return Object.keys(data).map(function(key) {
         return data[key]
     });
 }
-function expand(object, callback){
+
+function expand(object, callback) {
 
 }
 //*********************************************************************************************************
@@ -131,15 +147,13 @@ app.all('/dashboard', function(req, res) {
                             teacher = true;
                         }
                         console.log(data);
-                        res.render('dashboard', {
+                        render(res, 'dashboard', {
                             type: req.session.user.type,
                             student: student,
                             teacher: teacher,
                             userData: data,
-                            title: 'Dashboard',
-                            scripts: scripts,
-                            stylesheets: stylesheets
-                        });
+                            title: 'Dashboard'
+                        }, 'mainType = \'{{type}}\'; uid = \'{{userData.uid}}\'');
                     }
                 });
             });
@@ -160,11 +174,9 @@ app.all('/logout', function(req, res) {
 //*********************************************************************************************************
 
 app.get('/', function(req, res) {
-    res.render('index', {
-        title: 'TestTaker',
-        scripts: scripts,
-        stylesheets: stylesheets
-    });
+    render(res, 'index', {
+        title: 'TestTaker'
+    }, null, 'body{color:white;}');
 });
 
 app.get('/test', function(req, res) {
@@ -183,9 +195,7 @@ app.get('/login', function(req, res) {
         } else if (req.query.error != undefined) {
             errors = [req.query.error];
         }
-        res.render('login', {
-            scripts: scripts,
-            stylesheets: stylesheets,
+        render(res, 'login', {
             version: clientVersion,
             messages: messages,
             errors: errors
@@ -195,11 +205,12 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/faq', function(req, res) {
-    res.render('questions', {
-        scripts: scripts,
-        stylesheets: stylesheets
-    })
-})
+    render(res, 'questions', {});
+});
+
+app.get('/about', function(req, res) {
+    render(res, 'about', {title: 'TestTaker | About'});
+});
 
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -346,7 +357,7 @@ app.post('/test', urlencodedParser, function(req, res) {
     // TODO: substitute references with Firebase values
 
     //send test to students
-    res.render('test', {
+    render(res, 'test', {
         'class': data,
         'teacher': data,
         'name': data,
@@ -436,7 +447,7 @@ app.get('/classes/:classID', function(req, res) {
         .endAt(req.params.classID)
         .once('value', function(snap) {
             classData = snap.val()[Object.keys(snap.val())[0]];
-            res.render('class', {
+            render(res, 'class', {
                 classData: classData
             });
         });
