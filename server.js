@@ -61,18 +61,17 @@ var urlencodedParser = bodyParser.urlencoded({
 //*********************************************************************************************************
 //*********************************************************************************************************
 
-function render(res, file, locals, script, stylesheet){
+function render(res, file, locals) {
     var toBeRendered = locals;
     toBeRendered.partials = {
         header: 'header',
         footer: 'footer',
         head: 'head'
     }
-    toBeRendered.clientVersion = clientVersion;
-    toBeRendered.script = script;
-    toBeRendered.stylesheet = stylesheet;
+    toBeRendered.version = clientVersion;
     res.render(file, locals);
 }
+
 function lookUpUser(uid, type, callback) {
     console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
     try {
@@ -149,11 +148,12 @@ app.all('/dashboard', function(req, res) {
                         console.log(data);
                         render(res, 'dashboard', {
                             type: req.session.user.type,
+                            uid: Object.keys(snap.val())[0],
                             student: student,
                             teacher: teacher,
                             userData: data,
                             title: 'Dashboard'
-                        }, 'mainType = \'{{type}}\'; uid = \'{{userData.uid}}\'');
+                        });
                     }
                 });
             });
@@ -176,7 +176,7 @@ app.all('/logout', function(req, res) {
 app.get('/', function(req, res) {
     render(res, 'index', {
         title: 'TestTaker'
-    }, null, 'body{color:white;}');
+    });
 });
 
 app.get('/test', function(req, res) {
@@ -196,7 +196,6 @@ app.get('/login', function(req, res) {
             errors = [req.query.error];
         }
         render(res, 'login', {
-            version: clientVersion,
             messages: messages,
             errors: errors
         });
@@ -209,8 +208,16 @@ app.get('/faq', function(req, res) {
 });
 
 app.get('/about', function(req, res) {
-    render(res, 'about', {title: 'TestTaker | About'});
+    render(res, 'about', {
+        title: 'TestTaker | About'
+    });
 });
+
+app.get('/privacy', function(req, res) {
+    render(res, 'privacy', {
+        title: 'TestTaker | Privacy Policy'
+    })
+})
 
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -305,31 +312,56 @@ app.post('/login', urlencodedParser, function(req, res) {
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
-    console.log('post at addclass')
+    console.log('post at addclass');
+    console.log('BODY: ');
+    console.log(req.body);
+    console.log('SESSION: ');
+    console.log(req.session);
     if (req.session.user.type == 'student') {
+        console.log('student');
         var key;
         try {
             key = classes
                 .orderByKey()
-                .startAt(req.body.classId)
-                .endAt(req.body.classId)
-                .orderByChild('students')
-                .startAt(req.session.user.uid)
-                .endAt(req.session.user.uid)
-                .key()
-            var studentClasses = students.child(req.session.uid + '/classes');
-            var theClass = studentClasses.child(req.body.classId);
-            theClass.set(true);
-            res.json({
-                'success': 'class added successfully'
-            });
+                .startAt('-K2ZRtZqH4A6CUnwMsL2')
+                .endAt('-K2ZRtZqH4A6CUnwMsL2')
+                .once('value', function(snap) {
+                    //to think about: should the teacher not have to invite students
+                    console.log(snap.val());
+
+                    /*classes.child(Object.keys(snap.val())[0])
+                        .orderByChild('students')
+                        .startAt(req.session.user.uid)
+                        .endAt(req.session.user.uid)
+                        .once('value', function(snap) {
+                            if (snap.val() == null) {
+                                res.status(400).json({'error': 'you do not have permissions to join this class'});
+                            } else {
+                                async.each(toArray(snap.val()), function(item, callback) {
+                                    if (item == req.session.user.uid) {
+                                        callback()
+                                    }
+                                }, function() {
+                                    var studentClasses = students.child(req.session.uid + '/classes');
+                                    var theClass = studentClasses.child(req.body.classId);
+                                    theClass.set(true);
+                                    res.json({
+                                        'success': 'class added successfully'
+                                    });
+                                });
+                            }
+                        })*/
+                });
         } catch (err) {
+            console.error(err);
             res.status(500).json({
                 'error': 'class not added successfully'
             });
         }
     } else {
-        res.send('we\'re working on it')
+        res.status(400).json({
+            'error': 'this is for students only: please use the /createClass POST request'
+        });
     }
 });
 

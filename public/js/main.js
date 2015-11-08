@@ -25,19 +25,18 @@
             $('#doIt').on('click', function() {
                 if (mainType == 'teacher') {
                     $.post('/createClass', {
-                        className: $('#className').val(),
-                        function(data) {
-                            console.log(data);
-                        }
+                        className: $('#className').val()
+                    }, function(data) {
+                        console.log(data);
+                        window.location = '/dashboard'
                     });
-                    window.location = '/dashboard'
                 } else if (mainType == 'student') {
                     $.post('/addClass', {
                         classID: $('#classId').val()
                     }, function(data) {
                         console.log(data);
+                        window.location = '/dashboard'
                     });
-                    window.location = '/dashboard'
                 } else {
                     // TODO: err
                 }
