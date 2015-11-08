@@ -295,7 +295,7 @@ app.post('/login', urlencodedParser, function(req, res) {
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
     console.log('post at addclass')
-    if (req.session.type == 'student') {
+    if (req.session.user.type == 'student') {
         var key;
         try {
             key = classes
