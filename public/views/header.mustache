@@ -10,7 +10,7 @@
         <a class="mdl-navigation__link" href="/about">About</a>
         <!-- For development purposes-->
         <!-- TODO: Add a settings FAB -->
-        <a class="mdl-navigation__link" href="{{#userData}}/logout">Logout{{/userData}}{{^userData}}/login">Login{{/userData}}</a>
+        <a class="mdl-navigation__link" href="{{#isLoggedIn}}/logout">Logout{{/isLoggedIn}}{{^isLoggedIn}}/login">Login{{/isLoggedIn}}</a>
     </nav>
 </div>
 </header>

@@ -122,3 +122,7 @@ body {
 #dialog {
     display: none;
 }
+.table {
+  width: 95%;
+  margin: 1em;
+}
