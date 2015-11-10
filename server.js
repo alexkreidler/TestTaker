@@ -206,8 +206,8 @@ app.get('/login', function(req, res) {
     }
 });
 
-app.get('/faq', function(req, res) {
-    render(req, res, 'questions', {});
+app.get('/help', function(req, res) {
+    render(req, res, 'help', {});
 });
 
 app.get('/about', function(req, res) {
