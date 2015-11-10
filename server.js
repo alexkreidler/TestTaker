@@ -167,7 +167,7 @@ app.all('/dashboard', function(req, res) {
 
 app.all('/logout', function(req, res) {
     req.session.user = undefined;
-    res.redirect('/');
+    res.redirect('/login');
 });
 
 //*********************************************************************************************************
