@@ -432,6 +432,18 @@ app.post('/deleteClass', urlencodedParser, function(req, res) {
     // TODO: error
 });
 
+app.post('/unenroll', urlencodedParser, function(req, res) {
+    try {
+        var student = students.child(req.session.user.uid);
+        var thisClass = student.child(req.body.classID);
+        thisClass.remove();
+        res.end('success');
+    } catch (err){
+        console.error(err);
+        res.end(err);
+    }
+});
+
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SPECIALIZED REQUESTS*************************************************
@@ -448,7 +460,8 @@ app.get('/classes/:classID', function(req, res) {
             var data = snap.val();
             if (data == undefined) {
                 console.error('The snapshot didn\'t find anything');
-                //todo - send error to client
+                res.redirect(404, '/dashboard?error=class_not_found')
+                    //todo - send error to client
             } else {
                 classData = data[Object.keys(data)[0]];
                 render(req, res, 'class', {

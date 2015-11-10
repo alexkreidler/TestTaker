@@ -12,12 +12,21 @@
         root = new Firebase('testtaker.firebaseio.com');
 
         $('[id^=delete-]').on('click', function() {
-            $.post('/deleteClass', {
-                classId: (this).id.replace('delete-', '')
-            }, function(data) {
-                console.log(data);
-                window.location = '/dashboard';
-            });
+            if (mainType == 'teacher') {
+                $.post('/deleteClass', {
+                    classID: (this).id.replace('delete-', '')
+                }, function(data) {
+                    console.log(data);
+                    window.location = '/dashboard';
+                });
+            } else if (mainType == 'student'){
+                $.post('/unenroll', {
+                    classID: (this).id.replace('delete-', '')
+                }, function(data) {
+                    console.log(data);
+                    window.location = '/dashboard';
+                });
+            }
         });
 
         $('#addClass').on('click', function() {
@@ -98,27 +107,26 @@
             'type': 'student',
             'email': $('#signUpEmail').val(),
             'password': $('#signUpPass').val()
-        })
-    })
+        });
+    });
     $('#signUpTeacher').on('click', function() {
         $.post('/signUp', {
             'type': 'teacher',
             'email': $('#signUpEmail').val(),
             'password': $('#signUpPass').val()
-        })
+        });
     });
     $('addClass').on('click', function() {
         $.post('/addClass', {
             'type': type,
             'uid': uid
-        })
+        });
     });
     $('submitTest').on('click', function() {
         $.post('/gradeTest', {
             'uid': uid
-        })
+        });
     });
     $('.lookLikeButton').html(
-      'testing'
-    )
-})
+    'testing'
+);
