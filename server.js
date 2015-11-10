@@ -1,73 +1,45 @@
-var version = '0.0.0'
-var clientVersion = '0.0.0'
+var version = '0.0.0';
+var clientVersion = '0.0.0';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
-//Work on redirection
-//var express-session = require('express-session');
+var compression = require('compression');
 var port = process.env.PORT || 3000;
 var app = express();
 app.listen(port);
 console.log('Listening on port: ' + port);
+app.use(compression());
 app.use(express.static('public'));
 
 var Firebase = require('firebase');
 var consolidate = require('consolidate');
-//var RedisStore = require('connect-redis')(session);
-var root = new Firebase('http://testtaker.firebaseio.com')
+var session = require('client-sessions');
+var async = require('async');
+var root = new Firebase('http://testtaker.firebaseio.com');
 var students = root.child('students');
 var teachers = root.child('teachers');
 var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
-var scripts = ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', 'https://cdn.firebase.com/js/client/2.3.1/firebase.js', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js', '../js/main.js'];
-var stylesheets = ['https://fonts.googleapis.com/icon?family=Material+Icons', '../stylesheets/main.css', 'https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css'];
-var dataPass = {};
 
-/*
 app.use(session({
-    genid: function(req) {
-        return Math.floor((Math.random() * 9999999999) + 1);
-    },
-    secret: Math.floor((Math.random() * 9999999999) + 1)
+  cookieName: 'session',
+  secret: 'random_string_goes_here',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
 }));
-*/
 app.use(express.static('public'));
 
-//dont need now that it is all in one js file
-/*
-function scriptGen(scriptArray, args) {
-    for (var i = 0; i < args.length; i++) {
-        scriptArray.push(args[i]);
-    }
-    return scriptArray;
-}*/
 
-function lookUpUser(uid, type, callback) {
-    console.log(uid + ' TYPE: ' + type);
-    root.child(type + 's')
-        .orderByChild("uid")
-        .startAt(uid)
-        .endAt(uid)
-        .once('value', function(snap) {
-            console.log(snap.val());
-            user = snap.val();
-            console.log(user);
-            callback(user);
-        });
-}
 
 app.engine('mustache', consolidate.mustache);
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'mustache');
 
 var urlencodedParser = bodyParser.urlencoded({
-    extended: true
+  extended: true
 });
-
-//work on redirection
-//app.use(express-session());
 
 // TODO: helper 'error' function to send back errors
 /*function error(code){
@@ -85,34 +57,170 @@ var urlencodedParser = bodyParser.urlencoded({
 */
 //*********************************************************************************************************
 //*********************************************************************************************************
+//************************************HELPER FUNCTIONS*****************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
+
+function render(req, res, file, locals) {
+  var toBeRendered = locals;
+  toBeRendered.partials = {
+    header: 'header',
+    footer: 'footer',
+    head: 'head'
+  };
+  toBeRendered.version = clientVersion;
+  toBeRendered.isLoggedIn = (req.session.user != undefined);
+  if (toBeRendered.isLoggedIn == true) {
+    if (req.session.user.type == 'student') {
+      toBeRendered.student = true;
+      toBeRendered.teacher = false;
+    } else if (req.session.user.type == 'teacher') {
+      toBeRendered.student = false;
+      toBeRendered.teacher = true;
+    }
+  }
+  res.render(file, toBeRendered);
+}
+
+function lookUpUser(uid, type, callback) {
+  console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
+  try {
+    root.child(type + 's')
+      .orderByKey()
+      .startAt(uid)
+      .endAt(uid)
+      .once('value', function(snap) {
+        user = snap.val();
+        if (user == null) {
+          callback('No user found', null);
+        } else {
+          callback(null, user);
+        }
+      }, function(err) {
+        callback(err, null);
+      });
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function toArray(data) {
+  return Object.keys(data).map(function(key) {
+    return data[key];
+  });
+}
+
+function expand(object, callback) {
+
+}
+//*********************************************************************************************************
+//*********************************************************************************************************
+//************************************APP.ALL REQUESTS****************************************************
+//*********************************************************************************************************
+//*********************************************************************************************************
+app.all('/dashboard', function(req, res) {
+  if (req.session.user) {
+    var userData = req.session.user.userData;
+    root.child([req.session.user.type] + 's')
+      .orderByChild('uid')
+      .startAt(req.session.uid)
+      .endAt(req.session.uid)
+      .once('value', function(snap) {
+        data = snap.val();
+        console.log(data);
+        data = data[Object.keys(data)[0]];
+        var name = data.name;
+        var otherArr = [];
+        async.forEachOf(data.classes, function(item, key, callback) {
+          classes.child(key).once('value', function(snap) {
+            var thisClass = snap.val();
+            thisClass.id = key;
+            console.log(thisClass.code);
+            otherArr.push(thisClass);
+            callback();
+          }, function(err) {
+            callback(err);
+          });
+        }, function(err) {
+          if (err) {
+
+          } else {
+            data.classes = otherArr;
+            var student;
+            var teacher;
+            console.log(data);
+            render(req, res, 'dashboard', {
+              type: req.session.user.type,
+              uid: Object.keys(snap.val())[0],
+              student: student,
+              teacher: teacher,
+              userData: data,
+              title: 'Dashboard'
+            });
+          }
+        });
+      });
+  } else {
+    res.redirect('/login?error=not_signed_in');
+  }
+});
+
+app.all('/logout', function(req, res) {
+  req.session.user = undefined;
+  res.redirect('/');
+});
+
+//*********************************************************************************************************
+//*********************************************************************************************************
 //************************************SERVER RENDERING REQUESTS********************************************
 //*********************************************************************************************************
 //*********************************************************************************************************
 
 app.get('/', function(req, res) {
-    res.render('index', {
-        title: 'TestTaker',
-        scripts: scripts,
-        stylesheets: stylesheets
-    });
+  render(req, res, 'index', {
+    title: 'TestTaker'
+  });
 });
+
 app.get('/test', function(req, res) {
-    //res.sendFile(__dirname + '/static/test/test.html');
-    res.redirect('/')
+  //res.sendFile(__dirname + '/static/test/test.html');
+  res.redirect('/');
 });
+
 app.get('/login', function(req, res) {
-    res.render('login', {
-        scripts: scripts,
-        stylesheets: stylesheets,
-        version: clientVersion
+  console.log(req.query);
+  if (req.session.user != undefined) {
+    res.redirect('/dashboard');
+  } else {
+    var messages, errors = [];
+    if (req.query.message != undefined) {
+      messages = [req.query.message];
+    } else if (req.query.error != undefined) {
+      errors = [req.query.error];
+    }
+    render(req, res, 'login', {
+      messages: messages,
+      errors: errors
     });
+
+  }
 });
+
 app.get('/faq', function(req, res) {
-    res.render('questions', {
-        scripts: scriptGen(scripts.slice(), ['../js/faq.js', 'https://fast.eager.io/iXKMX5lync.js']),
-        stylesheets: stylesheets
-    })
-})
+  render(req, res, 'questions', {});
+});
+
+app.get('/about', function(req, res) {
+  render(req, res, 'about', {
+    title: 'TestTaker | About'
+  });
+});
+
+app.get('/privacy', function(req, res) {
+  render(req, res, 'privacy', {
+    title: 'TestTaker | Privacy Policy'
+  });
+});
 
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -120,217 +228,229 @@ app.get('/faq', function(req, res) {
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.post('/signUp', urlencodedParser, function(req, res) {
-    if (req.body.type == 'student') {
-        students.createUser({
-            email: req.body.email,
-            password: req.body.password
-        }, function(error, userData) {
-            if (error) {
-                switch (error.code) {
-                    case "EMAIL_TAKEN":
-                        res.status(400).json({
-                            error: "The new user account cannot be created because the email is already in use."
-                        });
-                        break;
-                    case "INVALID_EMAIL":
-                        res.status(400).json({
-                            error: "The specified email is not a valid email."
-                        });
-                        break;
-                    default:
-                        res.status(500).json({
-                            error: error
-                        });
-                }
-            } else {
-                students.push({
-                    'name': req.body.name,
-                    'uid': userData.uid,
-                    classes: 0
-                })
-                res.redirect('/');
-            }
-        })
-    } else if (req.body.type == 'teacher') {
-
-    } else {
-        res.status(400).json({
-            error: 'Invalid user type'
-        });
-    }
-});
-app.post('/login', urlencodedParser, function(req, res) {
-    lookUpUser(req.body.uid, req.body.type, function(data) {
-        /*var dataPassId = Math.floor((Math.random * 9999999) + 1);
-        dataPass[dataPassId] = {
-            type: req.body.type,
-            userData: data[Object.keys(data)[0]]
-        }*/
-        /*
-        req.session.type = req.body.type;
-        req.session.userData = data[Object.keys(data)[0]];
-        res.redirect('/dashboard');
-        */
-        res.render('dashboard', {
-            type: req.body.type,
-            userData: data[Object.keys(data)[0]],
-            title: 'Dashboard',
-            scripts: scripts,
-            stylesheets: stylesheets,
-            version: clientVersion
-        });
-        //res.redirect('/dashboard?dataPass=' + dataPassId
-    });
-    /*app.all('/dashboard', function(req, res) {
-      if (req.session.type && req.session.userData) {
-        res.render('dashboard', {
-          type: req.session.type,
-          userData: req.session.userData,
-          title: 'Dashboard',
-          scripts: scripts,
-          stylesheets: stylesheets
-        });
+  if (req.body.type == 'student') {
+    students.createUser({
+      email: req.body.email,
+      password: req.body.password
+    }, function(error, userData) {
+      if (error) {
+        switch (error.code) {
+          case "EMAIL_TAKEN":
+            res.status(400).json({
+              error: "The new user account cannot be created because the email is already in use."
+            });
+            break;
+          case "INVALID_EMAIL":
+            res.status(400).json({
+              error: "The specified email is not a valid email."
+            });
+            break;
+          default:
+            res.status(500).json({
+              error: error
+            });
+        }
       } else {
-        // TODO: error 'you need to sign in'
+        var spot = students.child(userData.uid);
+        spot.set({
+          'name': req.body.name,
+          classes: 0
+        });
+        res.redirect('/login?message=account_created');
       }
     });
-    */
-});
-/*app.get('/dashboard', function(req, res){
-    console.log('Dashboard');
-    if(dataPass[req.params.dataPass]){
-        var data = dataPass[req.params.dataPass];
-        res.render('dashboard', {
-            type: data.type,
-            userData: data.userData,
-            title: 'Dashboard',
-            scripts: scripts,
-            stylesheets: stylesheets
+  } else if (req.body.type == 'teacher') {
+    teachers.createUser({
+      email: req.body.email,
+      password: req.body.password
+    }, function(error, userData) {
+      if (error) {
+        switch (error.code) {
+          case "EMAIL_TAKEN":
+            res.status(400).json({
+              error: "The new user account cannot be created because the email is already in use."
+            });
+            break;
+          case "INVALID_EMAIL":
+            res.status(400).json({
+              error: "The specified email is not a valid email."
+            });
+            break;
+          default:
+            res.status(500).json({
+              error: error
+            });
+        }
+      } else {
+        var spot = teachers.child(userData.uid);
+        spot.set({
+          'name': req.body.name,
+          classes: 0
         });
+        res.redirect('/login?message=account_created');
+      }
+    });
+  } else {
+    res.status(400).json({
+      error: 'Invalid user type'
+    });
+  }
+});
+
+app.post('/login', urlencodedParser, function(req, res) {
+  lookUpUser(req.body.uid, req.body.type, function(err, data) {
+    if (err) {
+      // TODO: error
+      res.status(400).send('whoops! it looks like an error');
     } else {
-        res.status(400).send('not logged in');
+      req.session.user = {
+        type: req.body.type,
+        userData: data[Object.keys(data)[0]],
+        uid: req.body.uid
+      };
+      res.redirect('/dashboard');
     }
-})*/
+  });
+});
 
 // to think about: should a syncronizer do this automatically and populate student classes with the list  of students in the class
 app.post('/addClass', urlencodedParser, function(req, res) {
-    if (req.body.type == 'student') {
-        var key;
-        try {
-            key = classes
-                .orderByKey()
-                .startAt(req.body.classID)
-                .endAt(req.body.classID)
-                .orderByChild('students')
-                .startAt(req.body.studentID)
-                .endAt(req.body.studentID)
-                .key()
-            var studentClasses = students.child(req.body.studentID + '/classes');
-            studentClasses.push(key);
-            res.json({
-                'success': 'class added successfully'
-            });
-        } catch (err) {
-            res.status(500).json({
-                'error': 'class not added successfully'
-            });
-            res.send('whoops! there was an error');
-        }
-    } else if (req.body.type == 'teacher') {
-
-    } else {
-
-    }
+  //to think about - not use the query, just do it? --> decision: YES
+  if (req.session.user.type == 'student') {
+    var studentClasses = students.child(req.session.user.uid + '/classes');
+    var theClass = studentClasses.child(req.body.classID);
+    theClass.set(true);
+    res.json({
+      'success': 'class added successfully'
+    });
+  } else {
+    res.status(400).json({
+      'error': 'this is for students only: please use the /createClass POST request'
+    });
+  }
 });
 
 app.post('/test', urlencodedParser, function(req, res) {
-    //verify that they can take the test
-    //generate test, pulling from Firebase
-    var questions = [];
-    var randomArray = [];
-    var testDataKey = tests
-        .orderByKey()
-        .startAt(req.body.testID)
-        .endAt(req.body.testID)
-        .child('testData');
-    var thisTestData = testData.child(testDataKey).once('value', function(data) {
-        questions = Object.keys(data);
-    });
+  res.end('we\'re working on it');
+  //verify that they can take the test
+  //generate test, pulling from Firebase
+  /*var questions = [];
+  var randomArray = [];
+  var testDataKey = tests
+      .orderByKey()
+      .startAt(req.body.testID)
+      .endAt(req.body.testID)
+      .child('testData');
+  var thisTestData = testData.child(testDataKey).once('value', function(data) {
+      questions = Object.keys(data);
+  });
 
-    for (var i = 1; i < questions.length; i++) {
-        var value = Math.floor((Math.random() * questions.length) - 1);
-        var data = questions[value];
-        questions.slice(pos, i);
-        randomArray.push(data);
-    }
+  for (var i = 1; i < questions.length; i++) {
+      var value = Math.floor((Math.random() * questions.length) - 1);
+      var data = questions[value];
+      questions.slice(pos, i);
+      randomArray.push(data);
+  }
 
-    // TODO: substitute references with Firebase values
+  // TODO: substitute references with Firebase values
 
-    //send test to students
-    res.render('test', {
-        'class': data,
-        'teacher': data,
-        'name': data,
-        'questions': [{
-            'prompt': data,
-            'img': data
-        }]
-    });
+  //send test to students
+  render(req, res, 'test', {
+      'class': data,
+      'teacher': data,
+      'name': data,
+      'questions': [{
+          'prompt': data,
+          'img': data
+      }]
+  });
+  */
 });
 
 app.post('/createTest', urlencodedParser, function(req, res) {
-    // TODO: check auth
-    if (req.body.type == 'teacher') {
-        var thisTestData = testData.push(req.body.testData);
-        var thisTestDataKey = thisTestData.key();
-        var data = JSON.parse(req.body);
-        data.testData = thisTestDataKey;
-    } else {
-        res.status(400).json({
-            error: "You can not create tests."
-        });
-    }
+  // TODO: check auth
+  if (req.body.type == 'teacher') {
+    var thisTestData = testData.push(req.body.testData);
+    var thisTestDataKey = thisTestData.key();
+    var data = JSON.parse(req.body);
+    data.testData = thisTestDataKey;
+  } else {
+    res.status(400).json({
+      error: "You can not create tests."
+    });
+  }
 });
-app.post('/gradeTest', urlencodedParser, function(req, res) {
-    //Record Answers
-    var response = responses.push(req.body)
 
-    var thisTestData;
-    testData
-        .orderByKey()
-        .startAt(req.body.testData)
-        .endAt(req.body.testData)
-        .once('value', function(snap) {
-            thisTestData = Object.keys(snap.val())[0];
-        });
-    //
-    var keys = Object.keys(thisTestData.questions)
-    var key;
-    var arrayOfAnswers = [];
-    for (var i = 0; i < keys.length; i++) {
-        key = keys[i];
-        arrayOfAnswers.push(thisTestData[key].answer);
-    }
+app.post('/gradeTest', urlencodedParser, function(req, res) {
+  //Record Answers
+  var response = responses.push(req.body);
+
+  var thisTestData;
+  testData
+    .orderByKey()
+    .startAt(req.body.testData)
+    .endAt(req.body.testData)
+    .once('value', function(snap) {
+      thisTestData = Object.keys(snap.val())[0];
+    });
+  //
+  var keys = Object.keys(thisTestData.questions);
+  var key;
+  var arrayOfAnswers = [];
+  for (var i = 0; i < keys.length; i++) {
+    key = keys[i];
+    arrayOfAnswers.push(thisTestData[key].answer);
+  }
 });
+
+//to think about: do it on client for auth
+app.post('/createClass', urlencodedParser, function(req, res) {
+  // TODO: auth
+  var createdClass = classes.push({
+    name: req.body.className,
+    students: 0,
+    teachers: 0,
+    tests: 0
+  });
+  var key = createdClass.key();
+  var teacherClass = teachers.child(req.session.user.uid + '/classes/' + key);
+  teacherClass.set(true);
+
+  // TODO: success
+  res.end('success');
+});
+
+app.post('/deleteClass', urlencodedParser, function(req, res) {
+  // TODO: auth
+  var theClass = classes.child(req.body.classID);
+  theClass.remove();
+  var str = req.session.user.uid + '/classes/' + req.body.classID;
+  console.log(str);
+  var teacherClassLoc = teachers.child(str);
+  teacherClassLoc.remove();
+  res.end('success');
+  // TODO: error
+});
+
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************SPECIALIZED REQUESTS*************************************************
 //*********************************************************************************************************
 //*********************************************************************************************************
+
 app.get('/classes/:classID', function(req, res) {
-    var classData;
-    classes
-        .orderByKey()
-        .startAt(req.params.classID)
-        .endAt(req.params.classID)
-        .once('value', function(snap) {
-            classData = Object.keys(snap.val())[0];
-        })
-    res.render('class', {
-        classData: classData
-    })
+  var classData;
+  classes
+    .orderByKey()
+    .startAt(req.params.classID)
+    .endAt(req.params.classID)
+    .once('value', function(snap) {
+      classData = snap.val()[Object.keys(snap.val())[0]];
+      render(req, res, 'class', {
+        classData: classData,
+        classID: req.params.classID
+      });
+    });
 });
-
-
 
 console.log('Finished starting TestTaker Server v' + version);

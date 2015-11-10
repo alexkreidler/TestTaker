@@ -1,94 +1,106 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <title>TestTaker</title>
-    {{^scripts}}
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-    {{/scripts}}
-    {{^stylesheets}}
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="../stylesheets/main.css" rel="stylesheet">
-    {{/stylesheets}}
-    {{#scripts}}
-        <script src="{{.}}"></script>
-    {{/scripts}}
-    {{#stylesheets}}
-        <link href="{{.}}" rel="stylesheet">
-    {{/stylesheets}}
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-</head>
+{{>head}}
 
 <body>
-    <!-- Always shows a header, even in smaller screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
-                <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
-                <!-- Navigation. We hide it in small screens. -->
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="questions.mustache">Support</a>
-                    <a class="mdl-navigation__link" href="about.mustache">About</a>
-                    <!-- For development purposes-->
-                    <!-- TODO: Add a settings FAB -->
-                    <a class="mdl-navigation__link" href="login.mustache">Logout</a>
-                </nav>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Menu</span>
-            <nav class="mdl-navigation">
-                {{#classes}}
-                    <a class="mdl-navigation__link" href="/classes/{{classID}}">{{className}}</a>
-                {{/classes}}
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
-            <div class="page-content">
-                <div id="page">
-                    {{classData.name}}
-                    {{#classData.teachers}}{{name}}{{email}}{{/classData.teachers}}
-                    {{/teacher}}
-                    <!-- TODO: tabs -->
-                    {{/teacher}}
-                    {{#student}}
-                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-                            <thead>
-                                <tr>
-                                    <th class="mdl-data-table__cell--non-numeric">Tests</th>
-                                    <th>Date</th>
-                                    <th>?</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#tests}}
-                                    <tr>
-                                        <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                                        <td>{{date}}</td>
-                                        <td>?</td>
-                                    </tr>
-                                {{/tests}}
-                            </tbody>
-                        </table>
-                    {{/student}}
-                </div>
-            </div>
-        </main>
-        <footer class="mdl-mini-footer">
-          <div class="mdl-mini-footer__left-section">
-            <div class="mdl-logo">Title</div>
-            <ul class="mdl-mini-footer__link-list">
-              <li><a href="questions.mustache">Help</a></li>
-              <li><a href="#">Privacy &amp; Terms</a></li>
-            </ul>
-          </div>
-        </footer>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    {{>header}}
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        {{#classes}}
+        <a class="mdl-navigation__link" href="/classes/{{classID}}">{{className}}</a> {{/classes}}
+      </nav>
     </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div id="page">
+          <h1 class="hct">{{classData.name}}</h1>
+          {{#classData.teachers}}
+          <p>{{name}}{{email}}</p>{{/classData.teachers}} {{#teacher}}
+          <!-- TODO: tabs -->
+          <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+              <a href="#tests-panel" class="mdl-tabs__tab is-active">Tests</a>
+              <a href="#students-panel" class="mdl-tabs__tab">Students</a>
+            </div>
+
+            <div class="mdl-tabs__panel is-active" id="tests-panel">
+              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+                <thead>
+                  <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Test Name</th>
+                    <th class="mdl-data-table__cell--non-numeric">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Note: use the css is-selected attribute on tr for data manipulation-->
+                  {{#classData.tests}}
+                  <tr id="test-{{id}}">
+                    <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                    <td>{{avgScore}}</td>
+                  </tr>
+                  {{/classData.tests}}
+                </tbody>
+              </table>
+              {{^classData.tests}}
+              <p class="hct">It looks like you don't have any tests. Why not
+                <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="createTest">
+                  create one
+                </button>?
+              </p>
+              {{/classData.tests}}
+            </div>
+            <div class="mdl-tabs__panel" id="students-panel">
+              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+                <thead>
+                  <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Student Name</th>
+                    <th>Average Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#classData.students}}
+                  <tr id="student-{{id}}">
+                    <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                    <td>{{avgScore}}</td>
+                  </tr>
+                  {{/classData.students}}
+                </tbody>
+              </table>
+              {{^classData.students}}
+              <p class="hct">It looks like you don't have any students. To add students to your class, just give them this code: <br> "<code>{{classID}}</code>"
+              </p>
+              {{/classData.students}}
+            </div>
+          </div>
+          {{/teacher}} {{#student}}
+          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Tests</th>
+                <th>Date</th>
+                <th>?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#tests}}
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                <td>{{date}}</td>
+                <td>?</td>
+              </tr>
+              {{/tests}}
+            </tbody>
+          </table>
+          {{/student}}
+        </div>
+      </div>
+    </main>
+    {{>footer}}
+  </div>
 </body>
 
 </html>

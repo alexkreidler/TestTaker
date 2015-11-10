@@ -1,0 +1,10 @@
+Student<input name="type" type="radio" value="student">
+Teacher<input name="type" type="radio" value="teacher">
+<button onclick="func()">Calc</button>
+<p id="ans"></p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+function func(){
+$('#ans').html($('input[name="type"]:checked').val())
+}
+</script>
