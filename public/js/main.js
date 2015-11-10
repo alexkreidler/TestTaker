@@ -74,4 +74,7 @@ $(document).ready(function() {
             'uid': uid
         })
     });
-});
+    $('.lookLikeButton').html(
+      'testing'
+    )
+})

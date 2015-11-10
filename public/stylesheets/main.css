@@ -99,3 +99,6 @@ p.hct {
 body {
   min-height: 100vh;
 }
+.lookLikeButton{
+  -webkit-appearance: button;
+}
