@@ -133,17 +133,22 @@ app.all('/dashboard', function(req, res) {
                 var otherArr = [];
                 async.forEachOf(data.classes, function(item, key, callback) {
                     classes.child(key).once('value', function(snap) {
-                        var thisClass = snap.val();
-                        thisClass.id = key;
-                        console.log(thisClass.code);
-                        otherArr.push(thisClass);
-                        callback();
+                        if (snap.val() == undefined) {
+                            console.error('Snap.val equal to undefined');
+                            callback('Snap.val equal to undefined');
+                        } else {
+                            var thisClass = snap.val();
+                            thisClass.id = key;
+                            console.log(thisClass.code);
+                            otherArr.push(thisClass);
+                            callback();
+                        }
                     }, function(err) {
                         callback(err);
                     });
                 }, function(err) {
                     if (err) {
-
+                        res.redirect('/logout');
                     } else {
                         data.classes = otherArr;
                         var student;
@@ -438,7 +443,7 @@ app.post('/unenroll', urlencodedParser, function(req, res) {
         var thisClass = student.child(req.body.classID);
         thisClass.remove();
         res.end('success');
-    } catch (err){
+    } catch (err) {
         console.error(err);
         res.end(err);
     }
