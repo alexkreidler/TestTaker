@@ -4,6 +4,7 @@ console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression');
+var pj = require('prettyjson');
 var port = process.env.PORT || 3000;
 var app = express();
 app.listen(port);
@@ -83,7 +84,7 @@ function render(req, res, file, locals) {
 }
 
 function lookUpUser(uid, type, callback) {
-    console.log(uid + ' TYPE: ' + type + 'PLURAL TYPE: ' + type + 's');
+    console.log(uid + ' TYPE: ' + type + ' PLURAL TYPE: ' + type + 's');
     try {
         root.child(type + 's')
             .orderByKey()
@@ -91,9 +92,12 @@ function lookUpUser(uid, type, callback) {
             .endAt(uid)
             .once('value', function(snap) {
                 user = snap.val();
+                console.log('USER:');
+                console.log(user);
                 if (user == null) {
                     callback('No user found', null);
                 } else {
+                    console.log('successfully got user');
                     callback(null, user);
                 }
             }, function(err) {
@@ -122,18 +126,28 @@ app.all('/dashboard', function(req, res) {
     if (req.session.user) {
         var userData = req.session.user.userData;
         root.child([req.session.user.type] + 's')
-            .orderByChild('uid')
-            .startAt(req.session.uid)
-            .endAt(req.session.uid)
+            .orderByKey()
+            .startAt(req.session.user.uid)
+            .endAt(req.session.user.uid)
             .once('value', function(snap) {
                 data = snap.val();
-                console.log(data);
+                console.log('pure data: ');
+                console.log(pj.render(data));
                 data = data[Object.keys(data)[0]];
+                console.log('inner data: ');
+                console.log(pj.render(data));
                 var name = data.name;
                 var otherArr = [];
                 async.forEachOf(data.classes, function(item, key, callback) {
                     classes.child(key).once('value', function(snap) {
                         var thisClass = snap.val();
+                        console.log('ITEM');
+                        console.log(item);
+                        console.log('KEY');
+                        console.log(key);
+                        console.log('THISCLASS********************START');
+                        console.log(pj.render(thisClass));
+                        console.log('THISCLASS**********************END');
                         thisClass.id = key;
                         console.log(thisClass.code);
                         otherArr.push(thisClass);
@@ -188,6 +202,7 @@ app.get('/test', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
+    console.log('Query:');
     console.log(req.query);
     if (req.session.user != undefined) {
         res.redirect('/dashboard');
@@ -298,9 +313,12 @@ app.post('/signUp', urlencodedParser, function(req, res) {
 });
 
 app.post('/login', urlencodedParser, function(req, res) {
+    console.log('Req.body');
+    console.log(req.body);
     lookUpUser(req.body.uid, req.body.type, function(err, data) {
         if (err) {
             // TODO: error
+            console.error(err);
             res.status(400).send('whoops! it looks like an error');
         } else {
             req.session.user = {
@@ -317,6 +335,11 @@ app.post('/login', urlencodedParser, function(req, res) {
 app.post('/addClass', urlencodedParser, function(req, res) {
     //to think about - not use the query, just do it? --> decision: YES
     if (req.session.user.type == 'student') {
+        try{
+            classes.child(req.body.classID)
+        } catch(err){
+            res.status(400).send('Invalid Class ID: ' + req.body.classID + ' Additional info: ' + err);
+        }
         var studentClasses = students.child(req.session.user.uid + '/classes');
         var theClass = studentClasses.child(req.body.classID);
         theClass.set(true);
