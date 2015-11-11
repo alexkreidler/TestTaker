@@ -22,7 +22,8 @@
     "firebase": "latest",
     "mustache": "latest",
     "async": "latest",
-    "compression": "latest"
+    "compression": "latest",
+    "prettyjson": "latest"
   },
   "devDependencies": {
     "gulp": "latest",
