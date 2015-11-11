@@ -119,11 +119,51 @@ body {
 .mdl-mini-footer {
     bottom: 0;
 }
-#dialog {
-    display: none;
-}
 .table {
   width: 95%;
   margin: 1em;
->>>>>>> b0462d22bed96e244ceddeca03faff7c5e0362ea
+}
+#modal {
+  background: white;
+
+  position: fixed;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  margin: -25% 0 0 -25%;
+
+  /* Embiggen */
+  transform: scale(1.5); /* prefix me */
+
+  /* Hidden */
+  opacity: 0;
+  pointer-events: none;
+}
+.dialogIsOpen #page-wrap {
+
+  /* Blur and de-color */
+  -webkit-filter: blur(5px) grayscale(50%);
+
+  /* Recede */
+  -webkit-transform: scale(0.9);
+
+}
+.dialogIsOpen #modal {
+
+  /* Regular size and visible */
+  transform: scale(1); /* prefix me */
+  opacity: 1;
+
+  /* Clickable */
+  pointer-events: auto;
+
+}
+#page-wrap, #modal {
+
+  transition: all 0.4s ease; /* prefix me */
+
+}
+body {
+  /* Use at your own discretion */
+  -webkit-transform: translateZ(0);
 }

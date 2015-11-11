@@ -4,87 +4,90 @@
 {{>head}}
 
 <body>
+  <div id="page-wrap">
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        {{>header}}
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Menu</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
+      {{>header}}
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Menu</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
 
-            <div class="page-content">
+        <div class="page-content">
 
-                    <h1 class="hct">Welcome, {{userData.name}}!</h1>
-                    <!-- TODO : modal for addclass -->
-                    <button id="addClass" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--raised">
-                        <i class="material-icons">add</i>
-                    </button>
-                    {{#student}}
-                        <div id="dialog">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input class="mdl-textfield__input" type="text" id="classID">
-                                <label class="mdl-textfield__label" for="classID">Class ID</label>
-                            </div>
-                            <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
-                                Add Class
-                            </button>
-                        </div>
-                    {{/student}}
-                    {{#teacher}}
-                        <div id="dialog">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input class="mdl-textfield__input" type="text" id="className">
-                                <label class="mdl-textfield__label" for="className">Class Name</label>
-                            </div>
-                            <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
-                                Create Class
-                            </button>
-                        </div>
-                    {{/teacher}}
-                    <div class="mdl-grid">
-                        {{#userData.classes}}
-                            <div class="mdl-cell mdl-cell--6-col">
-                                <div class="classCard">
-                                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                                        <div class="mdl-card__title" style="background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg');">
-                                            <h2>{{name}}</h2>
-                                        </div>
-                                        <div class="mdl-card__supporting-text">
-                                            Teachers:
-                                            {{#teachers}}{{name}}{{/teachers}}
-                                            <br> Subject: {{subject}}
-                                            <br> Code: {{id}}
-                                        </div>
-                                        <div class="mdl-card__actions mdl-card--border">
-                                            <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Go to class</a>
-                                        </div>
-                                        <div class="mdl-card__menu">
-                                            <!-- Colored mini FAB button -->
-                                            <button id="delete-{{id}}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
-                                                <i class="material-icons">delete</i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {{/userData.classes}}
-                    </div>
-                    {{^userData.classes}}
-                    <h4 class="hct">It looks like you don't have any classes right now.</h4>
-                    {{/userData.classes}}
+          <h1 class="hct">Welcome, {{userData.name}}!</h1>
+          <!-- TODO : modal for addclass -->
+          <button id="addClass" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--raised">
+            <i class="material-icons">add</i>
+          </button>
+          {{#student}}
+          <div id="dialog">
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="classID">
+              <label class="mdl-textfield__label" for="classID">Class ID</label>
             </div>
-        </main>
+            <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
+              Add Class
+            </button>
+          </div>
+          {{/student}} {{#teacher}}
+          <div id="dialog">
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="className">
+              <label class="mdl-textfield__label" for="className">Class Name</label>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
+              Create Class
+            </button>
+          </div>
+          {{/teacher}}
+          <div class="mdl-grid">
+            {{#userData.classes}}
+            <div class="mdl-cell mdl-cell--6-col">
+              <div class="classCard">
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                  <div class="mdl-card__title" style="background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg');">
+                    <h2>{{name}}</h2>
+                  </div>
+                  <div class="mdl-card__supporting-text">
+                    Teachers: {{#teachers}}{{name}}{{/teachers}}
+                    <br> Subject: {{subject}}
+                    <br> Code: {{id}}
+                  </div>
+                  <div class="mdl-card__actions mdl-card--border">
+                    <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Go to class</a>
+                  </div>
+                  <div class="mdl-card__menu">
+                    <!-- Colored mini FAB button -->
+                    <button id="delete-{{id}}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/userData.classes}}
+          </div>
+          {{^userData.classes}}
+          <h4 class="hct">It looks like you don't have any classes right now.</h4>
+          {{/userData.classes}}
+        </div>
+      </main>
     </div>
     <script>
-    mainType = '{{type}}';
-    uid = '{{uid}}';
+      mainType = '{{type}}';
+      uid = '{{uid}}';
     </script>
+  </div>
+  <div id="modal">
+
+  </div>
 </body>
 
 </html>
