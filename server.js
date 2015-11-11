@@ -23,6 +23,7 @@ var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
 
+//create session for 30 minutes
 app.use(session({
     cookieName: 'session',
     secret: 'random_string_goes_here',
