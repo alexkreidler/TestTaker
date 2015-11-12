@@ -16,6 +16,8 @@ var Firebase = require('firebase');
 var consolidate = require('consolidate');
 var session = require('client-sessions');
 var async = require('async');
+var repl = require('repl');
+repl.start('TestTaker v' + version + ' REPL> ');
 var root = new Firebase('http://testtaker.firebaseio.com');
 var students = root.child('students');
 var teachers = root.child('teachers');
@@ -80,6 +82,7 @@ function render(req, res, file, locals) {
             toBeRendered.teacher = true;
         }
     }
+    console.log(pj.render(toBeRendered));
     res.render(file, toBeRendered);
 }
 
@@ -141,23 +144,33 @@ app.all('/dashboard', function(req, res) {
                 async.forEachOf(data.classes, function(item, key, callback) {
                     classes.child(key).once('value', function(snap) {
                         var thisClass = snap.val();
-                        console.log('ITEM');
-                        console.log(item);
-                        console.log('KEY');
-                        console.log(key);
-                        console.log('THISCLASS********************START');
-                        console.log(pj.render(thisClass));
-                        console.log('THISCLASS**********************END');
-                        thisClass.id = key;
-                        console.log(thisClass.code);
-                        otherArr.push(thisClass);
-                        callback();
+                        if (thisClass) {
+                            console.log('ITEM');
+                            console.log(item);
+                            console.log('KEY');
+                            console.log(key);
+                            console.log('THISCLASS********************START');
+                            console.log(pj.render(thisClass));
+                            console.log('THISCLASS**********************END');
+                            thisClass.id = key;
+                            console.log(thisClass.code);
+                            otherArr.push(thisClass);
+                            callback();
+                        } else if (!thisClass) {
+                            thisClass = {
+                                name: 'Error: Class Not Found',
+                                id: key,
+                                subject: 'This happened either because a teacher deleted the class or our server made a mistake.'
+                            }
+                            otherArr.push(thisClass);
+                            callback();
+                        }
                     }, function(err) {
                         callback(err);
                     });
                 }, function(err) {
                     if (err) {
-
+                        res.end('error: ' + err);
                     } else {
                         data.classes = otherArr;
                         var student;
@@ -181,7 +194,7 @@ app.all('/dashboard', function(req, res) {
 
 app.all('/logout', function(req, res) {
     req.session.user = undefined;
-    res.redirect('/');
+    res.redirect('/login?message=logged_out');
 });
 
 //*********************************************************************************************************
@@ -335,17 +348,30 @@ app.post('/login', urlencodedParser, function(req, res) {
 app.post('/addClass', urlencodedParser, function(req, res) {
     //to think about - not use the query, just do it? --> decision: YES
     if (req.session.user.type == 'student') {
-        try{
-            classes.child(req.body.classID)
-        } catch(err){
-            res.status(400).send('Invalid Class ID: ' + req.body.classID + ' Additional info: ' + err);
+        try {
+            classes
+                .orderByKey()
+                .startAt(req.body.classID)
+                .endAt(req.body.classID)
+                .once('value', function(snap) {
+                    if (snap.val()) {
+                        var studentClasses = students.child(req.session.user.uid + '/classes');
+                        var theClass = studentClasses.child(req.body.classID);
+                        theClass.set(true);
+                        var studentLoc = classes.child(req.body.classID + '/students/' + req.session.user.uid);
+                        studentLoc.set(true);
+                        res.json({
+                            'success': 'class added successfully'
+                        });
+                    } else if (!snap.val()) {
+                        res.status(400).json({
+                            'error': 'invalid class id: ' + req.body.classID
+                        });
+                    }
+                })
+        } catch (err) {
+            res.status(500).send('Whoops! It looks like an internal server error: ' + err);
         }
-        var studentClasses = students.child(req.session.user.uid + '/classes');
-        var theClass = studentClasses.child(req.body.classID);
-        theClass.set(true);
-        res.json({
-            'success': 'class added successfully'
-        });
     } else {
         res.status(400).json({
             'error': 'this is for students only: please use the /createClass POST request'
@@ -445,6 +471,7 @@ app.post('/createClass', urlencodedParser, function(req, res) {
 
 app.post('/deleteClass', urlencodedParser, function(req, res) {
     // TODO: auth
+    // TODO: delete references from all student accounts
     var theClass = classes.child(req.body.classID);
     theClass.remove();
     var str = req.session.user.uid + '/classes/' + req.body.classID;
@@ -457,11 +484,12 @@ app.post('/deleteClass', urlencodedParser, function(req, res) {
 
 app.post('/unenroll', urlencodedParser, function(req, res) {
     try {
-        var student = students.child(req.session.user.uid);
-        var thisClass = student.child(req.body.classID);
-        thisClass.remove();
+        console.log(req.session.user.uid);
+        console.log(req.body.classID);
+        var studentClassToBeDeleted = students.child(req.session.user.uid + '/classes/' + req.body.classID);
+        studentClassToBeDeleted.remove();
         res.end('success');
-    } catch (err){
+    } catch (err) {
         console.error(err);
         res.end(err);
     }
@@ -474,7 +502,7 @@ app.post('/unenroll', urlencodedParser, function(req, res) {
 //*********************************************************************************************************
 
 app.get('/classes/:classID', function(req, res) {
-    var classData;
+    // TODO: auth
     classes
         .orderByKey()
         .startAt(req.params.classID)
@@ -486,11 +514,60 @@ app.get('/classes/:classID', function(req, res) {
                 res.redirect(404, '/dashboard?error=class_not_found')
                     //todo - send error to client
             } else {
-                classData = data[Object.keys(data)[0]];
-                render(req, res, 'class', {
-                    classData: classData,
-                    classID: req.params.classID
-                });
+                data = data[Object.keys(data)[0]];
+                var testsArr = [];
+                async.forEachOf(data.tests, function(item, key, callback) {
+                    tests
+                        .orderByKey()
+                        .startAt(key)
+                        .endAt(key)
+                        .once('value', function(snap) {
+                            var snapdata = snap.val()
+                            testsArr.push(snapdata[Object.keys(snapdata)[0]]);
+                            callback();
+                        }, function(err) {
+                            callback(err);
+                        })
+                }, function(err) {
+                    if (err) {
+                        console.error(err)
+                        res.end(err);
+                    } else {
+                        data.tests = testsArr;
+                        if (req.session.user.type == 'student') {
+                            render(req, res, 'class', {
+                                classData: data,
+                                classID: req.params.classID
+                            });
+                        } else if (req.session.user.type == 'teacher'){
+                            var studentsArr = [];
+                            async.forEachOf(data.students, function(item, key, callback) {
+                                students
+                                    .orderByKey()
+                                    .startAt(key)
+                                    .endAt(key)
+                                    .once('value', function(snap) {
+                                        var snapdata = snap.val()
+                                        studentsArr.push(snapdata[Object.keys(snapdata)[0]]);
+                                        callback();
+                                    }, function(err) {
+                                        callback(err);
+                                    })
+                            }, function (err){
+                                if (err){
+                                    console.error(err);
+                                    res.end(err);
+                                } else {
+                                    data.students = studentsArr;
+                                    render(req, res, 'class', {
+                                        classData: data,
+                                        classID: req.params.classID
+                                    });
+                                }
+                            });
+                        }
+                    }
+                })
             }
         });
 });
