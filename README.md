@@ -7,4 +7,4 @@ TestTaker is a testing application.
 - Version 0.0.0 - this is where we are now
 - Version 1.0 - we're working hard just to get this working with the backend Node.js API and Mustache for rendering
 - Version 2.0 - use front-end frameworks like Angular so we aren't rendering so much on the server (e.g. no more mustache)
-- Version 3.0 - I have no idea
+- Version 3.0 - flash cards

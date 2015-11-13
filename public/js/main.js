@@ -30,7 +30,7 @@
         });
 
         $('#addClass').on('click', function() {
-            $('#dialog').show();
+          $("body").toggleClass("dialogIsOpen");
             $('#doIt').on('click', function() {
                 if (mainType == 'teacher') {
                     $.post('/createClass', {
