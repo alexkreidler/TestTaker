@@ -26,6 +26,7 @@ var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
 
+//create session for 30 minutes
 app.use(session({
     cookieName: 'session',
     secret: 'random_string_goes_here',
@@ -161,7 +162,7 @@ app.all('/dashboard', function(req, res) {
                                 name: 'Error: Class Not Found',
                                 id: key,
                                 subject: 'This happened either because a teacher deleted the class or our server made a mistake.'
-                            }
+                            };
                             otherArr.push(thisClass);
                             callback();
                         }
@@ -511,7 +512,7 @@ app.get('/classes/:classID', function(req, res) {
             var data = snap.val();
             if (data == undefined) {
                 console.error('The snapshot didn\'t find anything');
-                res.redirect(404, '/dashboard?error=class_not_found')
+                res.redirect(404, '/dashboard?error=class_not_found');
                     //todo - send error to client
             } else {
                 data = data[Object.keys(data)[0]];
@@ -522,15 +523,15 @@ app.get('/classes/:classID', function(req, res) {
                         .startAt(key)
                         .endAt(key)
                         .once('value', function(snap) {
-                            var snapdata = snap.val()
+                            var snapdata = snap.val();
                             testsArr.push(snapdata[Object.keys(snapdata)[0]]);
                             callback();
                         }, function(err) {
                             callback(err);
-                        })
+                        });
                 }, function(err) {
                     if (err) {
-                        console.error(err)
+                        console.error(err);
                         res.end(err);
                     } else {
                         data.tests = testsArr;
@@ -547,12 +548,12 @@ app.get('/classes/:classID', function(req, res) {
                                     .startAt(key)
                                     .endAt(key)
                                     .once('value', function(snap) {
-                                        var snapdata = snap.val()
+                                        var snapdata = snap.val();
                                         studentsArr.push(snapdata[Object.keys(snapdata)[0]]);
                                         callback();
                                     }, function(err) {
                                         callback(err);
-                                    })
+                                    });
                             }, function (err){
                                 if (err){
                                     console.error(err);
@@ -567,7 +568,7 @@ app.get('/classes/:classID', function(req, res) {
                             });
                         }
                     }
-                })
+                });
             }
         });
 });
