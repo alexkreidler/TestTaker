@@ -23,11 +23,11 @@
 
           <h1 class="hct">Welcome, {{userData.name}}!</h1>
           <!-- TODO : modal for addclass -->
-          <button id="addClass" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--raised">
+          <button id="addClass" class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--raised">
             <i class="material-icons">add</i>
           </button>
           {{#student}}
-          <div id="dialog">
+          <div id="dialog" style="display: none;">
             <div class="mdl-textfield mdl-js-textfield">
               <input class="mdl-textfield__input" type="text" id="classID">
               <label class="mdl-textfield__label" for="classID">Class ID</label>
@@ -37,7 +37,7 @@
             </button>
           </div>
           {{/student}} {{#teacher}}
-          <div id="dialog">
+          <div id="dialog" style="display:none;">
             <div class="mdl-textfield mdl-js-textfield">
               <input class="mdl-textfield__input" type="text" id="className">
               <label class="mdl-textfield__label" for="className">Class Name</label>

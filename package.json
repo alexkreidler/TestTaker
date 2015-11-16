@@ -15,14 +15,15 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/tim1589/testtaker#readme",
   "dependencies": {
+    "async": "latest",
     "body-parser": "latest",
     "client-sessions": "latest",
+    "compression": "latest",
     "consolidate": "latest",
     "express": "latest",
     "firebase": "latest",
+    "moment": "^2.10.6",
     "mustache": "latest",
-    "async": "latest",
-    "compression": "latest",
     "prettyjson": "latest"
   },
   "devDependencies": {

@@ -17,6 +17,7 @@ var consolidate = require('consolidate');
 var session = require('client-sessions');
 var async = require('async');
 var repl = require('repl');
+var moment = require('moment');
 repl.start('TestTaker v' + version + ' REPL> ');
 var root = new Firebase('http://testtaker.firebaseio.com');
 var students = root.child('students');
@@ -66,7 +67,7 @@ var urlencodedParser = bodyParser.urlencoded({
 //*********************************************************************************************************
 
 function render(req, res, file, locals) {
-    var toBeRendered = locals;
+    var toBeRendered = locals ? locals : {};
     toBeRendered.partials = {
         header: 'header',
         footer: 'footer',
@@ -250,6 +251,7 @@ app.get('/privacy', function(req, res) {
         title: 'TestTaker | Privacy Policy'
     });
 });
+
 
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -513,7 +515,7 @@ app.get('/classes/:classID', function(req, res) {
             if (data == undefined) {
                 console.error('The snapshot didn\'t find anything');
                 res.redirect(404, '/dashboard?error=class_not_found');
-                    //todo - send error to client
+                //todo - send error to client
             } else {
                 data = data[Object.keys(data)[0]];
                 var testsArr = [];
@@ -523,9 +525,14 @@ app.get('/classes/:classID', function(req, res) {
                         .startAt(key)
                         .endAt(key)
                         .once('value', function(snap) {
+                            try{
                             var snapdata = snap.val();
                             testsArr.push(snapdata[Object.keys(snapdata)[0]]);
                             callback();
+                        } catch(err){
+                            console.log(err);
+                            res.end(err + ' This might be caused because you deleted a class.');
+                        }
                         }, function(err) {
                             callback(err);
                         });
@@ -540,7 +547,7 @@ app.get('/classes/:classID', function(req, res) {
                                 classData: data,
                                 classID: req.params.classID
                             });
-                        } else if (req.session.user.type == 'teacher'){
+                        } else if (req.session.user.type == 'teacher') {
                             var studentsArr = [];
                             async.forEachOf(data.students, function(item, key, callback) {
                                 students
@@ -554,8 +561,8 @@ app.get('/classes/:classID', function(req, res) {
                                     }, function(err) {
                                         callback(err);
                                     });
-                            }, function (err){
-                                if (err){
+                            }, function(err) {
+                                if (err) {
                                     console.error(err);
                                     res.end(err);
                                 } else {
@@ -571,6 +578,45 @@ app.get('/classes/:classID', function(req, res) {
                 });
             }
         });
+});
+
+
+app.get('/tests/:testID', function(req, res) {
+    if (req.session.user) {
+        tests
+            .orderByKey()
+            .startAt(req.params.testID)
+            .endAt(req.params.testID)
+            .once('value', function(snap) {
+                testInfo = snap.val();
+                if (moment(testInfo.date, 'MM/DD/YY').fromNow() === 0) {
+                    testData.child(req.params.testID)
+                        .once('value', function(snap) {
+                            questionData = snap.val();
+                            var questions = toArray(data);
+                            var theTestData = {
+                                name: testInfo.name,
+                                questions: questions
+                            };
+                            render(req, res, 'test', theTestData);
+                        });
+                } else {
+                    res.end('Whoops! Your test is not ready to take yet.');
+                }
+            }, function(err){
+                res.end(err);
+            });
+    } else {
+        res.redirect('/login?err=not_signed_in');
+    }
+});
+
+app.get('/createTest', function(req, res) {
+    if (req.session.user) {
+        render(req, res, 'create', {classID: req.params.classID ? req.params.classID : null});
+    } else {
+        res.redirect('/login?err=not_signed_in');
+    }
 });
 
 console.log('Finished starting TestTaker Server v' + version);

@@ -1,5 +1,6 @@
 .demo-card-wide.mdl-card {
   width: 512px;
+  margin: 1em;
 }
 .demo-card-wide > .mdl-card__title {
   color: #fff;
@@ -90,7 +91,7 @@ p.hct {
   padding-left: 3em;
 }
 
-#addClass {
+.fab {
   position: fixed;
   bottom: 2em;
   right: 2em;
