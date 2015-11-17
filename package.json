@@ -22,7 +22,6 @@
     "consolidate": "latest",
     "express": "latest",
     "firebase": "latest",
-    "moment": "^2.10.6",
     "mustache": "latest",
     "prettyjson": "latest"
   },
