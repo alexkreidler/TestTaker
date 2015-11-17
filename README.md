@@ -10,9 +10,11 @@ TestTaker is a testing application.
 - put all the ```<script>``` tags into the one js file (may need to rethink some things)
 
 ## MILESTONES ##
-- Version 0.0.0 - this is where we are now
-- Version 1.0 - we're working hard just to get this working with the backend Node.js API and Mustache for rendering
+- Version 1.0 - This is where we are now. We have a basic setup with a backend Node.js API, Mustache for rendering, and Firebase for a database
 - Version 2.0 - use front-end frameworks like Angular so we aren't rendering so much on the server (e.g. no more mustache)
 - Version 3.0 - flash cards
+
+## To think about ##
+- Use a different database like mongodb to have more customization and control
 
 &copy; 2015 TestTaker
