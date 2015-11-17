@@ -1,4 +1,6 @@
 # README #
+
+[![Join the chat at https://gitter.im/Tim15/TestTaker](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Tim15/TestTaker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 TestTaker is a testing application.
 
 ## TODOS ##
