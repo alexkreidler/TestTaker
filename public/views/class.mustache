@@ -31,75 +31,88 @@
                         <div class="mdl-tabs__panel is-active" id="tests-panel">
                             <div id="ct" style="display: none;">
 
-                                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                                        <div class="mdl-card__title">
-                                            <h2 style="color: black;">
-                                                Basic Test Data
-                                            </h2>
-                                        </div>
-                                        <div class="mdl-card__supporting-text">
-                                            <div class="mdl-textfield mdl-js-textfield">
-                                                <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
-                                                <label class="mdl-textfield__label" for="testName">Test Name</label>
-                                            </div>
-                                        </div>
-                                        <div class="mdl-card__actions mdl-card--border">
-                                            <div class="mdl-textfield mdl-js-textfield">
-                                                <input name="testImage" class="mdl-textfield__input answer" type="text" id="testDate">
-                                                <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
-                                            </div>
+                                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                    <div class="mdl-card__title">
+                                        <h2 style="color: black;">
+                                            Basic Test Data
+                                        </h2>
+                                    </div>
+                                    <div class="mdl-card__supporting-text">
+                                        <div class="mdl-textfield mdl-js-textfield">
+                                            <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
+                                            <label class="mdl-textfield__label" for="testName">Test Name</label>
                                         </div>
                                     </div>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <div class="mdl-textfield mdl-js-textfield">
+                                            <input name="testImage" class="mdl-textfield__input answer" type="text" id="testDate">
+                                            <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
-                                        <i class="material-icons">add</i>
-                                    </button>
-                                    <div id="questions">
-                                        <h1>
-                                            Questions
-                                        </h1>
-                                        <div class="question">
-                                            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                                                <div class="mdl-card__title">
-                                                    <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
+                                <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
+                                    <i class="material-icons">add</i>
+                                </button>
+                                <div id="questions">
+                                    <h1>
+                                        Questions
+                                    </h1>
+                                    <div class="question">
+                                        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                            <div class="mdl-card__title">
+                                                <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
+                                            </div>
+                                            <div class="mdl-card__supporting-text">
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
+                                                    <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
                                                 </div>
-                                                <div class="mdl-card__supporting-text">
-                                                    <div class="mdl-textfield mdl-js-textfield">
-                                                        <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
-                                                        <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
-                                                    </div>
-                                                    <div class="mdl-textfield mdl-js-textfield">
-                                                        <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
-                                                        <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
-                                                    </div>
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
+                                                    <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
                                                 </div>
-                                                <div class="mdl-card__actions mdl-card--border">
-                                                    <div class="mdl-textfield mdl-js-textfield">
-                                                        <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
-                                                        <label class="mdl-textfield__label" for="answer">Answer</label>
-                                                    </div>
+                                            </div>
+                                            <div class="mdl-card__actions mdl-card--border">
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
+                                                    <label class="mdl-textfield__label" for="answer">Answer</label>
                                                 </div>
-                                                <div class="mdl-card__menu">
-                                                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
-                                                        <i class="material-icons md-dark">delete</i>
-                                                    </button>
-                                                </div>
+                                            </div>
+                                            <div class="mdl-card__menu">
+                                                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
+                                                    <i class="material-icons md-dark">delete</i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                        Create
-                                    </button>
+                                </div>
+                                <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                    Create
+                                </button>
                             </div>
                             <!-- Colored FAB button with ripple -->
                             <button onclick="$('#ct').show()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored fab">
                                 <i class="material-icons">add</i>
                             </button>
+                            <!-- Left aligned menu below button -->
+                            <button id="demo-menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+
+                            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left">
+                                <li class="mdl-menu__item" id="openTest">Open Test</li>
+                                <li class="mdl-menu__item">Another Action</li>
+                                <li disabled class="mdl-menu__item">Disabled Action</li>
+                                <li class="mdl-menu__item">Yet Another Action</li>
+                            </ul>
+
                             <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric">Test Name</th>
                                         <th class="mdl-data-table__cell--non-numeric">Date</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Test ID</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,7 +120,8 @@
                                     {{#classData.tests}}
                                     <tr id="test-{{id}}">
                                         <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                                        <td>{{avgScore}}</td>
+                                        <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
+                                        <td class="mdl-data-table__cell--non-numeric">{{id}}</td>
                                     </tr>
                                     {{/classData.tests}}
                                 </tbody>
@@ -158,7 +172,7 @@
                             {{#classData.tests}}
                             <tr id="test-{{id}}">
                                 <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                                <td>{{avgScore}}</td>
+                                <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
                             </tr>
                             {{/classData.tests}}
                         </tbody>
@@ -171,7 +185,7 @@
         </main>
     </div>
     <script>
-    var theClass='{{classID}}';
+        var theClass = '{{classID}}';
     </script>
 </body>
 

@@ -15,6 +15,22 @@
         var tests = root.child('tests');
         var classes = root.child('classes');
 
+        $('#startTestingSession').on('click', function(){
+            var testID = window.location.href.replace('http://localhost:3000/tests/', '');
+            var test = tests.child(testID);
+            var stat = test.child('isAvailable');
+            stat.set(true);
+            alert('session started');
+        });
+
+        $('#endTestingSession').on('click', function(){
+            var testID = window.location.href.replace('http://localhost:3000/tests/', '');
+            var test = tests.child(testID);
+            var stat = test.child('isAvailable');
+            stat.set(false);
+            alert('session stopped');
+        });
+
         $('[id^=delete-]').on('click', function() {
             if (mainType == 'teacher') {
                 $.post('/deleteClass', {
@@ -55,11 +71,11 @@
                 }
             });
         });
-        $('#submitTest').on('click', function() {
+        /*$('#submitTest').on('click', function() {
             $.post('/gradeTest', {
                 'uid': uid
             });
-        });
+        });*/
         var submitVar = false;
         String.prototype.capitalizeFirstLetter = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);

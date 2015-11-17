@@ -10,20 +10,7 @@
     <!DOCTYPE html>
     <html>
 
-    <head>
-        <meta charset="utf-8">
-        <title>TestTaker</title>
-        {{^scripts}}
-        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-        {{/scripts}} {{^stylesheets}}
-        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
-        <script src="{{.}}"></script>
-        {{/scripts}} {{#stylesheets}}
-        <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    </head>
+    {{>head}}
 
     <body>
         <!-- Always shows a header, even in smaller screens. -->
@@ -52,54 +39,93 @@
                     <a class="mdl-navigation__link" href="">Link</a>
                 </nav>
             </div>
-            <h3>
-                Welcome {{userData.name}}. You are about to take the {{name}} test.
-            </h3>
-            <p>When you are ready, do your best to fill out the answers to the questions below. When you are done, click "Submit". Good Luck!</p>
-            {{#questions}}
-            <div class="quizQuestions">
-                <img src="{{imageUrl}}">
-                <div class="quizAnswers">
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-image: url({{image}})">
-                        <div class="mdl-card__title">
-                            <h2 class="mdl-card__title-text">Question 1</h2>
+            <main class="mdl-layout__content">
+                <div class="page-content" id="page-content">
+                    {{#student}}
+                        <h3>
+                            Welcome {{userData.name}}. You are about to take the {{name}} test.
+                        </h3>
+                        <p>When you are ready, do your best to fill out the answers to the questions below. When you are done, click "Submit". Good Luck!</p>
+                        <div id="quizQuestions">
+                            {{#questions}}
+                                <div class="quizAnswer">
+                                    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-image: url({{imageUrl}})">
+                                        <div class="mdl-card__title">
+                                            <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
+                                        </div>
+                                        <div class="mdl-card__supporting-text">
+                                            {{prompt}}
+                                        </div>
+                                        <div class="mdl-card__actions mdl-card--border">
+                                            <div class="mdl-textfield mdl-js-textfield">
+                                                <input class="mdl-textfield__input" type="text" id="question{{id}}">
+                                                <label class="mdl-textfield__label" for="question{{id}}">Answer...</label>
+                                            </div>
+                                        </div>
+                                        <div class="mdl-card__menu">
+                                            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                                <i class="material-icons">share</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/questions}}
                         </div>
-                        <div class="mdl-card__supporting-text">
-                            {{prompt}}
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input class="mdl-textfield__input" type="text" id="question{{id}}">
-                                <label class="mdl-textfield__label" for="question{{id}}">Answer...</label>
-                            </div>
-                        </div>
-                        <div class="mdl-card__menu">
-                            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                                <i class="material-icons">share</i>
+                        <div>
+                            <br>
+                            <button id="submitTest" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Submit Test
                             </button>
                         </div>
-                    </div>
+                        <script>
+                            $('#submitTest').on('click', function() {
+                                var answers = {};
+                                $('#quizQuestions').find('.quizAnswer').each(function(index, el) {
+                                    $(this).find('[id^=question]').each(function(index, el) {
+                                        answers[(this).id.replace('question', '')] = $(this).val()
+                                    });
+                                });
+                                // TODO: for customized tests
+                                obj = {
+                                    answers: answers,
+                                    test: window.location.href.replace('http://localhost:3000/tests/', '')
+                                }
+                                $.post('/submitTest', obj, function() {
+                                    alert('done');
+                                    $('#page-content').html('<h1>Thank you for submitting your test.</h1><p>Our server is grading it right now, but your teacher will look over it before you get your score back.</p>')
+                                });
+                            });
+                        </script>
+                    {{/student}}
+                    {{#teacher}}
+                        <h1>
+                            Test Admin Page for the test "{{name}}"
+                        </h1>
+                        {{#testingSession}}
+                            <button id="endTestingSession" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                End Testing Session
+                            </button>
+                        {{/testingSession}} {{^testingSession}}
+                        <button id="startTestingSession" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Start Testing Session
+                        </button>
+                        {{^testingSession}} {{/teacher}}
                 </div>
-            </div>
-            {{/questions}}
-            <div>
                 <br>
-                <button id="submitTest" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Submit Test</button>
-            </div>
-            <br>
-            <br>
-            <br>
-            <footer class="mdl-mini-footer">
-                <div class="mdl-mini-footer__left-section">
-                    <div class="mdl-logo">Title</div>
-                    <ul class="mdl-mini-footer__link-list">
-                        <li><a href="questions.mustache">Help</a></li>
-                        <li><a href="#">Privacy &amp; Terms</a></li>
-                    </ul>
-                </div>
-            </footer>
+                <br>
+                <br>
+                <footer class="mdl-mini-footer">
+                    <div class="mdl-mini-footer__left-section">
+                        <div class="mdl-logo">Title</div>
+                        <ul class="mdl-mini-footer__link-list">
+                            <li><a href="questions.mustache">Help</a></li>
+                            <li><a href="#">Privacy &amp; Terms</a></li>
+                        </ul>
+                    </div>
+                </footer>
             </main>
         </div>
+        {{>outdated}}
     </body>
 
     </html>

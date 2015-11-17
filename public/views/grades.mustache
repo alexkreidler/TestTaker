@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+{{>head}}
+
+<body>
+    <div id="page-wrap">
+        <!-- Always shows a header, even in smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            {{>header}}
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Menu</span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <h1>
+                        Student scores for {{testName}}
+                    </h1>
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Student</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#scores}}
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">{{studentName}}</td>
+                                <td>{{score}}</td>
+                            </tr>
+                            {{/scores}}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+        <script>
+            mainType = '{{type}}';
+            uid = '{{uid}}';
+        </script>
+    </div>
+</body>
+
+</html>

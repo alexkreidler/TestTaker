@@ -1,5 +1,5 @@
-var version = '0.0.0';
-var clientVersion = '0.0.0';
+var version = '1.0.0';
+var clientVersion = '1.0.0';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -26,6 +26,8 @@ var classes = root.child('classes');
 var testData = root.child('testData');
 var tests = root.child('tests');
 var responses = root.child('responses');
+var answers = root.child('answers');
+var grades = root.child('grades');
 
 //create session for 30 minutes
 app.use(session({
@@ -71,11 +73,13 @@ function render(req, res, file, locals) {
     toBeRendered.partials = {
         header: 'header',
         footer: 'footer',
-        head: 'head'
+        head: 'head',
+        outdated: 'outdated'
     };
     toBeRendered.version = clientVersion;
-    toBeRendered.isLoggedIn = (req.session.user != undefined);
-    if (toBeRendered.isLoggedIn == true) {
+    toBeRendered.isLoggedIn = (req.session.user !== undefined);
+    toBeRendered.userData = req.session.isLoggedIn ? req.session.user.userData : null;
+    if (toBeRendered.isLoggedIn === true) {
         if (req.session.user.type == 'student') {
             toBeRendered.student = true;
             toBeRendered.teacher = false;
@@ -433,26 +437,40 @@ app.post('/createTest', urlencodedParser, function(req, res) {
     }
 });
 
-app.post('/gradeTest', urlencodedParser, function(req, res) {
+app.post('/submitTest', urlencodedParser, function(req, res) {
     //Record Answers
-    var response = responses.push(req.body);
-
-    var thisTestData;
-    testData
+    //try{
+    var response = responses.child(req.body.test);
+    response.push(req.body.answers);
+    answers
+        .child(req.body.test)
         .orderByKey()
-        .startAt(req.body.testData)
-        .endAt(req.body.testData)
         .once('value', function(snap) {
-            thisTestData = Object.keys(snap.val())[0];
+            var answers = snap.val();
+            console.log(answers);
+            var keys = Object.keys(answers);
+            console.log(keys);
+            var answersArray = toArray(answers);
+            console.log(answersArray);
+            var gradedObj = {};
+            for (var i = 0; i < answersArray.length; i++) {
+                console.log(i);
+                console.log(answersArray[i]);
+                console.log(keys[i]);
+                if(answersArray[i] == req.body.answers[keys[i]]){
+                    gradedObj[keys[i]] = true;
+                } else {
+                    gradedObj[keys[i]] = false;
+                }
+            }
+            var testGrade = grades.child(req.body.test);
+            testGrade.push(gradedObj);
+            res.end('success');
         });
-    //
-    var keys = Object.keys(thisTestData.questions);
-    var key;
-    var arrayOfAnswers = [];
-    for (var i = 0; i < keys.length; i++) {
-        key = keys[i];
-        arrayOfAnswers.push(thisTestData[key].answer);
-    }
+    //} catch(err){
+        //console.log(err);
+        //res.status(500).end(err);
+    //}
 });
 
 //to think about: do it on client for auth
@@ -525,14 +543,17 @@ app.get('/classes/:classID', function(req, res) {
                         .startAt(key)
                         .endAt(key)
                         .once('value', function(snap) {
-                            try{
-                            var snapdata = snap.val();
-                            testsArr.push(snapdata[Object.keys(snapdata)[0]]);
-                            callback();
-                        } catch(err){
-                            console.log(err);
-                            res.end(err + ' This might be caused because you deleted a class.');
-                        }
+                            try {
+                                var snapdata = snap.val();
+                                var id = Object.keys(snapdata)[0];
+                                snapdata = snapdata[id];
+                                snapdata.id = id;
+                                testsArr.push(snapdata);
+                                callback();
+                            } catch (err) {
+                                console.log(err);
+                                res.end(err + ' This might be caused because you deleted a class.');
+                            }
                         }, function(err) {
                             callback(err);
                         });
@@ -588,24 +609,45 @@ app.get('/tests/:testID', function(req, res) {
             .startAt(req.params.testID)
             .endAt(req.params.testID)
             .once('value', function(snap) {
+                // TODO: error check
                 testInfo = snap.val();
-                if (moment(testInfo.date, 'MM/DD/YY').fromNow() === 0) {
-                    testData.child(req.params.testID)
-                        .once('value', function(snap) {
-                            questionData = snap.val();
-                            var questions = toArray(data);
-                            var theTestData = {
-                                name: testInfo.name,
-                                questions: questions
-                            };
-                            render(req, res, 'test', theTestData);
+                console.log(testInfo);
+                if (testInfo) {
+                    var id = Object.keys(testInfo)[0];
+                    testInfo = testInfo[id];
+                    console.log(testInfo);
+                    if (req.session.user.type == 'student') {
+                        if (testInfo.isAvailable === true) {
+                            testData.child(req.params.testID)
+                                .once('value', function(snap) {
+                                    questionData = snap.val();
+                                    var keys = Object.keys(questionData);
+                                    var questions = toArray(questionData);
+                                    for (var i = 0; i < questions.length; i++) {
+                                        questions[i].id = keys[i];
+                                    }
+                                    var theTestData = {
+                                        name: testInfo.name,
+                                        questions: questions
+                                    };
+                                    render(req, res, 'test', theTestData);
+                                });
+                        } else {
+                            res.end('Whoops! Your test is not ready to take yet.');
+                        }
+                    } else if (req.session.user.type == 'teacher') {
+                        render(req, res, 'test', {
+                            name: testInfo.name
                         });
+                    }
                 } else {
-                    res.end('Whoops! Your test is not ready to take yet.');
+                    console.log('test is null');
+                    // TODO: investigate
                 }
-            }, function(err){
+            }, function(err) {
                 res.end(err);
             });
+
     } else {
         res.redirect('/login?err=not_signed_in');
     }
@@ -613,7 +655,9 @@ app.get('/tests/:testID', function(req, res) {
 
 app.get('/createTest', function(req, res) {
     if (req.session.user) {
-        render(req, res, 'create', {classID: req.params.classID ? req.params.classID : null});
+        render(req, res, 'create', {
+            classID: req.params.classID ? req.params.classID : null
+        });
     } else {
         res.redirect('/login?err=not_signed_in');
     }
