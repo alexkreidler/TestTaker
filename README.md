@@ -1,5 +1,6 @@
 # README #
 TestTaker is a testing application.
+[![Build Status](https://travis-ci.org/Tim15/TestTaker.svg?branch=master)](https://travis-ci.org/Tim15/TestTaker)
 
 ## TODOS ##
 - Put footers inside main content area so that they are responsive
