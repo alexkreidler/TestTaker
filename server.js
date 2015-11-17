@@ -17,7 +17,6 @@ var consolidate = require('consolidate');
 var session = require('client-sessions');
 var async = require('async');
 var repl = require('repl');
-var moment = require('moment');
 repl.start('TestTaker v' + version + ' REPL> ');
 var root = new Firebase('http://testtaker.firebaseio.com');
 var students = root.child('students');
@@ -78,7 +77,7 @@ function render(req, res, file, locals) {
     };
     toBeRendered.version = clientVersion;
     toBeRendered.isLoggedIn = (req.session.user !== undefined);
-    toBeRendered.userData = req.session.isLoggedIn ? req.session.user.userData : null;
+    toBeRendered.user = toBeRendered.isLoggedIn ? req.session.user.user : null;
     if (toBeRendered.isLoggedIn === true) {
         if (req.session.user.type == 'student') {
             toBeRendered.student = true;
@@ -89,6 +88,7 @@ function render(req, res, file, locals) {
         }
     }
     console.log(pj.render(toBeRendered));
+    console.log(toBeRendered);
     res.render(file, toBeRendered);
 }
 
@@ -178,15 +178,16 @@ app.all('/dashboard', function(req, res) {
                     if (err) {
                         res.end('error: ' + err);
                     } else {
+                        console.log(otherArr);
                         data.classes = otherArr;
                         var student;
                         var teacher;
+                        console.log('DATASTART');
                         console.log(data);
+                        console.log('DATAEND');
                         render(req, res, 'dashboard', {
                             type: req.session.user.type,
                             uid: Object.keys(snap.val())[0],
-                            student: student,
-                            teacher: teacher,
                             userData: data,
                             title: 'Dashboard'
                         });
