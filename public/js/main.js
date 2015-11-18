@@ -15,16 +15,21 @@
         var tests = root.child('tests');
         var classes = root.child('classes');
 
-        $('#startTestingSession').on('click', function(){
-            var testID = window.location.href.replace('http://localhost:3000/tests/', '');
+        $('#startTestingSession').on('click', function() {
+            var href = window.location.href;
+            //string operations so development and production can use same code
+            var num = href.search('/tests') + 7;
+            var testID = href.substr(num, href.length);
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
             stat.set(true);
             alert('session started');
         });
 
-        $('#endTestingSession').on('click', function(){
-            var testID = window.location.href.replace('http://localhost:3000/tests/', '');
+        $('#endTestingSession').on('click', function() {
+            //string operations so development and production can use same code
+            var num = href.search('/tests') + 7;
+            var testID = href.substr(num, href.length);
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
             stat.set(false);
