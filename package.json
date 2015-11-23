@@ -2,10 +2,10 @@
   "name": "testtaker",
   "version": "0.0.0",
   "description": "a testing app",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "node test/test.js",
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
