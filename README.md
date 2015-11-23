@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Tim15/TestTaker.png?label=ready&title=Ready)](https://waffle.io/Tim15/TestTaker)
 # README #
 TestTaker is a testing application.
 [![Build Status](https://travis-ci.org/Tim15/TestTaker.svg?branch=master)](https://travis-ci.org/Tim15/TestTaker)
