@@ -1,5 +1,5 @@
 <html>
-
+<!--TODO: can we remove this-->
 <!--<head>
     <meta charset="utf-8">
     <title>TestTaker</title>
@@ -20,23 +20,23 @@
 
 <body>
 
-    <div class="mdl-layout__container">
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header has-drawer " data-upgraded=",MaterialLayout">
-            {{>header}}
-            <div class="mdl-layout__drawer">
-                <span class="mdl-layout-title">Menu</span>
-                <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                </nav>
-            </div>
-            <main class="mdl-layout__content">
-                <div class="page-content">
+  <div class="mdl-layout__container">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header has-drawer " data-upgraded=",MaterialLayout">
+      {{>header}}
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Menu</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div class="page-content">
 
-                    <h1 class="hct">Create Test</h1>
-                    <!--<button id="addTest" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+          <h1 class="hct">Create Test</h1>
+          <!--<button id="addTest" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
                         <i class="material-icons">add</i>
                         <span class="mdl-button__ripple-container">
                             <span class="mdl-ripple"></span>
@@ -70,181 +70,181 @@
 
                     </div>
                 -->
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <h2 style="color: black;">
-                                Basic Test Data
-                            </h2>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
-                                <label class="mdl-textfield__label" for="testName">Test Name</label>
-                            </div>
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div class="mdl-textfield mdl-js-textfield">
-                                <input name="testImage" class="mdl-textfield__input answer" type="text" id="testDate">
-                                <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
-                            </div>
-                        </div>
-                    </div>
+          <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+              <h2 style="color: black;">
+                Basic Test Data
+              </h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
+                <label class="mdl-textfield__label" for="testName">Test Name</label>
+              </div>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input name="testImage" class="mdl-textfield__input" type="text" id="testDate">
+                <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
+              </div>
+            </div>
+          </div>
 
-                    <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
-                        <i class="material-icons">add</i>
-                    </button>
-                    <div id="questions">
-                        <h1>
-                            Questions
-                        </h1>
-                        <div class="question">
-                            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                                <div class="mdl-card__title">
-                                    <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
-                                </div>
-                                <div class="mdl-card__supporting-text">
-                                    <div class="mdl-textfield mdl-js-textfield">
-                                        <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
-                                        <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
-                                    </div>
-                                    <div class="mdl-textfield mdl-js-textfield">
-                                        <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
-                                        <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
-                                    </div>
-                                </div>
-                                <div class="mdl-card__actions mdl-card--border">
-                                    <div class="mdl-textfield mdl-js-textfield">
-                                        <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
-                                        <label class="mdl-textfield__label" for="answer">Answer</label>
-                                    </div>
-                                </div>
-                                <div class="mdl-card__menu">
-                                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
-                                        <i class="material-icons md-dark">delete</i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                        Create
-                    </button>
+          <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
+            <i class="material-icons">add</i>
+          </button>
+          <div id="questions">
+            <h1>
+              Questions
+            </h1>
+            <div class="question">
+              <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
                 </div>
-            </main>
-            <div class="mdl-layout__obfuscator"></div>
+                <div class="mdl-card__supporting-text">
+                  <div class="mdl-textfield mdl-js-textfield">
+                    <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
+                    <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield">
+                    <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
+                    <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
+                  </div>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <div class="mdl-textfield mdl-js-textfield">
+                    <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
+                    <label class="mdl-textfield__label answer" for="answer">Answer</label>
+                  </div>
+                </div>
+                <div class="mdl-card__menu">
+                  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
+                    <i class="material-icons md-dark">delete</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Create
+          </button>
         </div>
+      </main>
+      <div class="mdl-layout__obfuscator"></div>
     </div>
-    <script>
-        /*
+  </div>
+  <script>
+    /*
 
-                $('#questions').on('keyup', '.mdl-textfield', function() {
-                    console.log($(this));
-                    $(this).each(function(index, el) {
-                        console.log(el);
-                        if ($(el).val() == '') {
-                            return;
-                        }
+                    $('#questions').on('keyup', '.mdl-textfield', function() {
+                        console.log($(this));
+                        $(this).each(function(index, el) {
+                            console.log(el);
+                            if ($(el).val() == '') {
+                                return;
+                            }
+                        });
+                        var id = $(this).parent().attr('id');
+                        var newQuestion = $(this).parent().clone();
+                        newQuestion.attr('id', 'question_' + (parseInt(id.substring(id.indexOf('_') + 1, id.length)) + 1));
+                        newQuestion.find('input').val('');
+                        $(this).parent().parent().append(newQuestion);
                     });
-                    var id = $(this).parent().attr('id');
-                    var newQuestion = $(this).parent().clone();
-                    newQuestion.attr('id', 'question_' + (parseInt(id.substring(id.indexOf('_') + 1, id.length)) + 1));
-                    newQuestion.find('input').val('');
-                    $(this).parent().parent().append(newQuestion);
-                });
-                /*
-                    var questions = document.getElementById('questions').innerHTML
-                    var questions2 = document.getElementById("testQuestions").value
-                    var questions3;
-                    var question;
-                    var question2 = '';
-                    var options;
-                    var checkbox;
-                    var type = document.getElementById('testType').value
-                    var testprompt = document.getElementById('testPrompt').value
-                    var testimage = document.getElementById('testImage').value
-                    var number = 0;
-
-                    function test() {
-                        type = document.getElementById('testType').value
-                        questions2 = document.getElementById("testQuestions").value
-                        type = type.toLowerCase();
-                        if (type == 'text' || type == 'text box' || type == 'textbox') {
-                            type = 'text';
-                        }
-                        if (type == 'checkbox' || type == 'check box' || type == 'multiple choice' || type == 'h') {
-                            if (type == 'checkbox' || type == 'check box') {
-                                type = 'checkbox';
-                            } else if (type == 'multiple choice') {
-                                type = 'radio';
-                            }
-                            document.getElementById('test-questions').style.display = '';
-                            if (questions2 != "") {
-                                questions2 = document.getElementById("testQuestions").value
-                                questions3 = questions2.split(', ');
-                            }
-                        } else {
-                            document.getElementById('test-questions').style.display = 'none';
-                        }
-                    }
-
-                    function makequestion(prompt, image, type, lables) {
-                        document.getElementById('questions').innerHTML = questions;
+                    /*
                         var questions = document.getElementById('questions').innerHTML
+                        var questions2 = document.getElementById("testQuestions").value
+                        var questions3;
                         var question;
                         var question2 = '';
                         var options;
                         var checkbox;
-                        document.getElementById('questions').innerHTML = questions;
-                        switch (type) {
-                            case 'text':
-                                question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
-                                    ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
-                                    '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div>\n<input class=mdl-textfield__input id=question' + number +
-                                    '></div>\n<label class=mdl-textfield__label for=question{{______}}>Answer...</label>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
-                                questions = questions + question;
-                                number++;
-                                break;
-                            case 'radio':
-                                question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
-                                    ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
-                                    '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
-                                questions = questions + question
-                                document.getElementById('questions').innerHTML = questions;
-                                for (var i = 0; i < lables.length; i++) {
-                                    question2 = question2 + '<input type="radio" name="question" id="question' + number + '">' + lables[i] + '<br>'
+                        var type = document.getElementById('testType').value
+                        var testprompt = document.getElementById('testPrompt').value
+                        var testimage = document.getElementById('testImage').value
+                        var number = 0;
+
+                        function test() {
+                            type = document.getElementById('testType').value
+                            questions2 = document.getElementById("testQuestions").value
+                            type = type.toLowerCase();
+                            if (type == 'text' || type == 'text box' || type == 'textbox') {
+                                type = 'text';
+                            }
+                            if (type == 'checkbox' || type == 'check box' || type == 'multiple choice' || type == 'h') {
+                                if (type == 'checkbox' || type == 'check box') {
+                                    type = 'checkbox';
+                                } else if (type == 'multiple choice') {
+                                    type = 'radio';
                                 }
-                                document.getElementById('radioHolder').innerHTML = question2
-                                document.getElementById('radioHolder').id = 'added'
-                                question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
-                                    ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
-                                    '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n' + question2 +
-                                    '\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
-                                questions = questions + question
-                                break;
-                            case 'checkbox':
-                                question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
-                                    ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
-                                    '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="checkboxHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
-                                questions = questions + question
-                                document.getElementById('questions').innerHTML = questions;
-                                for (var i = 0; i < lables.length; i++) {
-                                    checkbox = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="question' + number + '">\n<input type="checkbox" id="question' + number + '" class="mdl-checkbox__input">\n<span class="mdl-checkbox__label">' +
-                                        lables[i] + '</span>\n</label>';
-                                    question2 = question2 + checkbox;
+                                document.getElementById('test-questions').style.display = '';
+                                if (questions2 != "") {
+                                    questions2 = document.getElementById("testQuestions").value
+                                    questions3 = questions2.split(', ');
                                 }
-                                document.getElementById('checkboxHolder').innerHTML = question2
-                                document.getElementById('checkboxHolder').id = 'added'
-                                question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
-                                    ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
-                                    '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="checkboxHolder">\n' + question2 +
-                                    '\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
-                                questions = questions + question
-                                break;
+                            } else {
+                                document.getElementById('test-questions').style.display = 'none';
+                            }
                         }
-                        document.getElementById('questions').innerHTML = questions;
-                    }*/
-                    var theClass = '{{classID}}'
-    </script>
+
+                        function makequestion(prompt, image, type, lables) {
+                            document.getElementById('questions').innerHTML = questions;
+                            var questions = document.getElementById('questions').innerHTML
+                            var question;
+                            var question2 = '';
+                            var options;
+                            var checkbox;
+                            document.getElementById('questions').innerHTML = questions;
+                            switch (type) {
+                                case 'text':
+                                    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
+                                        ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
+                                        '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div>\n<input class=mdl-textfield__input id=question' + number +
+                                        '></div>\n<label class=mdl-textfield__label for=question{{______}}>Answer...</label>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n'
+                                    questions = questions + question;
+                                    number++;
+                                    break;
+                                case 'radio':
+                                    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
+                                        ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
+                                        '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
+                                    questions = questions + question
+                                    document.getElementById('questions').innerHTML = questions;
+                                    for (var i = 0; i < lables.length; i++) {
+                                        question2 = question2 + '<input type="radio" name="question" id="question' + number + '">' + lables[i] + '<br>'
+                                    }
+                                    document.getElementById('radioHolder').innerHTML = question2
+                                    document.getElementById('radioHolder').id = 'added'
+                                    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
+                                        ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
+                                        '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="radioHolder">\n' + question2 +
+                                        '\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
+                                    questions = questions + question
+                                    break;
+                                case 'checkbox':
+                                    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
+                                        ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
+                                        '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="checkboxHolder">\n_\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
+                                    questions = questions + question
+                                    document.getElementById('questions').innerHTML = questions;
+                                    for (var i = 0; i < lables.length; i++) {
+                                        checkbox = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="question' + number + '">\n<input type="checkbox" id="question' + number + '" class="mdl-checkbox__input">\n<span class="mdl-checkbox__label">' +
+                                            lables[i] + '</span>\n</label>';
+                                        question2 = question2 + checkbox;
+                                    }
+                                    document.getElementById('checkboxHolder').innerHTML = question2
+                                    document.getElementById('checkboxHolder').id = 'added'
+                                    question = '<div class=quizQuestions>\n<div class=quizAnswers>\n<div class="demo-card-wide mdl-card mdl-shadow--2dp" style=background-image:url(' + image +
+                                        ')>\n<div class=mdl-card__title>\n<h2 class=mdl-card__title-text>Welcome</h2>\n</div>\n<div class=mdl-card__supporting-text>\n' + prompt +
+                                        '\n</div>\n<div class="mdl-card__actions mdl-card--border">\n<div class="mdl-textfield mdl-js-textfield">\n<div id="checkboxHolder">\n' + question2 +
+                                        '\n</div>\n</div>\n</div>\n<div class=mdl-card__menu>\n<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n<i class=material-icons>share</i>\n</button>\n</div>\n</div>\n</div>\n</div>\n';
+                                    questions = questions + question
+                                    break;
+                            }
+                            document.getElementById('questions').innerHTML = questions;
+                        }*/
+    var theClass = '{{classID}}'
+  </script>
 
 
 

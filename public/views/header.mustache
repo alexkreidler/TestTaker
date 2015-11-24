@@ -1,16 +1,17 @@
 <header class="mdl-layout__header">
-<div class="mdl-layout__header-row">
+  <div class="mdl-layout__header-row">
     <!-- Title -->
     <span class="mdl-layout-title"><a href="/" class="nolink">TestTaker</a></span>
     <!-- Add spacer, to align navigation to the right -->
     <div class="mdl-layout-spacer"></div>
     <!-- Navigation. We hide it in small screens. -->
     <nav class="mdl-navigation mdl-layout--large-screen-only">
-        <a class="mdl-navigation__link" href="/help">Help</a>
-        <a class="mdl-navigation__link" href="/about">About</a>
-        <!-- For development purposes-->
-        <!-- TODO: Add a settings FAB -->
-        <a class="mdl-navigation__link" href="{{#isLoggedIn}}/logout">Logout{{/isLoggedIn}}{{^isLoggedIn}}/login">Login{{/isLoggedIn}}</a>
+      <a class="mdl-navigation__link" href="/help">Help</a>
+      <a class="mdl-navigation__link" href="/about">About</a>
+      <!-- For development purposes-->
+      <!-- TODO: Add a settings FAB -->
+      {{#isLoggedIn}}<a class="mdl-navigation__link" href="/dashboard">Dashboard</a>{{/isLoggedIn}}
+      <a class="mdl-navigation__link" href="{{#isLoggedIn}}/logout">Logout{{/isLoggedIn}}{{^isLoggedIn}}/login">Login{{/isLoggedIn}}</a>
     </nav>
-</div>
+  </div>
 </header>

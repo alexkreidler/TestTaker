@@ -1,78 +1,43 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <title>TestTaker</title>
-    {{^scripts}}
-    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-    {{/scripts}} {{^stylesheets}}
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.teal-blue.min.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="../stylesheets/main.css" rel="stylesheet"> {{/stylesheets}} {{#scripts}}
-    <script src="{{.}}"></script>
-    {{/scripts}} {{#stylesheets}}
-    <link href="{{.}}" rel="stylesheet"> {{/stylesheets}}
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-</head>
+{{>head}}
 
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-
-                <span class="mdl-layout-title"><a href="index.mustache" class="nolink">TestTaker</a></span>
-
-                <div class="mdl-layout-spacer"></div>
-
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="questions.mustache">Support</a>
-                    <a class="mdl-navigation__link" href="">About</a>
-                    <!-- TODO: For development purpaces-->
-                    <a class="mdl-navigation__link" href="login.mustache">Login</a>
-                </nav>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Menu</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
-            <div class="page-content">
-
-                <h1 class="hct">TestTaker</h1>
-
-                <p class="hct">Test taker is a program designed to help create flexible tests easily. </p>
-
-
-                <div class="center-responsive">
-                    <!-- TODO: For development purpaces-->
-                    <button onclick="window.location='login.mustache';" class="responsive mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                        Get Started
-                    </button>
-                </div>
-
-                <br>
-
-
-
-            </div>
-        </main>
-        <footer class="mdl-mini-footer">
-            <div class="mdl-mini-footer__left-section">
-                <div class="mdl-logo">Title</div>
-                <ul class="mdl-mini-footer__link-list">
-                    <li><a href="questions.mustache">Help</a></li>
-                    <li><a href="#">Privacy &amp; Terms</a></li>
-                </ul>
-            </div>
-        </footer>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    {{>header}}
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Menu</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
     </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+
+        <h1 class="hct">TestTaker</h1>
+
+        <p class="hct">Test taker is a program designed to help create flexible tests easily. </p>
+
+
+        <div class="center-responsive">
+          <!-- TODO: For development purpaces-->
+          <button onclick="window.location='login.mustache';" class="responsive mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Get Started
+          </button>
+        </div>
+
+        <br>
+
+
+
+      </div>
+    </main>
+    {{>footer}}
+  </div>
 </body>
 
 </html>
