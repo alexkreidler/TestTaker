@@ -4,7 +4,7 @@
   "description": "a testing app",
   "main": "server.js",
   "scripts": {
-    "test": "node test/test.js",
+    "test": "mocha",
     "start": "node server.js"
   },
   "repository": {
