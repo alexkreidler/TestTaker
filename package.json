@@ -26,9 +26,10 @@
     "prettyjson": "latest"
   },
   "devDependencies": {
+    "chai": "latest",
+    "chai-http": "^1.0.0",
     "gulp": "latest",
     "gulp-shell": "latest",
-    "chai": "latest",
     "mocha": "latest"
   }
 }

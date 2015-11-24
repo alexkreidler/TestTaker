@@ -1,8 +1,16 @@
-var expect = require('chai').expect
-var mocha = require('mocha')
-var server = require('../server.js')
+var mocha = require('mocha');
+var chaiHttp = require('chai-http');
+var server = require('../server.js');
+var chai = require('chai');
+var expect = chai.expect;
+
+chai.use(chaiHttp);
 describe('Server', function() {
-  describe('#toArray()', function() {
-    expect(toArray({'key': 'value', 'key2': 'value2'})).to.equal(['value', 'value2'])
+  it('should send the homepage on a GET request to root', function(done) {
+    chai.request(server).get('/').end(function(error, res) {
+     expect(err).to.be.null;
+     expect(res).to.have.status(200);
+     done();
+    });
   });
 });
