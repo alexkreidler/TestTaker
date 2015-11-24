@@ -11,11 +11,10 @@ Waffle.io
 
 ## TODOS ##
 - Put footers inside main content area so that they are responsive
-- Change all links to correct endpoints for production
 - add tooltips for all buttons
 - make dialog for different items
 - figure out layout + design
-- put all the ```<script>``` tags into the one js file (may need to rethink some things)
+- improve frontend js organization
 
 ## MILESTONES ##
 - Version 1.0 - This is where we are now. We have a basic setup with a backend Node.js API, Mustache for rendering, and Firebase for a database
