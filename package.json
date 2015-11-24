@@ -2,10 +2,10 @@
   "name": "testtaker",
   "version": "0.0.0",
   "description": "a testing app",
-  "main": "main.js",
+  "main": "server.js",
   "scripts": {
     "test": "node test/test.js",
-    "start": "node main.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
