@@ -1,3 +1,6 @@
+/*
+Postponed work on tests till version 2.5
+*/
 var mocha = require('mocha');
 var chaiHttp = require('chai-http');
 var server = require('../server.js');

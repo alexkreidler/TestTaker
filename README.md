@@ -1,13 +1,11 @@
 # README #
 TestTaker is a testing application.
-
-Travis CI
+============
 
 [![Build Status](https://travis-ci.org/Tim15/TestTaker.svg?branch=master)](https://travis-ci.org/Tim15/TestTaker)
-
-Waffle.io
-
 [![Stories in Ready](https://badge.waffle.io/Tim15/TestTaker.png?label=ready&title=Ready)](https://waffle.io/Tim15/TestTaker)
+[![GitHub release](https://img.shields.io/github/release/tim15/testtaker.svg)](https://github.com/tim15/testtaker)
+[![GitHub issues](https://img.shields.io/github/issues/tim15/testtaker.svg)](https://github.com/tim15/testtaker/issues)
 
 ## TODOS ##
 - Put footers inside main content area so that they are responsive
