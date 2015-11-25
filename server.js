@@ -434,8 +434,11 @@ app.post('/createTest', urlencodedParser, function(req, res) {
 app.post('/submitTest', urlencodedParser, function(req, res) {
     //Record Answers
     //try{
+    console.log(pj.render(req.body));
     var response = responses.child(req.body.test);
-    response.push(req.body.answers);
+    var toBeSubmitted = req.body.answers;
+    toBeSubmitted.uid = req.session.user.uid;
+    var responseLoc = response.push(toBeSubmitted);
     answers
         .child(req.body.test)
         .orderByKey()
@@ -458,7 +461,8 @@ app.post('/submitTest', urlencodedParser, function(req, res) {
                 }
             }
             var testGrade = grades.child(req.body.test);
-            testGrade.push(gradedObj);
+            var gradeLoc = testGrade.child(responseLoc.key());
+            gradeLoc.set(gradedObj)
             res.end('success');
         });
     //} catch(err){
@@ -643,13 +647,13 @@ app.get('/tests/:testID', function(req, res) {
             });
 
     } else {
-        res.redirect('/login?err=You are not signed in');
+        res.redirect('/login?error=You are not signed in');
     }
 });
 
 app.get('/classes/:classID/grades', function(req, res){
     if(req.session.user.type == 'teacher'){
-        
+
     } else {
         res.redirect(403, '/classes/' + req.params.classID + '?error=You do not have access to those grades');
     }
@@ -661,7 +665,7 @@ app.get('/createTest', function(req, res) {
             classID: req.params.classID ? req.params.classID : null
         });
     } else {
-        res.redirect('/login?err=You are not signed in');
+        res.redirect('/login?error=You are not signed in');
     }
 });
 
