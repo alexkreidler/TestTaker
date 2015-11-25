@@ -173,7 +173,7 @@ body {
   text-align: center;
   border: 2px solid red;
   border-radius: 10px;
-  background-color: #e37070;
+  background-color: lightCoral;
   margin: 1em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -183,7 +183,7 @@ body {
   text-align: center;
   border: 2px solid blue;
   border-radius: 10px;
-  background-color: #5a8dd9;
+  background-color: dodgerBlue;
   margin: 1em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -191,7 +191,7 @@ body {
 .error2{
   color: red;
   text-align: center;
-  background-color: #e37070;
+  background-color: lightCoral;
   margin: 1em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -199,7 +199,7 @@ body {
 .message2{
   color: blue;
   text-align: center;
-  background-color: #5a8dd9;
+  background-color: dodgerBlue;
   margin: 1em;
   padding-top: 1em;
   padding-bottom: 1em;
