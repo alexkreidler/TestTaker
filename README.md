@@ -1,6 +1,5 @@
 # README #
-TestTaker is a testing application.
-============
+It is an open-source testing app that was built to help a teacher and to provide a learning experience with coding. Because it's open-source it is free. It uses some of the latest technologies such as Node.js, Express.js, and Firebase. However, it is still in beta, so please report any bugs to our github page (open-source development platform). It is for students and teachers.
 
 [![Build Status](https://travis-ci.org/Tim15/TestTaker.svg?branch=master)](https://travis-ci.org/Tim15/TestTaker)
 [![Stories in Ready](https://badge.waffle.io/Tim15/TestTaker.png?label=ready&title=Ready)](https://waffle.io/Tim15/TestTaker)
