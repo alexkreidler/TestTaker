@@ -12,6 +12,7 @@ It is an open-source testing app that was built to help a teacher and to provide
 - make dialog for different items
 - figure out layout + design
 - improve frontend js organization
+- write a middleware to check auth instead of doing it each time (be more DRY)
 
 ## MILESTONES ##
 - Version 1.0 - This is where we are now. We have a basic setup with a backend Node.js API, Mustache for rendering, and Firebase for a database

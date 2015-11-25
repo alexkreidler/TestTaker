@@ -647,6 +647,14 @@ app.get('/tests/:testID', function(req, res) {
     }
 });
 
+app.get('/classes/:classID/grades', function(req, res){
+    if(req.session.user.type == 'teacher'){
+        
+    } else {
+        res.redirect(403, '/classes/' + req.params.classID + '?error=You do not have access to those grades');
+    }
+});
+
 app.get('/createTest', function(req, res) {
     if (req.session.user) {
         render(req, res, 'create', {
