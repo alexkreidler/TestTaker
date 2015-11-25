@@ -48,19 +48,14 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 
 // TODO: helper 'error' function to send back errors
-/*function error(code){
-  switch(code)
-  case '500':
-
-  break;
-  case '400':
-  // Bad Request
-  break;
-  case '400':
-
-  break;
-}
-*/
+app.use(function (req, res, next) {
+  if (req.method == 'GET') {
+    if (req.query){
+    res.say = {error: req.query.error ? req.query.error : null, message: req.query.message ? req.query.message : null};
+    }
+  };
+  next();
+});
 //*********************************************************************************************************
 //*********************************************************************************************************
 //************************************HELPER FUNCTIONS*****************************************************
@@ -73,7 +68,8 @@ function render(req, res, file, locals) {
         header: 'header',
         footer: 'footer',
         head: 'head',
-        outdated: 'outdated'
+        outdated: 'outdated',
+        say: 'say'
     };
     toBeRendered.version = clientVersion;
     toBeRendered.isLoggedIn = (req.session.user !== undefined);
@@ -87,6 +83,10 @@ function render(req, res, file, locals) {
             toBeRendered.teacher = true;
         }
     }
+    if (res.say) {
+      toBeRendered.error = res.say.error;
+      toBeRendered.message = res.say.message;
+    };
     console.log(pj.render(toBeRendered));
     console.log(toBeRendered);
     res.render(file, toBeRendered);
@@ -227,15 +227,8 @@ app.get('/login', function(req, res) {
     if (req.session.user != undefined) {
         res.redirect('/dashboard');
     } else {
-        var messages, errors = [];
-        if (req.query.message != undefined) {
-            messages = [req.query.message];
-        } else if (req.query.error != undefined) {
-            errors = [req.query.error];
-        }
         render(req, res, 'login', {
-            messages: messages,
-            errors: errors
+
         });
 
     }

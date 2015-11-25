@@ -19,20 +19,9 @@
     <main class="mdl-layout__content">
       <div class="page-content">
         <div id="page">
-          {{#errors}}
+
           <!-- TODO: make look nice -->
-          <div>
-            <p class="error2">
-              Error: {{.}}
-            </p>
-          </div>
-          {{/errors}} {{#messages}}
-          <div>
-            <p class="message">
-              {{.}}
-            </p>
-          </div>
-          {{/messages}}
+{{>say}}
           <div class="login-page">
             <div class="login-inline">
               <h2>Login</h2>
