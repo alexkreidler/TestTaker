@@ -195,13 +195,13 @@ app.all('/dashboard', function(req, res) {
                 });
             });
     } else {
-        res.redirect('/login?error=not_signed_in');
+        res.redirect('/login?error=You are not signed in');
     }
 });
 
 app.all('/logout', function(req, res) {
     req.session.user = undefined;
-    res.redirect('/login?message=logged_out');
+    res.redirect('/login?message=You are logged out');
 });
 
 //*********************************************************************************************************
@@ -285,7 +285,7 @@ app.post('/signUp', urlencodedParser, function(req, res) {
                     'name': req.body.name,
                     classes: 0
                 });
-                res.redirect('/login?message=account_created');
+                res.redirect('/login?message=Your account was created');
             }
         });
     } else if (req.body.type == 'teacher') {
@@ -316,7 +316,7 @@ app.post('/signUp', urlencodedParser, function(req, res) {
                     'name': req.body.name,
                     classes: 0
                 });
-                res.redirect('/login?message=account_created');
+                res.redirect('/login?message=Your account was created');
             }
         });
     } else {
@@ -526,7 +526,7 @@ app.get('/classes/:classID', function(req, res) {
             var data = snap.val();
             if (data == undefined) {
                 console.error('The snapshot didn\'t find anything');
-                res.redirect(404, '/dashboard?error=class_not_found');
+                res.redirect(404, '/dashboard?error=This class was not found');
                 //todo - send error to client
             } else {
                 data = data[Object.keys(data)[0]];
@@ -627,7 +627,7 @@ app.get('/tests/:testID', function(req, res) {
                                     render(req, res, 'test', theTestData);
                                 });
                         } else {
-                            res.end('Whoops! Your test is not ready to take yet.');
+                            res.redirect('/dashboard?error=Whoops! Your test is not ready to take yet.');
                         }
                     } else if (req.session.user.type == 'teacher') {
                         render(req, res, 'test', {
@@ -643,7 +643,7 @@ app.get('/tests/:testID', function(req, res) {
             });
 
     } else {
-        res.redirect('/login?err=not_signed_in');
+        res.redirect('/login?err=You are not signed in');
     }
 });
 
@@ -653,7 +653,7 @@ app.get('/createTest', function(req, res) {
             classID: req.params.classID ? req.params.classID : null
         });
     } else {
-        res.redirect('/login?err=not_signed_in');
+        res.redirect('/login?err=You are not signed in');
     }
 });
 

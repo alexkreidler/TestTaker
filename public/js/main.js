@@ -98,7 +98,11 @@
                         "password": $('#loginPass').val()
                     }, function(error, authData) {
                         if (error) {
-                            // TODO: error
+                          if (window.location.href.search(/\\?/g) == -1){
+                            window.location.href += '?error='+ error;
+                          } else {
+                            window.location.href += '&error='+ error;
+                            }
                             console.log('error signing in: ' + error);
                         } else {
                             $('#loginForm').html($('#loginForm').html() + '<input name="uid" type="text" value="' + authData.uid + '" style="display: none;">');
@@ -113,7 +117,11 @@
                         "password": $('#loginPass').val()
                     }, function(error, authData) {
                         if (error) {
-                            // TODO: error
+                          if (window.location.href.search(/\\?/g) == -1){
+                            window.location.href += '?error='+ error;
+                          } else {
+                            window.location.href += '&error='+ error;
+                            }
                             console.log('error signing in');
                         } else {
                             $('#loginForm').html($('#loginForm').html() + '<input name="uid" type="text" value="' + authData.uid + '" style="display: none;">');
