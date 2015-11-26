@@ -1,11 +1,11 @@
-var version = '1.0.0';
-var clientVersion = '1.0.0';
+var version = '1.0.7';
+var clientVersion = '1.0.7';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var pj = require('prettyjson');
-var port = process.env.PORT || 300;
+var port = process.env.PORT || 3000;
 var app = express();
 app.listen(port);
 console.log('Listening on port: ' + port);
