@@ -154,11 +154,7 @@
                 'uid': uid
             });
         });
-        $('submitTest').on('click', function() {
-            $.post('/gradeTest', {
-                'uid': uid
-            });
-        });
+        // TODO: Move submitTest here
 
         var counter = 1;
 

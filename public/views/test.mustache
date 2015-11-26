@@ -63,9 +63,12 @@
                                     });
                                 });
                                 // TODO: for customized tests
+                                var href = window.location.href;
+                                var num = href.search('/tests') + 7;
+                                var testID = href.substr(num, href.length);
                                 obj = {
                                     answers: answers,
-                                    test: window.location.href.replace('http://localhost:3000/tests/', '')
+                                    test: testID
                                 }
                                 $.post('/submitTest', obj, function() {
                                     alert('done');

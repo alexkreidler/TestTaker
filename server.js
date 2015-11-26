@@ -5,7 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var pj = require('prettyjson');
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 300;
 var app = express();
 app.listen(port);
 console.log('Listening on port: ' + port);
@@ -48,13 +48,16 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 
 // TODO: helper 'error' function to send back errors
-app.use(function (req, res, next) {
-  if (req.method == 'GET') {
-    if (req.query){
-    res.say = {error: req.query.error ? req.query.error : null, message: req.query.message ? req.query.message : null};
-    }
-  };
-  next();
+app.use(function(req, res, next) {
+    if (req.method == 'GET') {
+        if (req.query) {
+            res.say = {
+                error: req.query.error ? req.query.error : null,
+                message: req.query.message ? req.query.message : null
+            };
+        }
+    };
+    next();
 });
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -84,8 +87,8 @@ function render(req, res, file, locals) {
         }
     }
     if (res.say) {
-      toBeRendered.error = res.say.error;
-      toBeRendered.message = res.say.message;
+        toBeRendered.error = res.say.error;
+        toBeRendered.message = res.say.message;
     };
     console.log(pj.render(toBeRendered));
     console.log(toBeRendered);
@@ -438,6 +441,7 @@ app.post('/submitTest', urlencodedParser, function(req, res) {
     var response = responses.child(req.body.test);
     var toBeSubmitted = req.body.answers;
     toBeSubmitted.uid = req.session.user.uid;
+    console.log(toBeSubmitted);
     var responseLoc = response.push(toBeSubmitted);
     answers
         .child(req.body.test)
@@ -450,19 +454,26 @@ app.post('/submitTest', urlencodedParser, function(req, res) {
             var answersArray = toArray(answers);
             console.log(answersArray);
             var gradedObj = {};
+            var correct = 0;
+            var counter = 0;
             for (var i = 0; i < answersArray.length; i++) {
                 console.log(i);
                 console.log(answersArray[i]);
                 console.log(keys[i]);
+                counter++;
                 if (answersArray[i] == req.body.answers[keys[i]]) {
+                    correct++;
                     gradedObj[keys[i]] = true;
                 } else {
                     gradedObj[keys[i]] = false;
                 }
             }
+            gradedObj.scoreCorrect = correct;
+            gradedObj.outOf = counter;
+            gradedObj.uid = req.session.user.uid;
             var testGrade = grades.child(req.body.test);
             var gradeLoc = testGrade.child(responseLoc.key());
-            gradeLoc.set(gradedObj)
+            gradeLoc.set(gradedObj);
             res.end('success');
         });
     //} catch(err){
@@ -651,9 +662,54 @@ app.get('/tests/:testID', function(req, res) {
     }
 });
 
-app.get('/classes/:classID/grades', function(req, res){
-    if(req.session.user.type == 'teacher'){
-
+app.get('/tests/:testID/grades', function(req, res) {
+    if (req.session.user.type == 'teacher') {
+        try {
+            var testGrades = grades.child(req.params.testID);
+            testGrades
+                .orderByKey()
+                .once('value', function(snap) {
+                    data = snap.val();
+                    var gradeData = [];
+                    async.forEachOf(data, function(item, key, callback) {
+                        console.log(item);
+                        var score = item.scoreCorrect + '/' + item.outOf;
+                        console.log(item.uid);
+                        lookUpUser(item.uid, 'student', function(err, user) {
+                            if (err) {
+                                console.log(err);
+                                res.end(err);
+                            } else {
+                                console.log(user);
+                                user = user[Object.keys(user)[0]]
+                                gradeData.push({
+                                    studentName: user.name,
+                                    score: score
+                                });
+                                callback();
+                            }
+                        });
+                    }, function(err) {
+                        if (err) {
+                            console.log(err);
+                            res.end(err);
+                        } else {
+                            var renderData = {}
+                            renderData.scores = gradeData;
+                            console.log(req.params.testID);
+                            tests.child(req.params.testID)
+                                .once('value', function(snap) {
+                                    var data = snap.val();
+                                    renderData.testName = data.name;
+                                    render(req, res, 'grades', renderData);
+                                });
+                        }
+                    });
+                });
+        } catch (err) {
+            console.log(err);
+            res.redirect(400, '/classes/' + req.params.classID + '?error=The class you are looking for does not exist.')
+        }
     } else {
         res.redirect(403, '/classes/' + req.params.classID + '?error=You do not have access to those grades');
     }
