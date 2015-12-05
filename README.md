@@ -21,5 +21,3 @@ It is an open-source testing app that was built to help a teacher and to provide
 
 ## To think about ##
 - Use a different database like mongodb to have more customization and control
-
-&copy; 2015 TestTaker
