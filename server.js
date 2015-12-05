@@ -1,5 +1,5 @@
-var version = '1.0.7';
-var clientVersion = '1.0.7';
+var version = '1.0.7-beta';
+var clientVersion = '1.0.7-beta';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -252,7 +252,6 @@ app.get('/privacy', function(req, res) {
         title: 'TestTaker | Privacy Policy'
     });
 });
-
 
 //*********************************************************************************************************
 //*********************************************************************************************************

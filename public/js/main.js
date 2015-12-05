@@ -55,8 +55,11 @@
         });
 
         $('#addClass').on('click', function() {
-            $("#dialog").show();
+            var dialog = document.querySelector('.mdl-js-dialog');
+            console.log(dialog);
+            dialog.MaterialDialog.showModal();
             $('#doIt').on('click', function() {
+                dialog.MaterialDialog.close();
                 if (mainType == 'teacher') {
                     $.post('/createClass', {
                         className: $('#className').val()
@@ -74,6 +77,9 @@
                 } else {
                     // TODO: err
                 }
+            });
+            $('#cancel').on('click', function() {
+                dialog.MaterialDialog.close();
             });
         });
         /*$('#submitTest').on('click', function() {
@@ -98,10 +104,10 @@
                         "password": $('#loginPass').val()
                     }, function(error, authData) {
                         if (error) {
-                          if (window.location.href.search(/\\?/g) == -1){
-                            window.location.href += '?error='+ error;
-                          } else {
-                            window.location.href += '&error='+ error;
+                            if (window.location.href.search(/\\?/g) == -1) {
+                                window.location.href += '?error=' + error;
+                            } else {
+                                window.location.href += '&error=' + error;
                             }
                             console.log('error signing in: ' + error);
                         } else {
@@ -117,10 +123,10 @@
                         "password": $('#loginPass').val()
                     }, function(error, authData) {
                         if (error) {
-                          if (window.location.href.search(/\\?/g) == -1){
-                            window.location.href += '?error='+ error;
-                          } else {
-                            window.location.href += '&error='+ error;
+                            if (window.location.href.search(/\\?/g) == -1) {
+                                window.location.href += '?error=' + error;
+                            } else {
+                                window.location.href += '&error=' + error;
                             }
                             console.log('error signing in');
                         } else {
