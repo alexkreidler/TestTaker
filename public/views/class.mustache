@@ -4,190 +4,197 @@
 {{>head}}
 
 <body>
-  <!-- Always shows a header, even in smaller screens. -->
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    {{>header}}
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Menu</span>
-      <nav class="mdl-navigation">
-        {{#classes}}
-        <a class="mdl-navigation__link" href="/classes/{{classID}}">{{className}}</a> {{/classes}}
-      </nav>
-    </div>
-    <main class="mdl-layout__content">
-      <div class="page-content">
-        {{>say}}
-        <div id="page">
-          <h1 class="hct">{{classData.name}}</h1>
-          {{#classData.teachers}}
-          <p>{{name}}{{email}}</p>
-          {{/classData.teachers}} {{#teacher}}
-          <!-- TODO: tabs -->
-          <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-            <div class="mdl-tabs__tab-bar">
-              <a href="#tests-panel" class="mdl-tabs__tab is-active">Tests</a>
-              <a href="#students-panel" class="mdl-tabs__tab">Students</a>
-            </div>
-
-            <div class="mdl-tabs__panel is-active" id="tests-panel">
-              <div id="ct" style="display: none;">
-
-                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                  <div class="mdl-card__title">
-                    <h2 style="color: black;">
-                      Basic Test Data
-                    </h2>
-                  </div>
-                  <div class="mdl-card__supporting-text">
-                    <div class="mdl-textfield mdl-js-textfield">
-                      <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
-                      <label class="mdl-textfield__label" for="testName">Test Name</label>
-                    </div>
-                  </div>
-                  <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-textfield mdl-js-textfield">
-                      <input name="testImage" class="mdl-textfield__input answer" type="text" id="testDate">
-                      <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
-                    </div>
-                  </div>
-                </div>
-
-                <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
-                  <i class="material-icons">add</i>
-                </button>
-                <div id="questions">
-                  <h1>
-                    Questions
-                  </h1>
-                  <div class="question">
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                      <div class="mdl-card__title">
-                        <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
-                      </div>
-                      <div class="mdl-card__supporting-text">
-                        <div class="mdl-textfield mdl-js-textfield">
-                          <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
-                          <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
-                        </div>
-                        <div class="mdl-textfield mdl-js-textfield">
-                          <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
-                          <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
-                        </div>
-                      </div>
-                      <div class="mdl-card__actions mdl-card--border">
-                        <div class="mdl-textfield mdl-js-textfield">
-                          <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
-                          <label class="mdl-textfield__label" for="answer">Answer</label>
-                        </div>
-                      </div>
-                      <div class="mdl-card__menu">
-                        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
-                          <i class="material-icons md-dark">delete</i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                  Create
-                </button>
-              </div>
-              <!-- Colored FAB button with ripple -->
-              <button onclick="$('#ct').show()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored fab">
-                <i class="material-icons">add</i>
-              </button>
-              <!-- Left aligned menu below button -->
-              <button id="demo-menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
-                <i class="material-icons">more_vert</i>
-              </button>
-
-              <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left">
-                <li class="mdl-menu__item" id="openTest">Open Test</li>
-                <li class="mdl-menu__item">Another Action</li>
-                <li disabled class="mdl-menu__item">Disabled Action</li>
-                <li class="mdl-menu__item">Yet Another Action</li>
-              </ul>
-
-              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
-                <thead>
-                  <tr>
-                    <th class="mdl-data-table__cell--non-numeric">Test Name</th>
-                    <th class="mdl-data-table__cell--non-numeric">Date</th>
-                    <th class="mdl-data-table__cell--non-numeric">Test ID</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Note: use the css is-selected attribute on tr for data manipulation-->
-                  {{#classData.tests}}
-                  <tr id="test-{{id}}">
-                    <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{id}}</td>
-                  </tr>
-                  {{/classData.tests}}
-                </tbody>
-              </table>
-              {{^classData.tests}}
-              <p class="hct">It looks like you don't have any tests. Why not
-                <button onclick="window.location='/createTest?classID={{classID}}';" class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="createTest">
-                  create one
-                </button>?
-              </p>
-              {{/classData.tests}}
-            </div>
-            <div class="mdl-tabs__panel" id="students-panel">
-              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
-                <thead>
-                  <tr>
-                    <th class="mdl-data-table__cell--non-numeric">Student Name</th>
-                    <th>Average Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#classData.students}}
-                  <tr id="student-{{id}}">
-                    <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                    <td>{{avgScore}}</td>
-                  </tr>
-                  {{/classData.students}}
-                </tbody>
-              </table>
-              {{^classData.students}}
-              <p class="hct">It looks like you don't have any students. To add students to your class, just give them this code:
-                <br> "
-                <code>{{classID}}</code>"
-              </p>
-              {{/classData.students}}
-            </div>
-          </div>
-          {{/teacher}} {{#student}}
-          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
-            <thead>
-              <tr>
-                <th class="mdl-data-table__cell--non-numeric">Test Name</th>
-                <th class="mdl-data-table__cell--non-numeric">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Note: use the css is-selected attribute on tr for data manipulation-->
-              {{#classData.tests}}
-              <tr id="test-{{id}}">
-                <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
-              </tr>
-              {{/classData.tests}}
-            </tbody>
-          </table>
-          {{^classData.tests}}
-          <p class="hct">Wo hoo! No tests!</p>
-          {{/classData.tests}} {{/student}}
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        {{>header}}
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Menu</span>
+            <nav class="mdl-navigation">
+                {{#classes}}
+                <a class="mdl-navigation__link" href="/classes/{{classID}}">{{className}}</a> {{/classes}}
+            </nav>
         </div>
-      </div>
-    </main>
-  </div>
-  <script>
-    var theClass = '{{classID}}';
-  </script>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                {{>say}}
+                <div id="page">
+                    <h1 class="hct">{{classData.name}}</h1>
+                    {{#classData.teachers}}
+                    <p>{{name}}{{email}}</p>
+                    {{/classData.teachers}} {{#teacher}}
+                    <!-- TODO: tabs -->
+                    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                        <div class="mdl-tabs__tab-bar">
+                            <a href="#tests-panel" class="mdl-tabs__tab is-active">Tests</a>
+                            <a href="#students-panel" class="mdl-tabs__tab">Students</a>
+                        </div>
+
+                        <div class="mdl-tabs__panel is-active" id="tests-panel">
+                            <div id="ct" style="display: none;">
+
+                                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                    <div class="mdl-card__title">
+                                        <h2 style="color: black;">
+                                            Basic Test Data
+                                        </h2>
+                                    </div>
+                                    <div class="mdl-card__supporting-text">
+                                        <div class="mdl-textfield mdl-js-textfield">
+                                            <input name="testImage" class="mdl-textfield__input prompt" type="text" id="testName">
+                                            <label class="mdl-textfield__label" for="testName">Test Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <div class="mdl-textfield mdl-js-textfield">
+                                            <input name="testImage" class="mdl-textfield__input answer" type="text" id="testDate">
+                                            <label class="mdl-textfield__label" for="testDate">Test Date MM/DD/YY</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="newQuestion">
+                                    <i class="material-icons">add</i>
+                                </button>
+                                <div id="questions">
+                                    <h1>
+                                        Questions
+                                    </h1>
+                                    <div class="question">
+                                        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                            <div class="mdl-card__title">
+                                                <h2 class="mdl-card__title-text" style="color: black;">Question 1</h2>
+                                            </div>
+                                            <div class="mdl-card__supporting-text">
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input prompt" type="text" id="prompt">
+                                                    <label class="mdl-textfield__label" for="prompt">Prompt/Question</label>
+                                                </div>
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input imageUrl" type="text" id="imageUrl">
+                                                    <label class="mdl-textfield__label" for="imageUrl">Image URL</label>
+                                                </div>
+                                            </div>
+                                            <div class="mdl-card__actions mdl-card--border">
+                                                <div class="mdl-textfield mdl-js-textfield">
+                                                    <input name="testImage" class="mdl-textfield__input answer" type="text" id="answer">
+                                                    <label class="mdl-textfield__label" for="answer">Answer</label>
+                                                </div>
+                                            </div>
+                                            <div class="mdl-card__menu">
+                                                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect deleteQuestion">
+                                                    <i class="material-icons md-dark">delete</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="create" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                    Create
+                                </button>
+                            </div>
+                            <!-- Colored FAB button with ripple -->
+                            <button onclick="$('#ct').show()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored fab">
+                                <i class="material-icons">add</i>
+                            </button>
+
+                            <div class="mdl-card mdl-shadow--2dp">
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text">Tests</h2>
+                                </div>
+                                <div class="mdl-card__menu">
+                                    <!-- Left aligned menu below button -->
+                                    <button id="demo-menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+
+                                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left">
+                                        <li class="mdl-menu__item" id="openTest">Open Test</li>
+                                        <li class="mdl-menu__item">Another Action</li>
+                                        <li disabled class="mdl-menu__item">Disabled Action</li>
+                                        <li class="mdl-menu__item">Yet Another Action</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">Test Name</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Date</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Test ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Note: use the css is-selected attribute on tr for data manipulation-->
+                                    {{#classData.tests}}
+                                    <tr id="test-{{id}}">
+                                        <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                                        <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
+                                        <td class="mdl-data-table__cell--non-numeric">{{id}}</td>
+                                    </tr>
+                                    {{/classData.tests}}
+                                </tbody>
+                            </table>
+                            {{^classData.tests}}
+                            <p class="hct">It looks like you don't have any tests. Why not
+                                <button onclick="window.location='/createTest?classID={{classID}}';" class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="createTest">
+                                    create one
+                                </button>?
+                            </p>
+                            {{/classData.tests}}
+                        </div>
+                        <div class="mdl-tabs__panel" id="students-panel">
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">Student Name</th>
+                                        <th>Average Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#classData.students}}
+                                    <tr id="student-{{id}}">
+                                        <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                                        <td>{{avgScore}}</td>
+                                    </tr>
+                                    {{/classData.students}}
+                                </tbody>
+                            </table>
+                            {{^classData.students}}
+                            <p class="hct">It looks like you don't have any students. To add students to your class, just give them this code:
+                                <br> "
+                                <code>{{classID}}</code>"
+                            </p>
+                            {{/classData.students}}
+                        </div>
+                    </div>
+                    {{/teacher}} {{#student}}
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Test Name</th>
+                                <th class="mdl-data-table__cell--non-numeric">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Note: use the css is-selected attribute on tr for data manipulation-->
+                            {{#classData.tests}}
+                            <tr id="test-{{id}}">
+                                <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+                                <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
+                            </tr>
+                            {{/classData.tests}}
+                        </tbody>
+                    </table>
+                    {{^classData.tests}}
+                    <p class="hct">Wo hoo! No tests!</p>
+                    {{/classData.tests}} {{/student}}
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        var theClass = '{{classID}}';
+    </script>
 </body>
 
 </html>
