@@ -188,11 +188,6 @@ app.all('/dashboard', function(req, res) {
                         console.log('DATASTART');
                         console.log(data);
                         console.log('DATAEND');
-                        res.json({
-                        type: req.session.user.type,
-                        uid: Object.keys(snap.val())[0],
-                        userData: data,
-                        title: 'Dashboard'})
                         render(req, res, 'dashboard', {
                             type: req.session.user.type,
                             uid: Object.keys(snap.val())[0],

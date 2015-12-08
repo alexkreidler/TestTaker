@@ -1,19 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="testtaker" ng-controller="dashboardController">
+<html>
 
 {{>head}}
 
 <body>
-  <script>
-    var root = new Firebase('http://testtaker.firebaseio.com');
-    var app = angular.module('testtaker', []);
-    app.controller('dashboardController', function($scope) {
-      var user = Firebase.child(type)
-      user.child(uid).once('value', function(snap) {
-        var data = snap.val()
-      })
-    });
-  </script>
   <div id="page-wrap">
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -38,17 +28,16 @@
           </button>
           <div class="mdl-grid">
             {{#userData.classes}}
-            <div class="mdl-cell mdl-cell--6-col" ng-repeat="class in userData.classes">
+            <div class="mdl-cell mdl-cell--6-col">
               <div class="classCard">
                 <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                   <div class="mdl-card__title" style="background: url('http://www.getmdl.io/assets/demos/welcome_card.jpg');">
-                    <h2>{{class.name}}</h2>
+                    <h2>{{name}}</h2>
                   </div>
                   <div class="mdl-card__supporting-text">
-                    Teachers:
-                    <span ng-repeat="name in class.teacher">{{name}}</span>
-                    <br> Subject: {{class.subject}}
-                    <br> Code: {{class.id}}
+                    Teachers: {{#teachers}}{{name}}{{/teachers}}
+                    <br> Subject: {{subject}}
+                    <br> Code: {{id}}
                   </div>
                   <div class="mdl-card__actions mdl-card--border">
                     <a href="/classes/{{id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Go to class</a>
@@ -62,8 +51,11 @@
                 </div>
               </div>
             </div>
+            {{/userData.classes}}
           </div>
-          <h4 class="hct" ng-hide="userData.classes">It looks like you don't have any classes right now.</h4>
+          {{^userData.classes}}
+          <h4 class="hct">It looks like you don't have any classes right now.</h4>
+          {{/userData.classes}}
         </div>
       </main>
     </div>
@@ -73,21 +65,21 @@
     </script>
   </div>
   <div class="mdl-dialog mdl-js-dialog" id="addClassDialog">
-    <div class="mdl-dialog__title">
-      <h1>{{#student}}Add{{/student}}{{#teacher}}Create{{/teacher}} Class</h1>
-    </div>
-    <div class="mdl-dialog__content">
-      <div class="mdl-textfield mdl-js-textfield">
-        <input class="mdl-textfield__input" type="text" id="{{#student}}classID{{/student}}{{#teacher}}className{{/teacher}}">
-        <label class="mdl-textfield__label" for="{{#student}}classID{{/student}}{{#teacher}}className{{/teacher}}">{{#student}}Class ID{{/student}}{{#teacher}}Class Name{{/teacher}}</label>
+      <div class="mdl-dialog__title">
+          <h1>{{#student}}Add{{/student}}{{#teacher}}Create{{/teacher}} Class</h1>
       </div>
-    </div>
-    <div class="mdl-dialog__actions">
-      <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
-        {{#student}}Add Class{{/student}}{{#teacher}}Create Class{{/teacher}}
-      </button>
-      <button type="button" class="mdl-button" id="cancel">Cancel</button>
-    </div>
+      <div class="mdl-dialog__content">
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="{{#student}}classID{{/student}}{{#teacher}}className{{/teacher}}">
+            <label class="mdl-textfield__label" for="{{#student}}classID{{/student}}{{#teacher}}className{{/teacher}}">{{#student}}Class ID{{/student}}{{#teacher}}Class Name{{/teacher}}</label>
+          </div>
+      </div>
+      <div class="mdl-dialog__actions">
+          <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" id="doIt">
+            {{#student}}Add Class{{/student}}{{#teacher}}Create Class{{/teacher}}
+          </button>
+          <button type="button" class="mdl-button" id="cancel">Cancel</button>
+      </div>
   </div>
 </body>
 
