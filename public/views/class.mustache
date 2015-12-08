@@ -44,11 +44,11 @@
           <!-- TODO: tabs -->
           <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
             <div class="mdl-tabs__tab-bar">
-              <a href="#tests-panel" class="mdl-tabs__tab is-active">Tests</a>
-              <a href="#students-panel" class="mdl-tabs__tab">Students</a>
+              <a href="#students-panel" class="mdl-tabs__tab is-active">Students</a>
+              <a href="#tests-panel" class="mdl-tabs__tab">Tests</a>
             </div>
 
-            <div class="mdl-tabs__panel is-active" id="tests-panel">
+            <div class="mdl-tabs__panel" id="tests-panel">
               <div id="ct" style="display: none;">
 
                 <div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -154,7 +154,7 @@
               </p>
               {{/classData.tests}}
             </div>
-            <div class="mdl-tabs__panel" id="students-panel">
+            <div class="mdl-tabs__panel is-active" id="students-panel">
               <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
                 <thead>
                   <tr>
