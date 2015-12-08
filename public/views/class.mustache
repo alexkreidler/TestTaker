@@ -12,25 +12,21 @@
       <nav class="mdl-navigation">
         <hr style="background-color:#e1e6e7;">
         <span style="text-align:center;font-weight:bold;color:#292725;">Classes</span>
-        <hr style="background-color:#e1e6e7;">
-        {{#userData.classes}}
-        <a class="mdl-navigation__link" href="/classes/{{id}}">{{name}}</a>
-        {{/userData.classes}}
-        {{^userData.classes}}
-        <p>It looks like you don't have any classes right now.<p>
-        {{/userData.classes}}
-        <br>
-        <hr style="background-color:#e1e6e7;">
-        <span style="text-align:center;font-weight:bold;color:#292725;">Tests</span>
-        <hr style="background-color:#e1e6e7;">
-        {{#classData.tests}}
-        <a class="mdl-navigation__link" href="/tests/{{id}}">{{name}}</a>
-        {{/classData.tests}}
-        {{^classData.tests}}
-        <p>It looks like you don't have any tests right now.<p>
-        {{/classData.tests}}
-        <br>
-        <br>
+        <hr style="background-color:#e1e6e7;"> {{#userData.classes}}
+        <a class="mdl-navigation__link" href="/classes/{{id}}">{{name}}</a> {{/userData.classes}} {{^userData.classes}}
+        <p>It looks like you don't have any classes right now.
+          <p>
+            {{/userData.classes}}
+            <br>
+            <hr style="background-color:#e1e6e7;">
+            <span style="text-align:center;font-weight:bold;color:#292725;">Tests</span>
+            <hr style="background-color:#e1e6e7;"> {{#classData.tests}}
+            <a class="mdl-navigation__link" href="/tests/{{id}}">{{name}}</a> {{/classData.tests}} {{^classData.tests}}
+            <p>It looks like you don't have any tests right now.
+              <p>
+                {{/classData.tests}}
+                <br>
+                <br>
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -115,18 +111,25 @@
               <button onclick="$('#ct').show()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored fab">
                 <i class="material-icons">add</i>
               </button>
-              <!-- Left aligned menu below button -->
-              <button id="demo-menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
-                <i class="material-icons">more_vert</i>
-              </button>
 
-              <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left">
-                <li class="mdl-menu__item" id="openTest">Open Test</li>
-                <li class="mdl-menu__item">Another Action</li>
-                <li disabled class="mdl-menu__item">Disabled Action</li>
-                <li class="mdl-menu__item">Yet Another Action</li>
-              </ul>
+              <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Tests</h2>
+                </div>
+                <div class="mdl-card__menu">
+                  <!-- Left aligned menu below button -->
+                  <button id="demo-menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                  </button>
 
+                  <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left">
+                    <li class="mdl-menu__item" id="openTest">Open Test</li>
+                    <li class="mdl-menu__item">Another Action</li>
+                    <li disabled class="mdl-menu__item">Disabled Action</li>
+                    <li class="mdl-menu__item">Yet Another Action</li>
+                  </ul>
+                </div>
+              </div>
               <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
                 <thead>
                   <tr>
@@ -154,7 +157,7 @@
               </p>
               {{/classData.tests}}
             </div>
-            <div class="mdl-tabs__panel is-active" id="students-panel">
+            <div class="mdl-tabs__panel" id="students-panel">
               <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
                 <thead>
                   <tr>
@@ -202,11 +205,66 @@
           {{/classData.tests}} {{/student}}
         </div>
       </div>
-    </main>
+      <<<<<<< HEAD <div class="mdl-tabs__panel is-active" id="students-panel">
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Student Name</th>
+              <th>Average Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#classData.students}}
+            <tr id="student-{{id}}">
+              <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+              <td>{{avgScore}}</td>
+            </tr>
+            {{/classData.students}}
+          </tbody>
+        </table>
+        {{^classData.students}}
+        <p class="hct">It looks like you don't have any students. To add students to your class, just give them this code:
+          <br> "
+          <code>{{classID}}</code>"
+        </p>
+        {{/classData.students}}
+  </div>
+  </div>
+  {{/teacher}} {{#student}}
+  <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp table">
+    <thead>
+      <tr>
+        <th class="mdl-data-table__cell--non-numeric">Test Name</th>
+        <th class="mdl-data-table__cell--non-numeric">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Note: use the css is-selected attribute on tr for data manipulation-->
+      {{#classData.tests}}
+      <tr id="test-{{id}}">
+        <td class="mdl-data-table__cell--non-numeric">{{name}}</td>
+        <td class="mdl-data-table__cell--non-numeric">{{date}}</td>
+      </tr>
+      {{/classData.tests}}
+    </tbody>
+  </table>
+  {{^classData.tests}}
+  <p class="hct">Wo hoo! No tests!</p>
+  {{/classData.tests}} {{/student}}
+  </div>
+  </div>
+  </main>
   </div>
   <script>
     var theClass = '{{classID}}';
   </script>
+  =======
+  </main>
+  </div>
+  <script>
+    var theClass = '{{classID}}';
+  </script>
+  >>>>>>> develop
 </body>
 
 </html>
