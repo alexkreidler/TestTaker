@@ -20,22 +20,17 @@
         <p>It looks like you don't have any classes right now.<p>
         {{/userData.classes}}
         <br>
+        <hr style="background-color:#e1e6e7;">
+        <span style="text-align:center;font-weight:bold;color:#292725;">Tests</span>
+        <hr style="background-color:#e1e6e7;">
+        {{#classData.tests}}
+        <a class="mdl-navigation__link" href="/tests/{{id}}">{{name}}</a>
+        {{/classData.tests}}
+        {{^classData.tests}}
+        <p>It looks like you don't have any tests right now.<p>
+        {{/classData.tests}}
         <br>
         <br>
-        <br>
-        {{#teacher}}
-        <hr style="background-color:#e1e6e7;">
-        <span style="text-align:center;font-weight:bold;color:#292725;">Students</span>
-        <hr style="background-color:#e1e6e7;">
-        {{#classData.students}}
-        <a class="mdl-navigation__link" href="student-{{id}}">{{name}}</a>
-        {{/classData.students}}
-        {{/teacher}}
-        {{#student}}
-        <hr style="background-color:#e1e6e7;">
-        <span style="text-align:center;font-weight:bold;color:#292725;">Classmates</span>
-        <hr style="background-color:#e1e6e7;">
-        {{/student}}
       </nav>
     </div>
     <main class="mdl-layout__content">
