@@ -56,8 +56,17 @@ app.use(function(req, res, next) {
                 message: req.query.message ? req.query.message : null
             };
         }
-    };
+    }
     next();
+});
+
+var protectedPages = ['/dashboard', '/classes', '/tests'];
+app.use(protectedPages, function(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login?error=You are not logged in.');
+    }
 });
 //*********************************************************************************************************
 //*********************************************************************************************************
@@ -89,7 +98,7 @@ function render(req, res, file, locals) {
     if (res.say) {
         toBeRendered.error = res.say.error;
         toBeRendered.message = res.say.message;
-    };
+    }
     console.log(pj.render(toBeRendered));
     console.log(toBeRendered);
     res.render(file, toBeRendered);
@@ -135,71 +144,67 @@ function expand(object, callback) {
 //*********************************************************************************************************
 //*********************************************************************************************************
 app.all('/dashboard', function(req, res) {
-    if (req.session.user) {
-        var userData = req.session.user.userData;
-        root.child([req.session.user.type] + 's')
-            .orderByKey()
-            .startAt(req.session.user.uid)
-            .endAt(req.session.user.uid)
-            .once('value', function(snap) {
-                data = snap.val();
-                console.log('pure data: ');
-                console.log(pj.render(data));
-                data = data[Object.keys(data)[0]];
-                console.log('inner data: ');
-                console.log(pj.render(data));
-                var name = data.name;
-                var otherArr = [];
-                async.forEachOf(data.classes, function(item, key, callback) {
-                    classes.child(key).once('value', function(snap) {
-                        var thisClass = snap.val();
-                        if (thisClass) {
-                            console.log('ITEM');
-                            console.log(item);
-                            console.log('KEY');
-                            console.log(key);
-                            console.log('THISCLASS********************START');
-                            console.log(pj.render(thisClass));
-                            console.log('THISCLASS**********************END');
-                            thisClass.id = key;
-                            console.log(thisClass.code);
-                            otherArr.push(thisClass);
-                            callback();
-                        } else if (!thisClass) {
-                            thisClass = {
-                                name: 'Error: Class Not Found',
-                                id: key,
-                                subject: 'This happened either because a teacher deleted the class or our server made a mistake.'
-                            };
-                            otherArr.push(thisClass);
-                            callback();
-                        }
-                    }, function(err) {
-                        callback(err);
-                    });
-                }, function(err) {
-                    if (err) {
-                        res.end('error: ' + err);
-                    } else {
-                        console.log(otherArr);
-                        data.classes = otherArr;
-                        var student;
-                        var teacher;
-                        console.log('DATASTART');
-                        console.log(data);
-                        console.log('DATAEND');
-                        render(req, res, 'dashboard', {
-                            type: req.session.user.type,
-                            uid: Object.keys(snap.val())[0],
-                            userData: data,
-                            title: 'Dashboard'
-                        });
+    var userData = req.session.user.userData;
+    root.child([req.session.user.type] + 's')
+        .orderByKey()
+        .startAt(req.session.user.uid)
+        .endAt(req.session.user.uid)
+        .once('value', function(snap) {
+            data = snap.val();
+            console.log('pure data: ');
+            console.log(pj.render(data));
+            data = data[Object.keys(data)[0]];
+            console.log('inner data: ');
+            console.log(pj.render(data));
+            var name = data.name;
+            var otherArr = [];
+            async.forEachOf(data.classes, function(item, key, callback) {
+                classes.child(key).once('value', function(snap) {
+                    var thisClass = snap.val();
+                    if (thisClass) {
+                        console.log('ITEM');
+                        console.log(item);
+                        console.log('KEY');
+                        console.log(key);
+                        console.log('THISCLASS********************START');
+                        console.log(pj.render(thisClass));
+                        console.log('THISCLASS**********************END');
+                        thisClass.id = key;
+                        console.log(thisClass.code);
+                        otherArr.push(thisClass);
+                        callback();
+                    } else if (!thisClass) {
+                        thisClass = {
+                            name: 'Error: Class Not Found',
+                            id: key,
+                            subject: 'This happened either because a teacher deleted the class or our server made a mistake.'
+                        };
+                        otherArr.push(thisClass);
+                        callback();
                     }
+                }, function(err) {
+                    callback(err);
                 });
+            }, function(err) {
+                if (err) {
+                    res.end('error: ' + err);
+                } else {
+                    console.log(otherArr);
+                    data.classes = otherArr;
+                    var student;
+                    var teacher;
+                    console.log('DATASTART');
+                    console.log(data);
+                    console.log('DATAEND');
+                    render(req, res, 'dashboard', {
+                        type: req.session.user.type,
+                        uid: Object.keys(snap.val())[0],
+                        userData: data,
+                        title: 'Dashboard'
+                    });
+                }
             });
-    } else {
-        res.redirect('/login?error=You are not signed in');
-    }
+        });
 });
 
 app.all('/logout', function(req, res) {
@@ -371,7 +376,7 @@ app.post('/addClass', urlencodedParser, function(req, res) {
                             'error': 'invalid class id: ' + req.body.classID
                         });
                     }
-                })
+                });
         } catch (err) {
             res.status(500).send('Whoops! It looks like an internal server error: ' + err);
         }
@@ -611,54 +616,49 @@ app.get('/classes/:classID', function(req, res) {
 
 
 app.get('/tests/:testID', function(req, res) {
-    if (req.session.user) {
-        tests
-            .orderByKey()
-            .startAt(req.params.testID)
-            .endAt(req.params.testID)
-            .once('value', function(snap) {
-                // TODO: error check
-                testInfo = snap.val();
+    tests
+        .orderByKey()
+        .startAt(req.params.testID)
+        .endAt(req.params.testID)
+        .once('value', function(snap) {
+            // TODO: error check
+            testInfo = snap.val();
+            console.log(testInfo);
+            if (testInfo) {
+                var id = Object.keys(testInfo)[0];
+                testInfo = testInfo[id];
                 console.log(testInfo);
-                if (testInfo) {
-                    var id = Object.keys(testInfo)[0];
-                    testInfo = testInfo[id];
-                    console.log(testInfo);
-                    if (req.session.user.type == 'student') {
-                        if (testInfo.isAvailable === true) {
-                            testData.child(req.params.testID)
-                                .once('value', function(snap) {
-                                    questionData = snap.val();
-                                    var keys = Object.keys(questionData);
-                                    var questions = toArray(questionData);
-                                    for (var i = 0; i < questions.length; i++) {
-                                        questions[i].id = keys[i];
-                                    }
-                                    var theTestData = {
-                                        name: testInfo.name,
-                                        questions: questions
-                                    };
-                                    render(req, res, 'test', theTestData);
-                                });
-                        } else {
-                            res.redirect('/dashboard?error=Whoops! Your test is not ready to take yet.');
-                        }
-                    } else if (req.session.user.type == 'teacher') {
-                        render(req, res, 'test', {
-                            name: testInfo.name
-                        });
+                if (req.session.user.type == 'student') {
+                    if (testInfo.isAvailable === true) {
+                        testData.child(req.params.testID)
+                            .once('value', function(snap) {
+                                questionData = snap.val();
+                                var keys = Object.keys(questionData);
+                                var questions = toArray(questionData);
+                                for (var i = 0; i < questions.length; i++) {
+                                    questions[i].id = keys[i];
+                                }
+                                var theTestData = {
+                                    name: testInfo.name,
+                                    questions: questions
+                                };
+                                render(req, res, 'test', theTestData);
+                            });
+                    } else {
+                        res.redirect('/dashboard?error=Whoops! Your test is not ready to take yet.');
                     }
-                } else {
-                    console.log('test is null');
-                    // TODO: investigate
+                } else if (req.session.user.type == 'teacher') {
+                    render(req, res, 'test', {
+                        name: testInfo.name
+                    });
                 }
-            }, function(err) {
-                res.end(err);
-            });
-
-    } else {
-        res.redirect('/login?error=You are not signed in');
-    }
+            } else {
+                console.log('test is null');
+                // TODO: investigate
+            }
+        }, function(err) {
+            res.end(err);
+        });
 });
 
 app.get('/tests/:testID/grades', function(req, res) {
@@ -680,7 +680,7 @@ app.get('/tests/:testID/grades', function(req, res) {
                                 res.end(err);
                             } else {
                                 console.log(user);
-                                user = user[Object.keys(user)[0]]
+                                user = user[Object.keys(user)[0]];
                                 gradeData.push({
                                     studentName: user.name,
                                     score: score
@@ -693,7 +693,7 @@ app.get('/tests/:testID/grades', function(req, res) {
                             console.log(err);
                             res.end(err);
                         } else {
-                            var renderData = {}
+                            var renderData = {};
                             renderData.scores = gradeData;
                             console.log(req.params.testID);
                             tests.child(req.params.testID)
@@ -707,13 +707,15 @@ app.get('/tests/:testID/grades', function(req, res) {
                 });
         } catch (err) {
             console.log(err);
-            res.redirect(400, '/classes/' + req.params.classID + '?error=The class you are looking for does not exist.')
+            res.redirect(400, '/classes/' + req.params.classID + '?error=The class you are looking for does not exist.');
         }
     } else {
         res.redirect(403, '/classes/' + req.params.classID + '?error=You do not have access to those grades');
     }
 });
 
+//TODO: finish this and create better UI #19
+/*
 app.get('/createTest', function(req, res) {
     if (req.session.user) {
         render(req, res, 'create', {
@@ -722,7 +724,7 @@ app.get('/createTest', function(req, res) {
     } else {
         res.redirect('/login?error=You are not signed in');
     }
-});
+});*/
 
 console.log('Finished starting TestTaker Server v' + version);
 
