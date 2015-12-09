@@ -23,17 +23,18 @@
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
             stat.set(true);
-            alert('session started');
+            window.location = href + '?message=Testing session was started';
         });
 
         $('#endTestingSession').on('click', function() {
+            var href = window.location.href;
             //string operations so development and production can use same code
             var num = href.search('/tests') + 7;
             var testID = href.substr(num, href.length);
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
             stat.set(false);
-            alert('session stopped');
+            window.location = href + '?message=Testing session was stopped';
         });
 
         $('[id^=delete-]').on('click', function() {

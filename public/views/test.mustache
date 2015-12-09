@@ -18,6 +18,7 @@
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content" id="page-content">
+                    {{>say}}
                     {{#student}}
                         <h3>
                             Welcome {{userData.name}}. You are about to take the {{name}} test.
@@ -94,7 +95,6 @@
                 <br>
                 <br>
                 <br>
-{{>footer}}
             </main>
         </div>
         {{>outdated}}
