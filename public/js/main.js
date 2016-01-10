@@ -22,18 +22,21 @@
             var testID = href.substr(num, href.length);
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
-            stat.set(true);
-            alert('session started');
+            stat.set(true, function() {
+                window.location = href;
+            });
         });
 
         $('#endTestingSession').on('click', function() {
+            var href = window.location.href;
             //string operations so development and production can use same code
             var num = href.search('/tests') + 7;
             var testID = href.substr(num, href.length);
             var test = tests.child(testID);
             var stat = test.child('isAvailable');
-            stat.set(false);
-            alert('session stopped');
+            stat.set(false, function() {
+                window.location = href;
+            });
         });
 
         $('[id^=delete-]').on('click', function() {

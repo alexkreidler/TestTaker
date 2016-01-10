@@ -649,7 +649,8 @@ app.get('/tests/:testID', function(req, res) {
                     }
                 } else if (req.session.user.type == 'teacher') {
                     render(req, res, 'test', {
-                        name: testInfo.name
+                        name: testInfo.name,
+                        testingSession: testInfo.isAvailable
                     });
                 }
             } else {
