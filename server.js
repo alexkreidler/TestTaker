@@ -1,5 +1,5 @@
-var version = '1.0.7-beta';
-var clientVersion = '1.0.7-beta';
+var version = '1.0.8';
+var clientVersion = '1.0.8';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
 var bodyParser = require('body-parser');
