@@ -19,13 +19,12 @@ var async = require('async');
 var repl = require('repl');
 repl.start('TestTaker v' + version + ' REPL> ');
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyD97LgdbZVSse3r5QEg6Y_QkafeecqMoQM",
-  authDomain: "testtaker.firebaseapp.com",
-  databaseURL: "https://testtaker.firebaseio.com",
-  storageBucket: "project-3650940312735856658.appspot.com",
-};
-firebase.initializeApp(config);
+firebase.initializeApp({
+  serviceAccount: "private-key.json",
+  databaseURL: "https://testtaker.firebaseio.com"
+});
+
+
 var root = firebase.database().ref();
 var students = root.child('students');
 var teachers = root.child('teachers');
