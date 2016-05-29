@@ -1,4 +1,4 @@
-var version = '1.0.8';
+var version = '2.0.0-firebase-v3';
 var clientVersion = '1.0.8';
 console.log('Starting TestTaker Server v' + version);
 var express = require('express');
@@ -12,13 +12,21 @@ console.log('Listening on port: ' + port);
 app.use(compression());
 app.use(express.static('public'));
 
-var Firebase = require('firebase');
+var firebase = require('firebase');
 var consolidate = require('consolidate');
 var session = require('client-sessions');
 var async = require('async');
 var repl = require('repl');
 repl.start('TestTaker v' + version + ' REPL> ');
-var root = new Firebase('http://testtaker.firebaseio.com');
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyD97LgdbZVSse3r5QEg6Y_QkafeecqMoQM",
+  authDomain: "testtaker.firebaseapp.com",
+  databaseURL: "https://testtaker.firebaseio.com",
+  storageBucket: "project-3650940312735856658.appspot.com",
+};
+firebase.initializeApp(config);
+var root = firebase.database().ref();
 var students = root.child('students');
 var teachers = root.child('teachers');
 var classes = root.child('classes');
@@ -428,7 +436,7 @@ app.post('/createTest', urlencodedParser, function(req, res) {
     // TODO: check auth
     if (req.body.type == 'teacher') {
         var thisTestData = testData.push(req.body.testData);
-        var thisTestDataKey = thisTestData.key();
+        var thisTestDataKey = thisTestData.key;
         var data = JSON.parse(req.body);
         data.testData = thisTestDataKey;
     } else {
@@ -476,7 +484,7 @@ app.post('/submitTest', urlencodedParser, function(req, res) {
             gradedObj.outOf = counter;
             gradedObj.uid = req.session.user.uid;
             var testGrade = grades.child(req.body.test);
-            var gradeLoc = testGrade.child(responseLoc.key());
+            var gradeLoc = testGrade.child(responseLoc.key);
             gradeLoc.set(gradedObj);
             res.end('success');
         });
@@ -495,7 +503,7 @@ app.post('/createClass', urlencodedParser, function(req, res) {
         teachers: 0,
         tests: 0
     });
-    var key = createdClass.key();
+    var key = createdClass.key;
     var teacherClass = teachers.child(req.session.user.uid + '/classes/' + key);
     teacherClass.set(true);
 

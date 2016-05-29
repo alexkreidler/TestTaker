@@ -9,7 +9,15 @@
         $('#' + form + 'Form').submit();
     }
     $(document).ready(function() {
-        var root = new Firebase('testtaker.firebaseio.com');
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD97LgdbZVSse3r5QEg6Y_QkafeecqMoQM",
+            authDomain: "testtaker.firebaseapp.com",
+            databaseURL: "https://testtaker.firebaseio.com",
+            storageBucket: "project-3650940312735856658.appspot.com",
+        };
+        firebase.initializeApp(config);
+        var root = firebase.database.ref();
         var testData = root.child('testData');
         var answers = root.child('answers');
         var tests = root.child('tests');
