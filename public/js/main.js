@@ -17,7 +17,8 @@
             storageBucket: "project-3650940312735856658.appspot.com",
         };
         firebase.initializeApp(config);
-        var root = firebase.database.ref();
+        var auth = firebase.auth();
+        var root = firebase.database().ref();
         var testData = root.child('testData');
         var answers = root.child('answers');
         var tests = root.child('tests');
@@ -109,42 +110,34 @@
             } else {
                 event.preventDefault();
                 if (mainType == 'student') {
-                    students = root.child('students');
-                    students.authWithPassword({
-                        "email": $('#loginEmail').val(),
-                        "password": $('#loginPass').val()
-                    }, function(error, authData) {
-                        if (error) {
-                            if (window.location.href.search(/\\?/g) == -1) {
+                    auth.signInWithEmailAndPassword($('#loginEmail').val(), $('#loginPass').val()).then(function(authData){
+                        //success
+                            $('#loginForm').html($('#loginForm').html() + '<input name="uid" type="text" value="' + authData.uid + '" style="display: none;">');
+                            submitVar = true;
+                            $('#loginForm').submit();
+                    }, function(error){
+                        //failure
+                            if (window.location.href.search(/\?/g) < 1) {
                                 window.location.href += '?error=' + error;
                             } else {
                                 window.location.href += '&error=' + error;
                             }
                             console.log('error signing in: ' + error);
-                        } else {
+                    });
+                } else if (mainType == 'teacher') {
+                    auth.signInWithEmailAndPassword($('#loginEmail').val(), $('#loginPass').val()).then(function(authData){
+                        //success
                             $('#loginForm').html($('#loginForm').html() + '<input name="uid" type="text" value="' + authData.uid + '" style="display: none;">');
                             submitVar = true;
                             $('#loginForm').submit();
-                        }
-                    });
-                } else if (mainType == 'teacher') {
-                    teachers = root.child('teachers');
-                    teachers.authWithPassword({
-                        "email": $('#loginEmail').val(),
-                        "password": $('#loginPass').val()
-                    }, function(error, authData) {
-                        if (error) {
-                            if (window.location.href.search(/\\?/g) == -1) {
+                    }, function(error){
+                        //failure
+                            if (window.location.href.search(/\?/g) < 1) {
                                 window.location.href += '?error=' + error;
                             } else {
                                 window.location.href += '&error=' + error;
                             }
-                            console.log('error signing in');
-                        } else {
-                            $('#loginForm').html($('#loginForm').html() + '<input name="uid" type="text" value="' + authData.uid + '" style="display: none;">');
-                            submitVar = true;
-                            $('#loginForm').submit();
-                        }
+                            console.log('error signing in: ' + error);
                     });
                 } else {
                     throw 'invalid type';

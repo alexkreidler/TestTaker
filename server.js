@@ -24,6 +24,8 @@ firebase.initializeApp({
   databaseURL: "https://testtaker.firebaseio.com"
 });
 
+var auth = firebase.auth();
+
 
 var root = firebase.database().ref();
 var students = root.child('students');
@@ -272,42 +274,15 @@ app.get('/privacy', function(req, res) {
 //*********************************************************************************************************
 app.post('/signUp', urlencodedParser, function(req, res) {
     if (req.body.type == 'student') {
-        students.createUser({
-            email: req.body.email,
-            password: req.body.password
-        }, function(error, userData) {
-            if (error) {
-                switch (error.code) {
-                    case "EMAIL_TAKEN":
-                        res.status(400).json({
-                            error: "The new user account cannot be created because the email is already in use."
-                        });
-                        break;
-                    case "INVALID_EMAIL":
-                        res.status(400).json({
-                            error: "The specified email is not a valid email."
-                        });
-                        break;
-                    default:
-                        res.status(500).json({
-                            error: error
-                        });
-                }
-            } else {
+        auth.createUserWithEmailAndPassword(req.body.email, req.body.password).then(function(userData) {
                 var spot = students.child(userData.uid);
                 spot.set({
                     'name': req.body.name,
                     classes: 0
                 });
                 res.redirect('/login?message=Your account was created');
-            }
-        });
-    } else if (req.body.type == 'teacher') {
-        teachers.createUser({
-            email: req.body.email,
-            password: req.body.password
-        }, function(error, userData) {
-            if (error) {
+        }, function(error){
+            
                 switch (error.code) {
                     case "EMAIL_TAKEN":
                         res.status(400).json({
@@ -324,14 +299,33 @@ app.post('/signUp', urlencodedParser, function(req, res) {
                             error: error
                         });
                 }
-            } else {
+        });
+    } else if (req.body.type == 'teacher') {
+        auth.createUserWithEmailAndPassword(req.body.email, req.body.password).then(function(userData) {
                 var spot = teachers.child(userData.uid);
                 spot.set({
                     'name': req.body.name,
                     classes: 0
                 });
                 res.redirect('/login?message=Your account was created');
-            }
+        }, function(error){
+            
+                switch (error.code) {
+                    case "EMAIL_TAKEN":
+                        res.status(400).json({
+                            error: "The new user account cannot be created because the email is already in use."
+                        });
+                        break;
+                    case "INVALID_EMAIL":
+                        res.status(400).json({
+                            error: "The specified email is not a valid email."
+                        });
+                        break;
+                    default:
+                        res.status(500).json({
+                            error: error
+                        });
+                }
         });
     } else {
         res.status(400).json({
